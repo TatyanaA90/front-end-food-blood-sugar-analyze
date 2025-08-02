@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: food-blood-sugar-analyzer-frontend
+    env: static
+    plan: free
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      - key: VITE_API_BASE_URL
+        value: https://back-end-food-blood-sugar-analyzer.onrender.com
+      - key: VITE_APP_NAME
+        value: Food & Blood Sugar Analyzer
+      - key: VITE_APP_VERSION
+        value: 1.0.0 
