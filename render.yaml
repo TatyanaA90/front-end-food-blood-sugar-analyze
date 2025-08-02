@@ -1,7 +1,6 @@
 services:
-  - type: web
+  - type: static
     name: food-blood-sugar-analyzer-frontend
-    env: static
     plan: free
     buildCommand: npm install && npm run build
     staticPublishPath: ./dist
