@@ -1,19 +1,38 @@
 /* ProtectedRoute Component Styles */
-/* @tailwind base; */
-/* @tailwind components; */
-/* @tailwind utilities; */
+
 .protected-loading-main {
-  @apply min-h-screen bg-gray-50 flex items-center justify-center;
+  min-height: 100vh;
+  background-color: #f9fafb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .protected-loading-section {
-  @apply text-center;
+  text-align: center;
 }
 
 .protected-loading-spinner {
-  @apply animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto;
+  animation: spin 1s linear infinite;
+  border-radius: 50%;
+  height: 3rem;
+  width: 3rem;
+  border-bottom: 2px solid #2563eb;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .protected-loading-text {
-  @apply mt-4 text-gray-600;
+  margin-top: 1rem;
+  color: #4b5563;
+}
+
+/* Spin animation for loading spinner */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
