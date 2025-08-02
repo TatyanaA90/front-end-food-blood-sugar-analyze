@@ -1,0 +1,107 @@
+/* Login Page Styles */
+/* @tailwind base; */
+/* @tailwind components; */
+/* @tailwind utilities; */
+.login-main {
+  @apply min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8;
+}
+
+.login-header-section {
+  @apply sm:mx-auto sm:w-full sm:max-w-md;
+}
+
+.login-header {
+  @apply flex justify-center;
+}
+
+.login-title {
+  @apply mt-6 text-center text-3xl font-extrabold text-gray-900;
+}
+
+.login-subtitle {
+  @apply mt-2 text-center text-sm text-gray-600;
+}
+
+.login-link {
+  @apply font-medium text-blue-600 hover:text-blue-500;
+}
+
+.login-form-section {
+  @apply mt-8 sm:mx-auto sm:w-full sm:max-w-md;
+}
+
+.login-form-container {
+  @apply bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10;
+}
+
+.login-form {
+  @apply space-y-6;
+}
+
+.login-error {
+  @apply bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-md;
+}
+
+.login-label {
+  @apply block text-sm font-medium text-gray-700;
+}
+
+.login-input {
+  @apply appearance-none block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm;
+}
+
+.login-input-error {
+  @apply border-red-300;
+}
+
+.login-input-normal {
+  @apply border-gray-300;
+}
+
+.login-input-wrapper {
+  @apply mt-1 relative;
+}
+
+.login-password-toggle {
+  @apply absolute inset-y-0 right-0 pr-3 flex items-center;
+}
+
+.login-button {
+  @apply w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+.login-footer {
+  @apply mt-6;
+}
+
+.login-divider {
+  @apply relative;
+}
+
+.login-divider-line {
+  @apply absolute inset-0 flex items-center;
+}
+
+.login-divider-border {
+  @apply w-full border-t border-gray-300;
+}
+
+.login-divider-text {
+  @apply relative flex justify-center text-sm;
+}
+
+.login-divider-content {
+  @apply px-2 bg-white text-gray-500;
+}
+
+.login-footer-button {
+  @apply w-full flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500;
+}
+
+.login-header-icon {
+  @apply h-12 w-12 text-blue-600;
+}
+
+.login-password-icon {
+  @apply h-5 w-5 text-gray-400;
+}
