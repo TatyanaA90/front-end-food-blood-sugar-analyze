@@ -18,6 +18,7 @@ The Food & Blood Sugar Analyzer helps users track and manage their diabetes by l
 - **Charts**: Recharts for data visualization
 - **Icons**: Lucide React
 - **Deployment**: Render (Static Site)
+- **Testing**: Vitest + React Testing Library + MSW
 
 ## ✨ Features
 
@@ -74,6 +75,51 @@ npm run preview
 
 # Lint code
 npm run lint
+
+# Run tests
+npm run test
+
+# Run tests once
+npm run test:run
+
+# Run tests with coverage
+npm run test:coverage
+
+# Open test UI
+npm run test:ui
+```
+
+## 🧪 Testing
+
+The project includes a comprehensive testing infrastructure:
+
+### Testing Stack
+- **Framework**: Vitest (Vite-native, fast testing)
+- **Testing Library**: React Testing Library for component testing
+- **User Events**: @testing-library/user-event for interaction testing  
+- **API Mocking**: MSW (Mock Service Worker) for API testing
+- **Environment**: jsdom for DOM simulation
+
+### Test Coverage
+- ✅ **Authentication Flow**: Login, registration, logout, and token management
+- ✅ **Form Validation**: Real-time validation and error handling
+- ✅ **User Interactions**: Form submission, password toggle, navigation
+- ✅ **API Integration**: Mocked backend responses for reliable testing
+- ✅ **Accessibility**: Form labels, keyboard navigation, screen readers
+
+### Running Tests
+```bash
+# Watch mode (recommended for development)
+npm run test
+
+# Single run (CI/CD)
+npm run test:run
+
+# Coverage report
+npm run test:coverage
+
+# Interactive UI
+npm run test:ui
 ```
 
 ## 🌐 Production Deployment
