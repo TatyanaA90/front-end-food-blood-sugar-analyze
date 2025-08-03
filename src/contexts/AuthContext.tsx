@@ -70,7 +70,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       });
 
       if (!response.ok) {
-        throw new Error('Registration failed');
+        if (response.status === 409) {
+          throw new Error('Username or email already exists. Please try different credentials.');
+        } else if (response.status === 400) {
+          throw new Error('Invalid registration data. Please check your information.');
+        } else if (response.status >= 500) {
+          throw new Error('Server error. Please try again later.');
+        } else {
+          throw new Error('Registration failed. Please try again.');
+        }
       }
 
       const data = await response.json();
