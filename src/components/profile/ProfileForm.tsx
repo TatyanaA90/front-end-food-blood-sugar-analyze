@@ -93,7 +93,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
 
       <form className="profile-form" onSubmit={handleSubmit(handleSave)}>
         <div className="profile-field">
-          <label className="profile-label" htmlFor={isEditing ? "name" : undefined}>
+          <label className="profile-label" id="name-label" htmlFor={isEditing ? "name" : undefined}>
             <UserIcon className="field-icon" />
             Name
           </label>
@@ -115,12 +115,12 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
               )}
             </>
           ) : (
-            <div className="profile-value">{user.name}</div>
+            <div className="profile-value" role="text" aria-labelledby="name-label">{user.name}</div>
           )}
         </div>
 
         <div className="profile-field">
-          <label className="profile-label" htmlFor={isEditing ? "email" : undefined}>
+          <label className="profile-label" id="email-label" htmlFor={isEditing ? "email" : undefined}>
             <Mail className="field-icon" />
             Email
           </label>
@@ -144,20 +144,20 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
               )}
             </>
           ) : (
-            <div className="profile-value">{user.email}</div>
+            <div className="profile-value" role="text" aria-labelledby="email-label">{user.email}</div>
           )}
         </div>
 
         <div className="profile-field">
-          <label className="profile-label">Username</label>
-          <div className="profile-value profile-readonly">
+          <label className="profile-label" id="username-label">Username</label>
+          <div className="profile-value profile-readonly" role="text" aria-labelledby="username-label">
             {user.username}
             <span className="profile-readonly-note">(Cannot be changed)</span>
           </div>
         </div>
 
         <div className="profile-field">
-          <label className="profile-label" htmlFor={isEditing ? "weight" : undefined}>
+          <label className="profile-label" id="weight-label" htmlFor={isEditing ? "weight" : undefined}>
             <Scale className="field-icon" />
             Weight
           </label>
@@ -227,7 +227,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
               )}
             </>
           ) : (
-            <div className="profile-value">
+            <div className="profile-value" role="text" aria-labelledby="weight-label">
               {user.weight ? `${user.weight.toFixed(2)} ${user.weight_unit}` : 'Not set'}
             </div>
           )}
