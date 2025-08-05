@@ -1,4 +1,5 @@
 import React from 'react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext.tsx';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -11,10 +12,14 @@ import Dashboard from './pages/Dashboard';
 import UserProfile from './pages/UserProfile';
 import AdminDashboard from './pages/AdminDashboard';
 
+// Create a client
+const queryClient = new QueryClient();
+
 function App() {
   return (
-    <AuthProvider>
-      <Router>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <Router>
         <main className="App">
           <Routes>
             {/* Public routes */}
@@ -64,6 +69,7 @@ function App() {
         </main>
       </Router>
     </AuthProvider>
+    </QueryClientProvider>
   );
 }
 

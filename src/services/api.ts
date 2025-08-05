@@ -11,12 +11,12 @@ const api = axios.create({
 
 // Request interceptor to add auth token
 api.interceptors.request.use(
-  (config) => {
+  (axiosConfig) => {
     const token = localStorage.getItem(config.jwtStorageKey);
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+      axiosConfig.headers.Authorization = `Bearer ${token}`;
     }
-    return config;
+    return axiosConfig;
   },
   (error) => {
     return Promise.reject(error);
