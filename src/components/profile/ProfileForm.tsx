@@ -149,8 +149,8 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
         </div>
 
         <div className="profile-field">
-          <label className="profile-label">Username</label>
-          <div className="profile-value profile-readonly">
+          <label className="profile-label" htmlFor="username-display">Username</label>
+          <div className="profile-value profile-readonly" id="username-display">
             {user.username}
             <span className="profile-readonly-note">(Cannot be changed)</span>
           </div>
