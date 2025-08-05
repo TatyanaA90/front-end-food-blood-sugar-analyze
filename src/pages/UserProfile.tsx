@@ -40,6 +40,7 @@ const UserProfile: React.FC = () => {
 
             updateUser(updatedUser);
             setIsEditing(false);
+            alert('Profile updated successfully!');
         } catch (error) {
             console.error('Profile update error:', error);
             alert('Failed to update profile. Please try again.');

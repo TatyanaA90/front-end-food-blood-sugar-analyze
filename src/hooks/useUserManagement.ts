@@ -25,10 +25,12 @@ export const useUpdateProfile = () => {
   return useMutation({
     mutationFn: (data: UserUpdateData) => userService.updateProfile(data),
     onSuccess: (updatedUser) => {
-      // Update the profile cache
+      // Immediately update the cache with the new data
       queryClient.setQueryData(userQueryKeys.profile(), updatedUser);
-      // Also update auth context if needed
+      // Force a refetch to ensure we have the latest data
       queryClient.invalidateQueries({ queryKey: userQueryKeys.profile() });
+      // Also invalidate any other user-related queries that might be affected
+      queryClient.invalidateQueries({ queryKey: userQueryKeys.all });
     },
   });
 };

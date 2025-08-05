@@ -34,7 +34,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
     defaultValues: {
       name: user.name || '',
       email: user.email || '',
-      weight: user.weight?.toString() || '',
+      weight: user.weight ? user.weight.toFixed(2) : '',
       weight_unit: user.weight_unit || 'kg'
     },
     mode: 'onChange'
@@ -48,7 +48,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
     reset({
       name: user.name || '',
       email: user.email || '',
-      weight: user.weight?.toString() || '',
+      weight: user.weight ? user.weight.toFixed(2) : '',
       weight_unit: user.weight_unit || 'kg'
     });
     onCancel();
@@ -166,13 +166,33 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
                 <input
                   id="weight"
                   type="number"
+                  step="0.01"
+                  min="0"
+                  max="1000"
                   {...register('weight', {
-                    min: { value: 1, message: 'Weight must be positive' },
-                    max: { value: 1000, message: 'Weight must be reasonable' }
+                    valueAsNumber: true,
+                    validate: {
+                      positive: (value: string) => {
+                        if (!value) return true;
+                        const num = Number(value);
+                        return num >= 1 || 'Weight must be positive';
+                      },
+                      reasonable: (value: string) => {
+                        if (!value) return true;
+                        const num = Number(value);
+                        return num <= 1000 || 'Weight must be reasonable';
+                      },
+                      format: (value: string) => {
+                        if (!value) return true;
+                        const num = Number(value);
+                        if (isNaN(num)) return 'Please enter a valid number';
+                        const formatted = Number(num.toFixed(2));
+                        return formatted === num || 'Please enter a number with up to 2 decimal places';
+                      }
+                    }
                   })}
                   className={`profile-input profile-weight-input ${errors.weight ? 'profile-input-error' : ''}`}
-                  placeholder="Weight"
-                  step="0.1"
+                  placeholder="Enter weight"
                 />
                 <select
                   {...register('weight_unit')}
@@ -188,7 +208,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
             </>
           ) : (
             <div className="profile-value">
-              {user.weight ? `${user.weight} ${user.weight_unit}` : 'Not set'}
+              {user.weight ? `${user.weight.toFixed(2)} ${user.weight_unit}` : 'Not set'}
             </div>
           )}
         </div>
