@@ -162,7 +162,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
           </label>
           {isEditing ? (
             <>
-              <div className="profile-weight-inputs">
+              <div className="profile-weight-group">
                 <input
                   id="weight"
                   type="number"
@@ -191,17 +191,16 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
                       }
                     }
                   })}
-                  className={`profile-input profile-weight-input ${errors.weight ? 'profile-input-error' : ''}`}
-                  placeholder="Enter weight"
+                  className={`profile-weight-input ${errors.weight ? 'profile-input-error' : ''}`}
+                  placeholder="72.50"
                 />
-                <select
-                  {...register('weight_unit')}
-                  className="profile-select"
-                >
-                  <option value="kg">kg</option>
-                  <option value="lb">lb</option>
-                </select>
+                <span className="profile-weight-unit">kg</span>
               </div>
+              <input
+                type="hidden"
+                {...register('weight_unit')}
+                value="kg"
+              />
               {errors.weight && (
                 <span className="profile-error">{errors.weight.message}</span>
               )}
