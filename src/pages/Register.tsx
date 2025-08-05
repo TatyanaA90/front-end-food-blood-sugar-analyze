@@ -35,7 +35,7 @@ const Register: React.FC = () => {
       setError('');
       await registerUser(data.username, data.email, data.password, data.weight, data.weight_unit);
       navigate('/dashboard');
-    } catch (err) {
+    } catch {
       setError('Registration failed. Please try again.');
     }
   };
@@ -176,6 +176,7 @@ const Register: React.FC = () => {
                   type="button"
                   className="register-password-toggle"
                   onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
                 >
                   {showPassword ? (
                     <EyeOff className="register-password-icon" />
@@ -218,6 +219,7 @@ const Register: React.FC = () => {
                   type="button"
                   className="register-password-toggle"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
                 >
                   {showConfirmPassword ? (
                     <EyeOff className="register-password-icon" />
@@ -276,6 +278,7 @@ const Register: React.FC = () => {
                   placeholder="Enter weight (optional)"
                 />
                 <select
+                  id="weight_unit"
                   {...register('weight_unit')}
                   className="register-select"
                   defaultValue="kg"

@@ -31,8 +31,11 @@ The Food & Blood Sugar Analyzer helps users track and manage their diabetes by l
 - 🔍 Real-time form validation with animated error states
 - 📊 Admin features (user stats, management)
 - 🔄 React Query integration for efficient data fetching
-- 🛡️ Proper error handling for auth failures
+- 🛡️ Proper error handling for auth failures with no unwanted redirects
 - 👤 Complete user profile with weight management
+- ✅ Enhanced form validation with password complexity requirements
+- 🚫 Prevention of form submission on validation errors
+- 📍 Stay on same page after failed login attempts
 
 ### Core Features (Coming Soon)
 - 🩸 Glucose readings tracking with unit conversion (mg/dL ↔ mmol/L)

@@ -42,6 +42,10 @@
 - [x] Fix auth token header configuration
 - [x] Add QueryClientProvider for data management
 - [x] Implement proper error handling for auth failures
+- [x] Fix login and registration form validation and error handling
+- [x] Prevent unwanted redirects on authentication errors
+- [x] Update password validation patterns with special character requirements
+- [x] Enhance register function with weight and weight_unit parameters
 - [ ] Create password reset functionality (if backend supports)
 - [x] Test authentication flow end-to-end
 

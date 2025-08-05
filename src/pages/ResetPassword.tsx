@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Lock, Eye, EyeOff } from 'lucide-react';
 import { useResetPassword } from '../hooks/useUserManagement';
+import { Lock, Eye, EyeOff } from 'lucide-react';
 import './ResetPassword.css';
 
 interface ResetPasswordFormData {
@@ -11,10 +11,10 @@ interface ResetPasswordFormData {
 }
 
 const ResetPassword: React.FC = () => {
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [searchParams] = useSearchParams();
-  const token = searchParams.get('token');
   const navigate = useNavigate();
-  const [showPassword, setShowPassword] = useState(false);
   const resetPasswordMutation = useResetPassword();
 
   const {
@@ -27,8 +27,9 @@ const ResetPassword: React.FC = () => {
   const newPassword = watch('newPassword');
 
   const onSubmit = async (data: ResetPasswordFormData) => {
+    const token = searchParams.get('token');
     if (!token) {
-      alert('Invalid or missing reset token');
+      alert('Invalid reset link. Please request a new password reset.');
       return;
     }
 
@@ -37,30 +38,34 @@ const ResetPassword: React.FC = () => {
         token,
         newPassword: data.newPassword,
       });
-      
-      navigate('/login', {
-        state: { message: 'Password reset successful. Please log in with your new password.' }
-      });
-    } catch (error) {
+      alert('Password reset successfully! You can now log in with your new password.');
+      navigate('/login');
+    } catch (error: any) {
       console.error('Password reset error:', error);
-      alert('Failed to reset password. The link may be invalid or expired.');
+      const errorMessage = error.response?.data?.detail || 
+                         error.response?.data?.message || 
+                         'Failed to reset password. Please try again.';
+      alert(errorMessage);
     }
   };
 
-  if (!token) {
+  // If no token is provided, show error
+  if (!searchParams.get('token')) {
     return (
       <main className="reset-password-main">
         <section className="reset-password-section">
-          <div className="reset-password-error">
-            <Lock className="reset-password-icon error" />
+          <div className="reset-password-header">
+            <Lock className="reset-password-icon" />
             <h1 className="reset-password-title">Invalid Reset Link</h1>
-            <p className="reset-password-message">
+            <p className="reset-password-subtitle">
               This password reset link is invalid or has expired.
-              Please request a new password reset link.
             </p>
+          </div>
+          <div className="reset-password-actions">
             <button
+              type="button"
               onClick={() => navigate('/forgot-password')}
-              className="reset-password-button"
+              className="reset-password-submit"
             >
               Request New Reset Link
             </button>
@@ -89,7 +94,7 @@ const ResetPassword: React.FC = () => {
             <div className="password-input-wrapper">
               <input
                 id="newPassword"
-                type={showPassword ? 'text' : 'password'}
+                type={showNewPassword ? 'text' : 'password'}
                 {...register('newPassword', {
                   required: 'New password is required',
                   minLength: {
@@ -107,9 +112,10 @@ const ResetPassword: React.FC = () => {
               <button
                 type="button"
                 className="password-toggle-btn"
-                onClick={() => setShowPassword(!showPassword)}
+                onClick={() => setShowNewPassword(!showNewPassword)}
+                aria-label={showNewPassword ? 'Hide password' : 'Show password'}
               >
-                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                {showNewPassword ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
             </div>
             {errors.newPassword && (
@@ -124,7 +130,7 @@ const ResetPassword: React.FC = () => {
             <div className="password-input-wrapper">
               <input
                 id="confirmPassword"
-                type={showPassword ? 'text' : 'password'}
+                type={showConfirmPassword ? 'text' : 'password'}
                 {...register('confirmPassword', {
                   required: 'Please confirm your password',
                   validate: value =>
@@ -136,9 +142,10 @@ const ResetPassword: React.FC = () => {
               <button
                 type="button"
                 className="password-toggle-btn"
-                onClick={() => setShowPassword(!showPassword)}
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
               >
-                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
             </div>
             {errors.confirmPassword && (

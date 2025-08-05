@@ -215,6 +215,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
                   }}
                 />
                 <select
+                  id="weight_unit"
                   {...register('weight_unit')}
                   className="profile-unit-select"
                 >
