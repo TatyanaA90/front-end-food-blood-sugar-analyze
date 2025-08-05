@@ -12,7 +12,7 @@ const api = axios.create({
 // Request interceptor to add auth token
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('blood_sugar_token');
+    const token = localStorage.getItem(config.jwtStorageKey);
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -29,7 +29,7 @@ api.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       // Token expired or invalid - redirect to login
-      localStorage.removeItem('blood_sugar_token');
+      localStorage.removeItem(config.jwtStorageKey);
       window.location.href = '/login';
     }
     return Promise.reject(error);
