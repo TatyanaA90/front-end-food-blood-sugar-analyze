@@ -162,8 +162,8 @@ const Register: React.FC = () => {
                       message: 'Password must be at least 8 characters',
                     },
                     pattern: {
-                      value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
-                      message: 'Password must contain at least one uppercase letter, one lowercase letter, and one number',
+                      value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+                      message: 'Password must include uppercase, lowercase, number, special character, and be at least 8 characters long',
                     },
                   })}
                   className={`register-input pr-10 ${

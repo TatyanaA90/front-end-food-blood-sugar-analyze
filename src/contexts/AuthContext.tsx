@@ -52,7 +52,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  const register = async (username: string, email: string, password: string) => {
+  const register = async (username: string, email: string, password: string, weight?: string, weight_unit?: string) => {
     try {
       setIsLoading(true);
       
@@ -60,7 +60,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         name: username,
         username,
         email,
-        password
+        password,
+        weight: weight ? parseFloat(weight) : undefined,
+        weight_unit: weight_unit || 'kg'
       });
       
       // Set auth state for immediate login

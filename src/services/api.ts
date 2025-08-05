@@ -27,8 +27,9 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
-      // Token expired or invalid - redirect to login
+    // Only redirect on 401 errors for authenticated requests (not login/register attempts)
+    if (error.response?.status === 401 && error.config?.url !== '/login' && error.config?.url !== '/users') {
+      // Token expired or invalid for authenticated requests - redirect to login
       localStorage.removeItem(config.jwtStorageKey);
       window.location.href = '/login';
     }

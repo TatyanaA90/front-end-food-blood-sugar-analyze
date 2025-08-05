@@ -25,6 +25,8 @@ export interface RegisterRequest {
   username: string;
   email: string;
   password: string;
+  weight?: number;
+  weight_unit?: string;
 }
 
 export interface RegisterResponse {
