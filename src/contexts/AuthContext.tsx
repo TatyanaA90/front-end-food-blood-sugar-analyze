@@ -1,6 +1,6 @@
 import React, { useState, useEffect, type ReactNode } from 'react';
-import { config } from '../config';
 import { AuthContext, type User, type AuthContextType } from './AuthContext.ts';
+import { authService } from '../services/authService';
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -11,42 +11,37 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Check for existing token on app load
+  // Check for existing token and fetch user data on app load
   useEffect(() => {
-    const storedToken = localStorage.getItem(config.jwtStorageKey);
-    if (storedToken) {
-      setToken(storedToken);
-      // TODO: Validate token with backend
-      // For now, we'll assume it's valid
+    const initializeAuth = async () => {
+      const storedToken = authService.getToken();
+      if (storedToken) {
+        try {
+          setToken(storedToken);
+          const userData = await authService.getCurrentUser();
+          setUser(userData);
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+          // If token is invalid, clear auth state
+          setToken(null);
+          setUser(null);
+          authService.logout();
+        }
+      }
       setIsLoading(false);
-    } else {
-      setIsLoading(false);
-    }
+    };
+
+    initializeAuth();
   }, []);
 
   const login = async (username: string, password: string) => {
     try {
       setIsLoading(true);
       
-      const response = await fetch(`${config.apiBaseUrl}/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Login failed');
-      }
-
-      const data = await response.json();
+      const data = await authService.login({ username, password });
       
-      // Store token
-      localStorage.setItem(config.jwtStorageKey, data.access_token);
+      // Set auth state
       setToken(data.access_token);
-      
-      // Set user data
       setUser(data.user);
       
     } catch (error) {
@@ -61,45 +56,37 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       setIsLoading(true);
       
-      const response = await fetch(`${config.apiBaseUrl}/users`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ name: username, username, email, password }),
+      const data = await authService.register({
+        name: username,
+        username,
+        email,
+        password
       });
-
-      if (!response.ok) {
-        if (response.status === 409) {
-          throw new Error('Username or email already exists. Please try different credentials.');
-        } else if (response.status === 400) {
-          throw new Error('Invalid registration data. Please check your information.');
-        } else if (response.status >= 500) {
-          throw new Error('Server error. Please try again later.');
-        } else {
-          throw new Error('Registration failed. Please try again.');
-        }
-      }
-
-      const data = await response.json();
       
-      // Store token
-      localStorage.setItem(config.jwtStorageKey, data.access_token);
+      // Set auth state for immediate login
       setToken(data.access_token);
-      
-      // Set user data
       setUser(data.user);
       
     } catch (error) {
       console.error('Registration error:', error);
-      throw error;
+      
+      // Handle specific error types
+      if (error.response?.status === 409) {
+        throw new Error('Username or email already exists. Please try different credentials.');
+      } else if (error.response?.status === 400) {
+        throw new Error('Invalid registration data. Please check your information.');
+      } else if (error.response?.status >= 500) {
+        throw new Error('Server error. Please try again later.');
+      } else {
+        throw new Error('Registration failed. Please try again.');
+      }
     } finally {
       setIsLoading(false);
     }
   };
 
   const logout = () => {
-    localStorage.removeItem(config.jwtStorageKey);
+    authService.logout();
     setToken(null);
     setUser(null);
   };

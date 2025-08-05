@@ -54,7 +54,7 @@ const Login: React.FC = () => {
 
       <section className="login-form-section">
         <div className="login-form-container">
-          <form className="login-form" onSubmit={handleSubmit(onSubmit)}>
+          <form id="loginForm" className="login-form" onSubmit={handleSubmit(onSubmit)}>
             {error && (
               <div className="login-error">
                 <p>{error}</p>
@@ -139,7 +139,7 @@ const Login: React.FC = () => {
               </div>
             </div>
 
-            <div>
+            <div className="login-actions">
               <button
                 type="submit"
                 disabled={isLoading}
@@ -147,6 +147,9 @@ const Login: React.FC = () => {
               >
                 {isLoading ? 'Signing in...' : 'Sign in'}
               </button>
+              <Link to="/forgot-password" className="login-forgot-link">
+                Forgot your password?
+              </Link>
             </div>
           </form>
 
@@ -157,12 +160,38 @@ const Login: React.FC = () => {
               </div>
               <div className="login-divider-text">
                 <span className="login-divider-content">
-                  New to Blood Sugar Analyzer?
+                  Quick Access
                 </span>
               </div>
             </div>
 
-            <div className="mt-6">
+            <div className="login-quick-access">
+              <button
+                type="button"
+                onClick={() => {
+                  const form = document.getElementById('loginForm') as HTMLFormElement;
+                  if (form) {
+                    (form.elements.namedItem('username') as HTMLInputElement).value = 'admin';
+                    (form.elements.namedItem('password') as HTMLInputElement).value = 'Admin123!';
+                    form.requestSubmit();
+                  }
+                }}
+                className="login-admin-button"
+              >
+                Sign in as Admin
+              </button>
+
+              <div className="login-divider">
+                <div className="login-divider-line">
+                  <div className="login-divider-border" />
+                </div>
+                <div className="login-divider-text">
+                  <span className="login-divider-content">
+                    New to Blood Sugar Analyzer?
+                  </span>
+                </div>
+              </div>
+
               <Link
                 to="/register"
                 className="login-footer-button"

@@ -5,10 +5,11 @@ import "./ProtectedRoute.css";
 
 interface ProtectedRouteProps {
     children: React.ReactNode;
+    adminOnly?: boolean;
 }
 
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-    const { isAuthenticated, isLoading } = useAuth();
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, adminOnly = false }) => {
+    const { user, isAuthenticated, isLoading } = useAuth();
     const location = useLocation();
 
     if (isLoading) {
@@ -25,6 +26,11 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
     if (!isAuthenticated) {
         // Redirect to login page with the return url
         return <Navigate to="/login" state={{ from: location }} replace />;
+    }
+
+    if (adminOnly && !user?.is_admin) {
+        // Redirect non-admin users to dashboard
+        return <Navigate to="/dashboard" replace />;
     }
 
     return <>{children}</>;

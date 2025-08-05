@@ -4,6 +4,7 @@ interface User {
   id: number;
   username: string;
   email: string;
+  name: string;
   is_admin: boolean;
   weight?: number;
   weight_unit?: string;

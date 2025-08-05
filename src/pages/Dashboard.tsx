@@ -1,45 +1,13 @@
 import React from 'react';
 import { useAuth } from '../hooks/useAuth';
-import { LogOut, User, Activity, BarChart3, Plus } from 'lucide-react';
+import { Activity, BarChart3, Plus } from 'lucide-react';
 import './Dashboard.css';
 
 const Dashboard: React.FC = () => {
-    const { user, logout } = useAuth();
-
-    const handleLogout = () => {
-        logout();
-    };
+    const { user } = useAuth();
 
     return (
         <div className="dashboard-container">
-            {/* Header */}
-            <header className="dashboard-header">
-                <div className="dashboard-header-content">
-                    <div className="dashboard-header-inner">
-                        <div className="dashboard-title-container">
-                            <h1 className="dashboard-title">
-                                Food Blood Sugar Analyzer
-                            </h1>
-                        </div>
-                        <nav className="dashboard-nav">
-                            <div className="dashboard-user-info">
-                                <User className="dashboard-user-icon" />
-                                <span className="dashboard-username">{user?.username}</span>
-                            </div>
-                            <button
-                                onClick={handleLogout}
-                                className="dashboard-logout-button"
-                                aria-label="Logout"
-                            >
-                                <LogOut className="h-4 w-4" />
-                                <span>Logout</span>
-                            </button>
-                        </nav>
-                    </div>
-                </div>
-            </header>
-
-            {/* Main Content */}
             <main className="dashboard-main">
                 {/* Welcome Section */}
                 <section className="dashboard-section">
