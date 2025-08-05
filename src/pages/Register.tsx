@@ -10,6 +10,8 @@ interface RegisterFormData {
   email: string;
   password: string;
   confirmPassword: string;
+  weight?: string;
+  weight_unit?: string;
 }
 
 const Register: React.FC = () => {
@@ -31,7 +33,7 @@ const Register: React.FC = () => {
   const onSubmit = async (data: RegisterFormData) => {
     try {
       setError('');
-      await registerUser(data.username, data.email, data.password);
+      await registerUser(data.username, data.email, data.password, data.weight, data.weight_unit);
       navigate('/dashboard');
     } catch (err) {
       setError('Registration failed. Please try again.');
@@ -229,6 +231,64 @@ const Register: React.FC = () => {
                   </p>
                 )}
               </div>
+            </div>
+
+            <div>
+              <label
+                htmlFor="weight"
+                className="register-label"
+              >
+                Weight (Optional)
+              </label>
+              <div className="register-weight-inputs">
+                <input
+                  id="weight"
+                  type="text"
+                  inputMode="decimal"
+                  pattern="[0-9]*[.]?[0-9]{0,2}"
+                  {...register('weight', {
+                    required: false,
+                    validate: {
+                      isValid: (value: string) => {
+                        if (!value) return true;
+                        const num = parseFloat(value);
+                        if (isNaN(num)) return 'Please enter a valid number';
+                        if (num <= 0) return 'Weight must be positive';
+                        if (num > 1000) return 'Weight must be reasonable';
+                        // Format to 2 decimal places
+                        const formatted = num.toFixed(2);
+                        // Ensure the value matches the formatted version
+                        if (parseFloat(value).toFixed(2) !== formatted) {
+                          return 'Please enter a number with up to 2 decimal places';
+                        }
+                        return true;
+                      }
+                    },
+                    setValueAs: (value: string) => {
+                      if (!value) return null;
+                      const num = parseFloat(value);
+                      return isNaN(num) ? null : parseFloat(num.toFixed(2));
+                    }
+                  })}
+                  className={`register-input register-weight-input ${
+                    errors.weight ? 'register-input-error' : 'register-input-normal'
+                  }`}
+                  placeholder="Enter weight (optional)"
+                />
+                <select
+                  {...register('weight_unit')}
+                  className="register-select"
+                  defaultValue="kg"
+                >
+                  <option value="kg">kg</option>
+                  <option value="lb">lb</option>
+                </select>
+              </div>
+              {errors.weight && (
+                <p className="mt-2 text-sm text-red-600">
+                  {errors.weight.message}
+                </p>
+              )}
             </div>
 
             <div>
