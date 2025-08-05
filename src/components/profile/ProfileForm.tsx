@@ -200,8 +200,8 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
                   })}
                   className={`profile-weight-input ${errors.weight ? 'profile-input-error' : ''}`}
                   placeholder="0.00"
-                  value={watch('weight') ? Number(watch('weight')).toFixed(2) : ''}
-                  onChange={(e) => {
+                  defaultValue={user.weight ? user.weight.toFixed(2) : ''}
+                  onBlur={(e) => {
                     const value = e.target.value;
                     if (value === '') {
                       setValue('weight', null);
@@ -209,6 +209,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
                       const num = Number(value);
                       if (!isNaN(num)) {
                         setValue('weight', num.toFixed(2));
+                        e.target.value = num.toFixed(2);
                       }
                     }
                   }}
