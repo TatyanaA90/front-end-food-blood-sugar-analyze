@@ -42,8 +42,8 @@ export const userService = {
   },
 
   // Delete current user account
-  deleteAccount: async (): Promise<void> => {
-    await api.delete('/me');
+  deleteAccount: async (userId: number): Promise<void> => {
+    await api.delete(`/users/${userId}`);
   },
 
   // Admin operations

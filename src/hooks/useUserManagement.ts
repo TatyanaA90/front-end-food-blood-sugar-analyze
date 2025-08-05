@@ -40,7 +40,7 @@ export const useDeleteAccount = () => {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: userService.deleteAccount,
+    mutationFn: (userId: number) => userService.deleteAccount(userId),
     onSuccess: () => {
       // Clear all user-related cache
       queryClient.removeQueries({ queryKey: userQueryKeys.all });

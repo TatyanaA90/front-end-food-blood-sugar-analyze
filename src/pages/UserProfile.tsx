@@ -49,16 +49,20 @@ const UserProfile: React.FC = () => {
 
     const handleDeleteAccount = async () => {
         try {
-            await deleteAccountMutation.mutateAsync();
+            await deleteAccountMutation.mutateAsync(user.id);
 
             // Account deleted successfully - logout and redirect
             logout();
             navigate('/login', {
                 state: { message: 'Your account has been successfully deleted.' }
             });
-        } catch (error) {
+        } catch (error: any) {
             console.error('Account deletion error:', error);
-            alert('Failed to delete account. Please try again.');
+            const errorMessage = error.response?.data?.detail || 
+                               error.response?.data?.message || 
+                               'Failed to delete account. Please try again.';
+            alert(errorMessage);
+            setShowDeleteConfirm(false); // Close the modal on error
         }
     };
 
