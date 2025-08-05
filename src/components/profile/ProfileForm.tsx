@@ -93,7 +93,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
 
       <form className="profile-form" onSubmit={handleSubmit(handleSave)}>
         <div className="profile-field">
-          <label className="profile-label" htmlFor="name">
+          <label className="profile-label" htmlFor={isEditing ? "name" : undefined}>
             <UserIcon className="field-icon" />
             Name
           </label>
@@ -120,7 +120,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
         </div>
 
         <div className="profile-field">
-          <label className="profile-label" htmlFor="email">
+          <label className="profile-label" htmlFor={isEditing ? "email" : undefined}>
             <Mail className="field-icon" />
             Email
           </label>
@@ -149,15 +149,15 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
         </div>
 
         <div className="profile-field">
-          <label className="profile-label" htmlFor="username-display">Username</label>
-          <div className="profile-value profile-readonly" id="username-display">
+          <label className="profile-label">Username</label>
+          <div className="profile-value profile-readonly">
             {user.username}
             <span className="profile-readonly-note">(Cannot be changed)</span>
           </div>
         </div>
 
         <div className="profile-field">
-          <label className="profile-label" htmlFor="weight">
+          <label className="profile-label" htmlFor={isEditing ? "weight" : undefined}>
             <Scale className="field-icon" />
             Weight
           </label>
