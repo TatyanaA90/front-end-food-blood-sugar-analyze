@@ -29,6 +29,8 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
     register,
     handleSubmit,
     reset,
+    watch,
+    setValue,
     formState: { errors, isValid }
   } = useForm<FormData>({
     defaultValues: {
@@ -189,18 +191,36 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
                         const formatted = Number(num.toFixed(2));
                         return formatted === num || 'Please enter a number with up to 2 decimal places';
                       }
+                    },
+                    setValueAs: (value: string) => {
+                      if (!value) return null;
+                      const num = Number(value);
+                      return isNaN(num) ? null : Number(num.toFixed(2));
                     }
                   })}
                   className={`profile-weight-input ${errors.weight ? 'profile-input-error' : ''}`}
-                  placeholder="72.50"
+                  placeholder="0.00"
+                  value={watch('weight') ? Number(watch('weight')).toFixed(2) : ''}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (value === '') {
+                      setValue('weight', null);
+                    } else {
+                      const num = Number(value);
+                      if (!isNaN(num)) {
+                        setValue('weight', num.toFixed(2));
+                      }
+                    }
+                  }}
                 />
-                <span className="profile-weight-unit">kg</span>
+                <select
+                  {...register('weight_unit')}
+                  className="profile-unit-select"
+                >
+                  <option value="kg">kg</option>
+                  <option value="lb">lb</option>
+                </select>
               </div>
-              <input
-                type="hidden"
-                {...register('weight_unit')}
-                value="kg"
-              />
               {errors.weight && (
                 <span className="profile-error">{errors.weight.message}</span>
               )}
