@@ -36,6 +36,8 @@ The Food & Blood Sugar Analyzer helps users track and manage their diabetes by l
 - ✅ Enhanced form validation with password complexity requirements
 - 🚫 Prevention of form submission on validation errors
 - 📍 Stay on same page after failed login attempts
+- ⚖️ Weight data persistence from registration to profile
+- ♿ Full accessibility compliance with proper label associations
 
 ### Core Features (Coming Soon)
 - 🩸 Glucose readings tracking with unit conversion (mg/dL ↔ mmol/L)

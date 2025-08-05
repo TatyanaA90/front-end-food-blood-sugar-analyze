@@ -29,7 +29,6 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
     register,
     handleSubmit,
     reset,
-    watch,
     setValue,
     formState: { errors, isValid }
   } = useForm<FormData>({
