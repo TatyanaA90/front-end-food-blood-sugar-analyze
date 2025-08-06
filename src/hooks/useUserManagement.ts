@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { userService, type UserUpdateData } from '../services/userService';
+import { userService, type UserUpdateData, type AdminUserUpdate } from '../services/userService';
 
 // Query keys for consistent cache management
 export const userQueryKeys = {
@@ -127,7 +127,7 @@ export const useUpdateUserAdmin = () => {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: ({ userId, data }: { userId: number; data: any }) =>
+    mutationFn: ({ userId, data }: { userId: number; data: AdminUserUpdate }) =>
       userService.updateUserAdmin(userId, data),
     onSuccess: () => {
       // Refresh all user-related data

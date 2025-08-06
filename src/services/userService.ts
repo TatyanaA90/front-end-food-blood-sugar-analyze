@@ -52,6 +52,57 @@ export interface UserTruncateResponse {
   message: string;
 }
 
+export interface UserDataResponse {
+  user: {
+    id: number;
+    username: string;
+    email: string;
+    name: string;
+    is_admin: boolean;
+    weight?: number;
+    weight_unit?: string;
+    created_at: string;
+    updated_at: string;
+  };
+  data_summary: {
+    glucose_readings_count: number;
+    meals_count: number;
+    activities_count: number;
+    insulin_doses_count: number;
+    condition_logs_count: number;
+  };
+  glucose_readings: Array<{
+    id: number;
+    value: number;
+    unit: string;
+    timestamp: string;
+  }>;
+  meals: Array<{
+    id: number;
+    name: string;
+    meal_type: string;
+    timestamp: string;
+  }>;
+  activities: Array<{
+    id: number;
+    activity_type: string;
+    duration_minutes: number;
+    timestamp: string;
+  }>;
+  insulin_doses: Array<{
+    id: number;
+    insulin_type: string;
+    units: number;
+    timestamp: string;
+  }>;
+  condition_logs: Array<{
+    id: number;
+    condition_type: string;
+    severity: string;
+    timestamp: string;
+  }>;
+}
+
 // User profile operations
 export const userService = {
   // Get current user profile
@@ -90,8 +141,8 @@ export const userService = {
   },
 
   // Get specific user data (admin only)
-  getUserData: async (userId: number): Promise<any> => {
-    const response = await api.get(`/admin/users/${userId}/data`);
+  getUserData: async (userId: number): Promise<UserDataResponse> => {
+    const response = await api.get<UserDataResponse>(`/admin/users/${userId}/data`);
     return response.data;
   },
 

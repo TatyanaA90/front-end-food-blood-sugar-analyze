@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { X, User, Mail, Calendar, Shield, Activity, Utensils, Droplets, FileText, Edit3, Save, XCircle } from 'lucide-react';
+import { X, User, Shield, Activity, Utensils, Droplets, FileText, Edit3, Save, XCircle } from 'lucide-react';
 import { useUserData, useUpdateUserAdmin } from '../../hooks/useUserManagement';
 import type { UserDetail } from '../../services/userService';
+import './UserDetailModal.css';
 
 interface UserDetailModalProps {
   isOpen: boolean;
@@ -70,7 +71,11 @@ const UserDetailModal: React.FC<UserDetailModalProps> = ({
               {isEditing ? 'Edit User' : 'User Details'}
             </h2>
           </div>
-          <button className="modal-close-btn" onClick={onClose}>
+          <button 
+            className="modal-close-btn" 
+            onClick={onClose}
+            aria-label="Close user details"
+          >
             <X className="close-icon" />
           </button>
         </header>
@@ -93,12 +98,13 @@ const UserDetailModal: React.FC<UserDetailModalProps> = ({
                   <div className="detail-item">
                     <label className="detail-label">Name</label>
                     {isEditing ? (
-                      <input
-                        type="text"
-                        value={editData.name || ''}
-                        onChange={(e) => setEditData({ ...editData, name: e.target.value })}
-                        className="detail-input"
-                      />
+                                              <input
+                          type="text"
+                          value={editData.name || ''}
+                          onChange={(e) => setEditData({ ...editData, name: e.target.value })}
+                          className="detail-input"
+                          aria-label="Edit user name"
+                        />
                     ) : (
                       <span className="detail-value">{user.name}</span>
                     )}
@@ -106,12 +112,13 @@ const UserDetailModal: React.FC<UserDetailModalProps> = ({
                   <div className="detail-item">
                     <label className="detail-label">Email</label>
                     {isEditing ? (
-                      <input
-                        type="email"
-                        value={editData.email || ''}
-                        onChange={(e) => setEditData({ ...editData, email: e.target.value })}
-                        className="detail-input"
-                      />
+                                              <input
+                          type="email"
+                          value={editData.email || ''}
+                          onChange={(e) => setEditData({ ...editData, email: e.target.value })}
+                          className="detail-input"
+                          aria-label="Edit user email"
+                        />
                     ) : (
                       <span className="detail-value">{user.email}</span>
                     )}
@@ -126,11 +133,13 @@ const UserDetailModal: React.FC<UserDetailModalProps> = ({
                           value={editData.weight || ''}
                           onChange={(e) => setEditData({ ...editData, weight: parseFloat(e.target.value) || null })}
                           className="detail-input"
+                          aria-label="Edit user weight"
                         />
                         <select
                           value={editData.weight_unit || 'kg'}
                           onChange={(e) => setEditData({ ...editData, weight_unit: e.target.value })}
                           className="detail-select"
+                          aria-label="Select weight unit"
                         >
                           <option value="kg">kg</option>
                           <option value="lb">lb</option>
@@ -149,6 +158,7 @@ const UserDetailModal: React.FC<UserDetailModalProps> = ({
                         value={editData.is_admin ? 'true' : 'false'}
                         onChange={(e) => setEditData({ ...editData, is_admin: e.target.value === 'true' })}
                         className="detail-select"
+                        aria-label="Select admin status"
                       >
                         <option value="false">Regular User</option>
                         <option value="true">Administrator</option>
@@ -220,7 +230,7 @@ const UserDetailModal: React.FC<UserDetailModalProps> = ({
                     <div className="data-tab">
                       <h4>Recent Glucose Readings</h4>
                       <div className="data-list">
-                        {userData.glucose_readings?.slice(0, 5).map((reading: any) => (
+                        {userData.glucose_readings?.slice(0, 5).map((reading) => (
                           <div key={reading.id} className="data-item">
                             <span className="data-value">{reading.value} {reading.unit}</span>
                             <span className="data-time">{new Date(reading.timestamp).toLocaleString()}</span>
@@ -234,7 +244,7 @@ const UserDetailModal: React.FC<UserDetailModalProps> = ({
                     <div className="data-tab">
                       <h4>Recent Meals</h4>
                       <div className="data-list">
-                        {userData.meals?.slice(0, 5).map((meal: any) => (
+                        {userData.meals?.slice(0, 5).map((meal) => (
                           <div key={meal.id} className="data-item">
                             <span className="data-value">{meal.name} ({meal.meal_type})</span>
                             <span className="data-time">{new Date(meal.timestamp).toLocaleString()}</span>

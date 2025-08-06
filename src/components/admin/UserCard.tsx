@@ -117,6 +117,7 @@ const UserCard: React.FC<UserCardProps> = ({
           className="user-action-btn user-view-btn"
           onClick={() => onViewUserDetail(userData)}
           type="button"
+          aria-label={`View details for ${userData.name}`}
         >
           <Eye className="btn-icon" />
           View Details
@@ -125,6 +126,7 @@ const UserCard: React.FC<UserCardProps> = ({
           className="user-action-btn user-reset-btn"
           onClick={() => onPasswordReset(userData)}
           type="button"
+          aria-label={`Reset password for ${userData.name}`}
         >
           <Key className="btn-icon" />
           Reset Password
@@ -134,6 +136,7 @@ const UserCard: React.FC<UserCardProps> = ({
             className="user-action-btn user-delete-btn"
             onClick={() => onDeleteUser(userData)}
             type="button"
+            aria-label={`Delete user ${userData.name}`}
           >
             <Trash2 className="btn-icon" />
             Delete
