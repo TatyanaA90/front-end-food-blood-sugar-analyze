@@ -17,6 +17,14 @@ export const useUserProfile = () => {
     queryKey: userQueryKeys.profile(),
     queryFn: userService.getProfile,
     staleTime: 5 * 60 * 1000, // 5 minutes
+    retry: (failureCount, error) => {
+      // Don't retry on 401 errors (authentication issues)
+      if ((error as { response?: { status?: number } })?.response?.status === 401) {
+        return false;
+      }
+      // Retry up to 2 times for other errors
+      return failureCount < 2;
+    },
   });
 };
 

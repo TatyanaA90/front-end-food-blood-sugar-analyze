@@ -48,12 +48,14 @@ const AdminDashboard: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   // React Query hooks
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { data: users = [], isLoading: usersLoading, refetch: refetchUsers } = useAllUsers();
   const { data: usersDetailed = [], isLoading: detailedLoading, refetch: refetchDetailed } = useUsersDetailed();
   const { data: userStats = null, refetch: refetchStats } = useUserStats();
   const deleteUserMutation = useDeleteUser();
   const truncateUsersMutation = useTruncateUsers();
   const resetPasswordMutation = useResetUserPassword();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const updateUserMutation = useUpdateUserAdmin();
 
   // Check admin access

@@ -12,6 +12,7 @@ interface CustomRenderOptions extends Omit<RenderOptions, 'wrapper'> {
 export function renderWithProviders(
   ui: React.ReactElement,
   {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     initialEntries = ['/'],
     ...renderOptions
   }: CustomRenderOptions = {}
@@ -57,7 +58,7 @@ export const mockAuthResponse = {
 
 // Helper to simulate typing in a form field
 export const typeInField = async (
-  user: any,
+  user: ReturnType<typeof import('@testing-library/user-event').default.setup>,
   field: HTMLElement,
   value: string
 ) => {
@@ -66,5 +67,6 @@ export const typeInField = async (
 }
 
 // Re-export everything from React Testing Library
+// eslint-disable-next-line react-refresh/only-export-components
 export * from '@testing-library/react'
 export { renderWithProviders as render }

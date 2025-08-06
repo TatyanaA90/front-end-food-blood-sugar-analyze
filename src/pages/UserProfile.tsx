@@ -56,10 +56,10 @@ const UserProfile: React.FC = () => {
             navigate('/login', {
                 state: { message: 'Your account has been successfully deleted.' }
             });
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error('Account deletion error:', error);
-            const errorMessage = error.response?.data?.detail || 
-                               error.response?.data?.message || 
+            const errorMessage = (error as { response?: { data?: { detail?: string; message?: string } } })?.response?.data?.detail || 
+                               (error as { response?: { data?: { detail?: string; message?: string } } })?.response?.data?.message || 
                                'Failed to delete account. Please try again.';
             alert(errorMessage);
             setShowDeleteConfirm(false); // Close the modal on error
@@ -70,10 +70,24 @@ const UserProfile: React.FC = () => {
         setIsEditing(false);
     };
 
-    if (isLoading || !user) {
+    if (isLoading) {
         return (
             <div className="profile-loading">
                 <p>Loading profile...</p>
+            </div>
+        );
+    }
+
+    if (!user) {
+        return (
+            <div className="profile-error">
+                <p>Unable to load profile. Please try logging in again.</p>
+                <button 
+                    onClick={() => navigate('/login')}
+                    className="profile-login-btn"
+                >
+                    Go to Login
+                </button>
             </div>
         );
     }

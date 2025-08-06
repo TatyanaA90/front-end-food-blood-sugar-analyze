@@ -40,10 +40,10 @@ const ResetPassword: React.FC = () => {
       });
       alert('Password reset successfully! You can now log in with your new password.');
       navigate('/login');
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Password reset error:', error);
-      const errorMessage = error.response?.data?.detail || 
-                         error.response?.data?.message || 
+      const errorMessage = (error as { response?: { data?: { detail?: string; message?: string } } })?.response?.data?.detail || 
+                         (error as { response?: { data?: { detail?: string; message?: string } } })?.response?.data?.message || 
                          'Failed to reset password. Please try again.';
       alert(errorMessage);
     }

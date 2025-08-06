@@ -159,6 +159,7 @@ describe('Login Component', () => {
   })
 
   it('should show loading state during login', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const user = userEvent.setup()
     mockUseAuth.isLoading = true
     
