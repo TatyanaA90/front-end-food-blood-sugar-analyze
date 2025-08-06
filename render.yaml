@@ -4,6 +4,10 @@ services:
     plan: free
     buildCommand: npm install && npm run build
     staticPublishPath: ./dist
+    headers:
+      - path: /*
+        name: Cache-Control
+        value: no-cache
     envVars:
       - key: VITE_API_BASE_URL
         value: https://back-end-food-blood-sugar-analyzer.onrender.com
