@@ -54,6 +54,31 @@ The Food & Blood Sugar Analyzer helps users track and manage their diabetes by l
 - Node.js 18+ 
 - npm or yarn
 
+### Environment Configuration
+The application uses environment variables for configuration. Create a `.env.local` file for local development:
+
+```env
+VITE_API_BASE_URL=http://localhost:8000
+VITE_APP_NAME=Blood Sugar Analyzer
+VITE_DEBUG_MODE=true
+```
+
+### Production Deployment
+The application is deployed on Render with automatic deployments from the main branch. Production environment uses:
+
+```env
+VITE_API_BASE_URL=https://back-end-food-blood-sugar-analyzer.onrender.com
+VITE_APP_NAME=Food & Blood Sugar Analyzer
+VITE_DEBUG_MODE=false
+```
+
+### Recent Updates (December 2024)
+- ✅ **Admin Login Routing**: Fixed 404 errors for admin login URLs with comprehensive routing configuration
+- ✅ **Static Site Configuration**: Enhanced routing configuration for Render deployment with multiple fallback options
+- ✅ **Debugging Capabilities**: Added detailed logging for API connectivity and authentication flow
+- ✅ **Favicon Fix**: Resolved favicon.ico 404 error with proper file and HTML links
+- ✅ **Error Handling**: Enhanced API error handling for better user experience
+
 ### Installation
 
 ```bash

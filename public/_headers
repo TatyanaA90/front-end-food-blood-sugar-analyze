@@ -4,4 +4,14 @@
   Cache-Control: no-cache
 
 /index.html
+  Cache-Control: no-cache
+
+/admin/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Cache-Control: no-cache
+
+/login/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
   Cache-Control: no-cache 
