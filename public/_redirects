@@ -1,17 +1,17 @@
 # Handle client-side routing for React Router
 # Redirect all routes to index.html except for static assets
 
-# Specific admin routes
-/admin    /index.html   200
+# Admin routes - must come first
 /admin/login    /index.html   200
 /admin/*    /index.html   200
+/admin    /index.html   200
 
 # Login routes
-/login    /index.html   200
 /login/admin    /index.html   200
 /login/*    /index.html   200
+/login    /index.html   200
 
-# Other routes
+# Other specific routes
 /register    /index.html   200
 /profile    /index.html   200
 /dashboard    /index.html   200
@@ -19,4 +19,10 @@
 /reset-password    /index.html   200
 
 # Catch all - must be last
-/*    /index.html   200 
+/*    /index.html   200
+
+# Alternative approach - try without status code
+/admin/login    /index.html
+/admin/*    /index.html
+/login/admin    /index.html
+/login/*    /index.html 

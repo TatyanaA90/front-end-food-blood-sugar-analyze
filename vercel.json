@@ -1,20 +1,36 @@
 {
   "rewrites": [
     {
-      "source": "/(.*)",
+      "source": "/admin/(.*)",
       "destination": "/index.html"
-    }
-  ],
-  "redirects": [
-    {
-      "source": "/admin/login",
-      "destination": "/index.html",
-      "permanent": false
     },
     {
-      "source": "/login/admin",
-      "destination": "/admin/login",
-      "permanent": false
+      "source": "/login/(.*)",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/register",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/profile",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/dashboard",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/forgot-password",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/reset-password",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ],
   "headers": [
