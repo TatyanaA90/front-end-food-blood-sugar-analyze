@@ -6,7 +6,9 @@ export const userQueryKeys = {
   all: ['users'] as const,
   profile: () => [...userQueryKeys.all, 'profile'] as const,
   list: () => [...userQueryKeys.all, 'list'] as const,
+  detailed: () => [...userQueryKeys.all, 'detailed'] as const,
   stats: () => [...userQueryKeys.all, 'stats'] as const,
+  data: (userId: number) => [...userQueryKeys.all, 'data', userId] as const,
 };
 
 // Get current user profile
@@ -57,6 +59,25 @@ export const useAllUsers = () => {
   });
 };
 
+// Get detailed user information (admin only)
+export const useUsersDetailed = () => {
+  return useQuery({
+    queryKey: userQueryKeys.detailed(),
+    queryFn: userService.getUsersDetailed,
+    staleTime: 30 * 1000, // 30 seconds - admin data should be fresh
+  });
+};
+
+// Get specific user data (admin only)
+export const useUserData = (userId: number) => {
+  return useQuery({
+    queryKey: userQueryKeys.data(userId),
+    queryFn: () => userService.getUserData(userId),
+    enabled: !!userId,
+    staleTime: 30 * 1000, // 30 seconds
+  });
+};
+
 // Get user statistics (admin only)
 export const useUserStats = () => {
   return useQuery({
@@ -98,6 +119,20 @@ export const useResetUserPassword = () => {
   return useMutation({
     mutationFn: ({ userId, newPassword }: { userId: number; newPassword: string }) =>
       userService.resetUserPassword(userId, newPassword),
+  });
+};
+
+// Update user as admin
+export const useUpdateUserAdmin = () => {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: ({ userId, data }: { userId: number; data: any }) =>
+      userService.updateUserAdmin(userId, data),
+    onSuccess: () => {
+      // Refresh all user-related data
+      queryClient.invalidateQueries({ queryKey: userQueryKeys.all });
+    },
   });
 };
 

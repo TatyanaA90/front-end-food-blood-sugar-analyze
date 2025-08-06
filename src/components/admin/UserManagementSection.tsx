@@ -11,6 +11,11 @@ interface UserData {
   weight?: number;
   weight_unit?: string;
   created_at?: string;
+  glucose_readings_count?: number;
+  meals_count?: number;
+  activities_count?: number;
+  insulin_doses_count?: number;
+  condition_logs_count?: number;
 }
 
 interface UserManagementSectionProps {
@@ -20,6 +25,7 @@ interface UserManagementSectionProps {
   onTruncateUsers: () => void;
   onPasswordReset: (user: UserData) => void;
   onDeleteUser: (user: UserData) => void;
+  onViewUserDetail: (user: UserData) => void;
 }
 
 const UserManagementSection: React.FC<UserManagementSectionProps> = ({
@@ -28,7 +34,8 @@ const UserManagementSection: React.FC<UserManagementSectionProps> = ({
   onRefresh,
   onTruncateUsers,
   onPasswordReset,
-  onDeleteUser
+  onDeleteUser,
+  onViewUserDetail
 }) => {
   return (
     <section className="admin-section">
@@ -63,6 +70,7 @@ const UserManagementSection: React.FC<UserManagementSectionProps> = ({
               currentUserId={currentUserId}
               onPasswordReset={onPasswordReset}
               onDeleteUser={onDeleteUser}
+              onViewUserDetail={onViewUserDetail}
             />
           ))}
         </div>

@@ -5,7 +5,12 @@ import {
   Mail, 
   Calendar, 
   Key, 
-  Trash2 
+  Trash2,
+  Activity,
+  Utensils,
+  Droplets,
+  FileText,
+  Eye
 } from 'lucide-react';
 
 interface UserData {
@@ -17,6 +22,11 @@ interface UserData {
   weight?: number;
   weight_unit?: string;
   created_at?: string;
+  glucose_readings_count?: number;
+  meals_count?: number;
+  activities_count?: number;
+  insulin_doses_count?: number;
+  condition_logs_count?: number;
 }
 
 interface UserCardProps {
@@ -24,13 +34,15 @@ interface UserCardProps {
   currentUserId: number;
   onPasswordReset: (user: UserData) => void;
   onDeleteUser: (user: UserData) => void;
+  onViewUserDetail: (user: UserData) => void;
 }
 
 const UserCard: React.FC<UserCardProps> = ({ 
   userData, 
   currentUserId, 
   onPasswordReset, 
-  onDeleteUser 
+  onDeleteUser,
+  onViewUserDetail
 }) => {
   const formatDate = (dateString?: string) => {
     if (!dateString) return 'Unknown';
@@ -71,9 +83,44 @@ const UserCard: React.FC<UserCardProps> = ({
             </div>
           )}
         </div>
+
+        {/* User Data Summary */}
+        <div className="user-data-summary">
+          <h4 className="data-summary-title">Data Summary</h4>
+          <div className="data-summary-grid">
+            <div className="data-summary-item">
+              <Droplets className="data-icon" />
+              <span className="data-label">Glucose</span>
+              <span className="data-count">{userData.glucose_readings_count || 0}</span>
+            </div>
+            <div className="data-summary-item">
+              <Utensils className="data-icon" />
+              <span className="data-label">Meals</span>
+              <span className="data-count">{userData.meals_count || 0}</span>
+            </div>
+            <div className="data-summary-item">
+              <Activity className="data-icon" />
+              <span className="data-label">Activities</span>
+              <span className="data-count">{userData.activities_count || 0}</span>
+            </div>
+            <div className="data-summary-item">
+              <FileText className="data-icon" />
+              <span className="data-label">Logs</span>
+              <span className="data-count">{userData.condition_logs_count || 0}</span>
+            </div>
+          </div>
+        </div>
       </div>
 
       <footer className="user-card-actions">
+        <button 
+          className="user-action-btn user-view-btn"
+          onClick={() => onViewUserDetail(userData)}
+          type="button"
+        >
+          <Eye className="btn-icon" />
+          View Details
+        </button>
         <button 
           className="user-action-btn user-reset-btn"
           onClick={() => onPasswordReset(userData)}

@@ -4,16 +4,19 @@ import { useNavigate } from 'react-router-dom';
 import { XCircle } from 'lucide-react';
 import { 
   useAllUsers, 
+  useUsersDetailed,
   useUserStats, 
   useDeleteUser, 
   useTruncateUsers, 
-  useResetUserPassword 
+  useResetUserPassword,
+  useUpdateUserAdmin
 } from '../hooks/useUserManagement';
 import AdminHeader from '../components/admin/AdminHeader';
 import UserManagementSection from '../components/admin/UserManagementSection';
 import DeleteUserModal from '../components/admin/DeleteUserModal';
 import TruncateUsersModal from '../components/admin/TruncateUsersModal';
 import PasswordResetModal from '../components/admin/PasswordResetModal';
+import UserDetailModal from '../components/admin/UserDetailModal';
 import './AdminDashboard.css';
 
 interface UserData {
@@ -25,6 +28,11 @@ interface UserData {
   weight?: number;
   weight_unit?: string;
   created_at?: string;
+  glucose_readings_count?: number;
+  meals_count?: number;
+  activities_count?: number;
+  insulin_doses_count?: number;
+  condition_logs_count?: number;
 }
 
 const AdminDashboard: React.FC = () => {
@@ -35,15 +43,18 @@ const AdminDashboard: React.FC = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showTruncateModal, setShowTruncateModal] = useState(false);
   const [showPasswordReset, setShowPasswordReset] = useState(false);
+  const [showUserDetail, setShowUserDetail] = useState(false);
   const [newPassword, setNewPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
   // React Query hooks
   const { data: users = [], isLoading: usersLoading, refetch: refetchUsers } = useAllUsers();
+  const { data: usersDetailed = [], isLoading: detailedLoading, refetch: refetchDetailed } = useUsersDetailed();
   const { data: userStats = null, refetch: refetchStats } = useUserStats();
   const deleteUserMutation = useDeleteUser();
   const truncateUsersMutation = useTruncateUsers();
   const resetPasswordMutation = useResetUserPassword();
+  const updateUserMutation = useUpdateUserAdmin();
 
   // Check admin access
   useEffect(() => {
@@ -116,6 +127,11 @@ const AdminDashboard: React.FC = () => {
     generateRandomPassword();
   };
 
+  const handleViewUserDetail = (userData: UserData) => {
+    setSelectedUser(userData);
+    setShowUserDetail(true);
+  };
+
   const handleDeleteUserRequest = (userData: UserData) => {
     setSelectedUser(userData);
     setShowDeleteModal(true);
@@ -123,6 +139,7 @@ const AdminDashboard: React.FC = () => {
 
   const handleRefreshData = () => {
     refetchUsers();
+    refetchDetailed();
     refetchStats();
   };
 
@@ -136,7 +153,7 @@ const AdminDashboard: React.FC = () => {
     );
   }
 
-  if (usersLoading) {
+  if (usersLoading || detailedLoading) {
     return (
       <div className="admin-loading">
         <p>Loading admin dashboard...</p>
@@ -152,12 +169,13 @@ const AdminDashboard: React.FC = () => {
 
       <div className="admin-content">
         <UserManagementSection
-          users={users}
+          users={usersDetailed}
           currentUserId={user.id}
           onRefresh={handleRefreshData}
           onTruncateUsers={() => setShowTruncateModal(true)}
           onPasswordReset={handlePasswordResetRequest}
           onDeleteUser={handleDeleteUserRequest}
+          onViewUserDetail={handleViewUserDetail}
         />
       </div>
 
@@ -195,6 +213,16 @@ const AdminDashboard: React.FC = () => {
           setNewPassword('');
           setShowPassword(false);
         }}
+      />
+
+      <UserDetailModal
+        isOpen={showUserDetail}
+        user={selectedUser}
+        onClose={() => {
+          setShowUserDetail(false);
+          setSelectedUser(null);
+        }}
+        onRefresh={handleRefreshData}
       />
     </main>
   );
