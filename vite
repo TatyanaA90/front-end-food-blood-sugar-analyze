@@ -1,0 +1,9 @@
+
+
+  VITE v7.0.6  ready in 221 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: http://192.168.1.52:5173/
+  ➜  press h + enter to show help
+echo "Current API Base URL from config:"
+^Ccurl -I https://back-end-food-blood-sugar-analyzer.onrender.com

@@ -54,6 +54,7 @@ const PasswordResetModal: React.FC<PasswordResetModalProps> = ({
               <input
                 id="new-password"
                 type={showPassword ? 'text' : 'password'}
+                autoComplete="new-password"
                 value={newPassword}
                 onChange={(e) => onPasswordChange(e.target.value)}
                 className="password-input"

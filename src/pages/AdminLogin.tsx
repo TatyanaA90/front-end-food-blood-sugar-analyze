@@ -111,7 +111,7 @@ const AdminLogin: React.FC = () => {
                                 <input
                                     id="admin-password"
                                     type={showPassword ? 'text' : 'password'}
-                                    autoComplete="new-password"
+                                    autoComplete="current-password"
                                     {...register('password', {
                                         required: 'Admin password is required',
                                     })}

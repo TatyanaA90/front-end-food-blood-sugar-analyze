@@ -6,6 +6,11 @@
 /admin    /index.html   200
 /admin/login    /index.html   200
 /login    /index.html   200
+/login/admin    /index.html   200
 /register    /index.html   200
 /profile    /index.html   200
-/dashboard    /index.html   200 
+/dashboard    /index.html   200
+
+# Ensure all admin routes work
+/admin/*    /index.html   200
+/login/*    /index.html   200 

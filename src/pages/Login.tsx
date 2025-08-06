@@ -106,7 +106,7 @@ const Login: React.FC = () => {
                 <input
                   id="password"
                   type={showPassword ? 'text' : 'password'}
-                  autoComplete="new-password"
+                  autoComplete="current-password"
                   {...register('password', {
                     required: 'Password is required',
                   })}

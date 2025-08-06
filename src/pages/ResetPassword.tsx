@@ -95,6 +95,7 @@ const ResetPassword: React.FC = () => {
               <input
                 id="newPassword"
                 type={showNewPassword ? 'text' : 'password'}
+                autoComplete="new-password"
                 {...register('newPassword', {
                   required: 'New password is required',
                   minLength: {
@@ -131,6 +132,7 @@ const ResetPassword: React.FC = () => {
               <input
                 id="confirmPassword"
                 type={showConfirmPassword ? 'text' : 'password'}
+                autoComplete="new-password"
                 {...register('confirmPassword', {
                   required: 'Please confirm your password',
                   validate: value =>

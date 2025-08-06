@@ -21,19 +21,19 @@ interface Config {
 // Configuration object with type-safe environment variable access
 export const config: Config = {
   // API Configuration
-  apiBaseUrl: 'https://back-end-food-blood-sugar-analyzer.onrender.com',
-  apiTimeout: 10000,
+  apiBaseUrl: import.meta.env.VITE_API_BASE_URL || 'https://back-end-food-blood-sugar-analyzer.onrender.com',
+  apiTimeout: parseInt(import.meta.env.VITE_API_TIMEOUT || '10000'),
   
   // Application Configuration
-  appName: 'Food & Blood Sugar Analyzer',
-  appVersion: '1.0.0',
+  appName: import.meta.env.VITE_APP_NAME || 'Food & Blood Sugar Analyzer',
+  appVersion: import.meta.env.VITE_APP_VERSION || '1.0.0',
   
   // Authentication Configuration
-  jwtStorageKey: 'blood_sugar_token',
+  jwtStorageKey: import.meta.env.VITE_JWT_STORAGE_KEY || 'blood_sugar_token',
   
   // Feature Flags
-  enableAnalytics: true,
-  debugMode: false,
+  enableAnalytics: import.meta.env.VITE_ENABLE_ANALYTICS !== 'false',
+  debugMode: import.meta.env.VITE_DEBUG_MODE === 'true',
 };
 
 // Validation function to ensure all required configuration is present

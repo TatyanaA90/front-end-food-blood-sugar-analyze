@@ -64,6 +64,7 @@ const PasswordChangeSection: React.FC<PasswordChangeSectionProps> = ({
             <input
               id="currentPassword"
               type={showPasswords.current ? 'text' : 'password'}
+              autoComplete="current-password"
               {...register('currentPassword', {
                 required: 'Current password is required'
               })}
@@ -92,6 +93,7 @@ const PasswordChangeSection: React.FC<PasswordChangeSectionProps> = ({
             <input
               id="newPassword"
               type={showPasswords.new ? 'text' : 'password'}
+              autoComplete="new-password"
               {...register('newPassword', {
                 required: 'New password is required',
                 minLength: {
@@ -128,6 +130,7 @@ const PasswordChangeSection: React.FC<PasswordChangeSectionProps> = ({
             <input
               id="confirmPassword"
               type={showPasswords.confirm ? 'text' : 'password'}
+              autoComplete="new-password"
               {...register('confirmPassword', {
                 required: 'Please confirm your password',
                 validate: value =>

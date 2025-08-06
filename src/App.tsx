@@ -30,6 +30,7 @@ function App() {
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/admin/login" element={<AdminLoginRoute><AdminLogin /></AdminLoginRoute>} />
+            <Route path="/login/admin" element={<Navigate to="/admin/login" replace />} />
             
             {/* Protected routes */}
             <Route
