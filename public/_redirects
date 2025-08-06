@@ -1,3 +1,11 @@
 # Handle client-side routing for React Router
 # Redirect all routes to index.html except for static assets
-/*    /index.html   200 
+/*    /index.html   200
+
+# Specific routes for better compatibility
+/admin    /index.html   200
+/admin/login    /index.html   200
+/login    /index.html   200
+/register    /index.html   200
+/profile    /index.html   200
+/dashboard    /index.html   200 
