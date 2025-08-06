@@ -85,7 +85,7 @@ const AdminDashboard: React.FC = () => {
   const handleTruncateAllUsers = async () => {
     try {
       const result = await truncateUsersMutation.mutateAsync();
-      alert(`Successfully deleted ${result.users_deleted} users`);
+      alert(result.message);
       setShowTruncateModal(false);
     } catch (error) {
       console.error('Error truncating users:', error);

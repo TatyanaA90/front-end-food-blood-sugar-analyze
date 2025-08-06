@@ -47,10 +47,7 @@ export interface UserStats {
   total_users: number;
 }
 
-export interface UserTruncateResponse {
-  users_deleted: number;
-  message: string;
-}
+
 
 export interface UserDataResponse {
   user: {
@@ -122,21 +119,21 @@ export const userService = {
     await api.delete(`/users/${userId}`);
   },
 
-  // Admin operations
+  // Admin operations - All admin logic handled by backend
   getAllUsers: async (): Promise<User[]> => {
-    const response = await api.get<User[]>('/users');
+    const response = await api.get<User[]>('/admin/users');
     return response.data;
   },
 
   // Get detailed user information (admin only)
   getUsersDetailed: async (): Promise<UserDetail[]> => {
-    const response = await api.get<UserDetail[]>('/admin/users/detailed');
+    const response = await api.get<UserDetail[]>('/admin/users');
     return response.data;
   },
 
   // Get user statistics
   getUserStats: async (): Promise<UserStats> => {
-    const response = await api.get<UserStats>('/users/stats/count');
+    const response = await api.get<UserStats>('/admin/stats');
     return response.data;
   },
 
@@ -147,25 +144,25 @@ export const userService = {
   },
 
   // Update user as admin
-  updateUserAdmin: async (userId: number, data: AdminUserUpdate): Promise<User> => {
-    const response = await api.put<User>(`/admin/users/${userId}`, data);
+  updateUserAdmin: async (userId: number, data: AdminUserUpdate): Promise<{ message: string; user: UserDetail }> => {
+    const response = await api.put<{ message: string; user: UserDetail }>(`/admin/users/${userId}`, data);
     return response.data;
   },
 
   // Delete specific user (admin only)
   deleteUser: async (userId: number): Promise<void> => {
-    await api.delete(`/users/${userId}`);
+    await api.delete(`/admin/users/${userId}`);
   },
 
   // Truncate all users (admin only)
-  truncateAllUsers: async (): Promise<UserTruncateResponse> => {
-    const response = await api.delete<UserTruncateResponse>('/users/truncate-all');
+  truncateAllUsers: async (): Promise<{ message: string }> => {
+    const response = await api.delete<{ message: string }>('/admin/users/truncate-all');
     return response.data;
   },
 
-  // Reset user password (admin only) - placeholder for future implementation
+  // Reset user password (admin only)
   resetUserPassword: async (userId: number, newPassword: string): Promise<void> => {
-    await api.post('/admin/reset-password', {
+    await api.post(`/admin/users/${userId}/reset-password`, {
       user_id: userId,
       new_password: newPassword,
     });

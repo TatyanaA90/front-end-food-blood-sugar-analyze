@@ -27,7 +27,7 @@ const Login: React.FC = () => {
       setError('');
       await login(data.username, data.password);
       navigate('/dashboard');
-    } catch (err) {
+    } catch {
       setError('Invalid username or password');
       // Prevent navigation on error - stay on the same page
     }
@@ -106,7 +106,7 @@ const Login: React.FC = () => {
                 <input
                   id="password"
                   type={showPassword ? 'text' : 'password'}
-                  autoComplete="current-password"
+                  autoComplete="new-password"
                   {...register('password', {
                     required: 'Password is required',
                   })}
@@ -157,45 +157,17 @@ const Login: React.FC = () => {
               </div>
               <div className="login-divider-text">
                 <span className="login-divider-content">
-                  Quick Access
+                  New to Blood Sugar Analyzer?
                 </span>
               </div>
             </div>
 
-            <div className="login-quick-access">
-              <button
-                type="button"
-                onClick={() => {
-                  const form = document.getElementById('loginForm') as HTMLFormElement;
-                  if (form) {
-                    (form.elements.namedItem('username') as HTMLInputElement).value = 'admin';
-                    (form.elements.namedItem('password') as HTMLInputElement).value = 'Admin123!';
-                    form.requestSubmit();
-                  }
-                }}
-                className="login-admin-button"
-              >
-                Sign in as Admin
-              </button>
-
-              <div className="login-divider">
-                <div className="login-divider-line">
-                  <div className="login-divider-border" />
-                </div>
-                <div className="login-divider-text">
-                  <span className="login-divider-content">
-                    New to Blood Sugar Analyzer?
-                  </span>
-                </div>
-              </div>
-
-              <Link
-                to="/register"
-                className="login-footer-button"
-              >
-                Create new account
-              </Link>
-            </div>
+            <Link
+              to="/register"
+              className="login-footer-button"
+            >
+              Create new account
+            </Link>
           </footer>
         </div>
       </section>
