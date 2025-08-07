@@ -1,45 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import { XCircle } from 'lucide-react';
-import { 
-  useAllUsers, 
-  useUsersDetailed,
-  useUserStats, 
-  useDeleteUser, 
-  useTruncateUsers, 
-  useResetUserPassword,
-  useUpdateUserAdmin
-} from '../hooks/useUserManagement';
+import { useAuth } from '../hooks/useAuth';
+import { useAllUsers, useUsersDetailed, useUserStats, useDeleteUser, useTruncateUsers, useResetUserPassword, useUpdateUserAdmin } from '../hooks/useUserManagement';
 import AdminHeader from '../components/admin/AdminHeader';
 import UserManagementSection from '../components/admin/UserManagementSection';
 import DeleteUserModal from '../components/admin/DeleteUserModal';
 import TruncateUsersModal from '../components/admin/TruncateUsersModal';
 import PasswordResetModal from '../components/admin/PasswordResetModal';
 import UserDetailModal from '../components/admin/UserDetailModal';
+import type { UserDetail } from '../services/userService';
 import './AdminDashboard.css';
-
-interface UserData {
-  id: number;
-  username: string;
-  email: string;
-  name: string;
-  is_admin: boolean;
-  weight?: number;
-  weight_unit?: string;
-  created_at?: string;
-  glucose_readings_count?: number;
-  meals_count?: number;
-  activities_count?: number;
-  insulin_doses_count?: number;
-  condition_logs_count?: number;
-}
 
 const AdminDashboard: React.FC = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   
-  const [selectedUser, setSelectedUser] = useState<UserData | null>(null);
+  const [selectedUser, setSelectedUser] = useState<UserDetail | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showTruncateModal, setShowTruncateModal] = useState(false);
   const [showPasswordReset, setShowPasswordReset] = useState(false);
@@ -75,12 +52,42 @@ const AdminDashboard: React.FC = () => {
     if (!selectedUser) return;
 
     try {
+      console.log('Attempting to delete user:', selectedUser);
+      console.log('User ID:', selectedUser.id);
+      console.log('Current user:', user);
+      
       await deleteUserMutation.mutateAsync(selectedUser.id);
       setShowDeleteModal(false);
       setSelectedUser(null);
+      alert('User deleted successfully!');
     } catch (error) {
       console.error('Error deleting user:', error);
-      alert(`Failed to delete user: ${error}`);
+      
+      // More detailed error handling
+      let errorMessage = 'Failed to delete user';
+      
+      if (error.response) {
+        // Server responded with error status
+        if (error.response.status === 401) {
+          errorMessage = 'Authentication failed. Please log in again as admin.';
+        } else if (error.response.status === 403) {
+          errorMessage = 'Access denied. Admin privileges required.';
+        } else if (error.response.status === 404) {
+          errorMessage = 'User not found. The user may have already been deleted.';
+        } else if (error.response.status === 400) {
+          errorMessage = 'Cannot delete your own account.';
+        } else {
+          errorMessage = `Server error: ${error.response.status} - ${error.response.data?.detail || error.response.statusText}`;
+        }
+      } else if (error.request) {
+        // Network error
+        errorMessage = 'Network error. Please check your connection.';
+      } else {
+        // Other error
+        errorMessage = error.message || 'Unknown error occurred';
+      }
+      
+      alert(`Failed to delete user: ${errorMessage}`);
     }
   };
 
@@ -123,18 +130,18 @@ const AdminDashboard: React.FC = () => {
     }
   };
 
-  const handlePasswordResetRequest = (userData: UserData) => {
+  const handlePasswordResetRequest = (userData: UserDetail) => {
     setSelectedUser(userData);
     setShowPasswordReset(true);
     generateRandomPassword();
   };
 
-  const handleViewUserDetail = (userData: UserData) => {
+  const handleViewUserDetail = (userData: UserDetail) => {
     setSelectedUser(userData);
     setShowUserDetail(true);
   };
 
-  const handleDeleteUserRequest = (userData: UserData) => {
+  const handleDeleteUserRequest = (userData: UserDetail) => {
     setSelectedUser(userData);
     setShowDeleteModal(true);
   };
@@ -151,6 +158,8 @@ const AdminDashboard: React.FC = () => {
         <XCircle className="unauthorized-icon" />
         <h1>Access Denied</h1>
         <p>You don't have administrator privileges to access this page.</p>
+        <p>Current user: {user?.username || 'Not logged in'}</p>
+        <p>Is admin: {user?.is_admin ? 'Yes' : 'No'}</p>
       </div>
     );
   }
@@ -159,6 +168,8 @@ const AdminDashboard: React.FC = () => {
     return (
       <div className="admin-loading">
         <p>Loading admin dashboard...</p>
+        <p>Current user: {user?.username}</p>
+        <p>Is admin: {user?.is_admin ? 'Yes' : 'No'}</p>
       </div>
     );
   }

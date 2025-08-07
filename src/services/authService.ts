@@ -20,6 +20,25 @@ export interface LoginResponse {
   };
 }
 
+export interface AdminLoginRequest {
+  username: string;
+  password: string;
+}
+
+export interface AdminLoginResponse {
+  access_token: string;
+  token_type: string;
+  user: {
+    id: number;
+    username: string;
+    email: string;
+    name: string;
+    is_admin: boolean;
+    weight?: number;
+    weight_unit?: string;
+  };
+}
+
 export interface RegisterRequest {
   name: string;
   username: string;
@@ -47,6 +66,16 @@ export const authService = {
   // Login user
   login: async (credentials: LoginRequest): Promise<LoginResponse> => {
     const response = await api.post<LoginResponse>('/login', credentials);
+    
+    // Store token
+    localStorage.setItem(config.jwtStorageKey, response.data.access_token);
+    
+    return response.data;
+  },
+
+  // Admin login
+  adminLogin: async (credentials: AdminLoginRequest): Promise<AdminLoginResponse> => {
+    const response = await api.post<AdminLoginResponse>('/admin/login', credentials);
     
     // Store token
     localStorage.setItem(config.jwtStorageKey, response.data.access_token);

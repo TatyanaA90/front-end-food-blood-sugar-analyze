@@ -1,7 +1,7 @@
-import React, { useState, useEffect, type ReactNode } from 'react';
-import { AuthContext, type User, type AuthContextType } from './AuthContext.ts';
+import React, { useState, useEffect } from 'react';
+import type { ReactNode } from 'react';
 import { authService } from '../services/authService';
-import { config } from '../config';
+import { AuthContext, type User, type AuthContextType } from './AuthContextDef';
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -12,35 +12,21 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Check for existing token and fetch user data on app load
   useEffect(() => {
     const initializeAuth = async () => {
-      console.log('🔍 Initializing auth...');
-      console.log('🚀 API Base URL:', config.apiBaseUrl);
-      
-      const storedToken = authService.getToken();
-      console.log('🔍 Stored token:', storedToken ? 'exists' : 'none');
-      
-      if (storedToken) {
-        try {
-          console.log('🔍 Attempting to fetch user data...');
+      try {
+        const storedToken = authService.getToken();
+        if (storedToken) {
           setToken(storedToken);
           const userData = await authService.getCurrentUser();
-          console.log('✅ User data fetched successfully:', userData);
           setUser(userData);
-        } catch (error) {
-          console.error('❌ Error fetching user data:', error);
-          // If token is invalid, clear auth state
-          setToken(null);
-          setUser(null);
-          authService.logout();
         }
-      } else {
-        console.log('🔍 No stored token found');
+      } catch (error) {
+        console.error('Auth initialization error:', error);
+        authService.logout();
+      } finally {
+        setIsLoading(false);
       }
-      
-      console.log('🔍 Setting isLoading to false');
-      setIsLoading(false);
     };
 
     initializeAuth();
@@ -68,6 +54,36 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         throw new Error('Network error. Please check your connection and try again.');
       } else {
         throw new Error('Login failed. Please try again.');
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const adminLogin = async (username: string, password: string) => {
+    try {
+      setIsLoading(true);
+      
+      const data = await authService.adminLogin({ username, password });
+      
+      // Set auth state
+      setToken(data.access_token);
+      setUser(data.user);
+      
+    } catch (error) {
+      console.error('Admin login error:', error);
+      
+      // Handle specific error types for better user feedback
+      if (error.response?.status === 401) {
+        throw new Error('Invalid admin credentials. Please check your username and password.');
+      } else if (error.response?.status === 403) {
+        throw new Error('Insufficient privileges. Admin access required.');
+      } else if (error.response?.status >= 500) {
+        throw new Error('Server error. Please try again later.');
+      } else if (error.response?.status === 0 || !error.response) {
+        throw new Error('Network error. Please check your connection and try again.');
+      } else {
+        throw new Error('Admin login failed. Please try again.');
       }
     } finally {
       setIsLoading(false);
@@ -127,6 +143,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     isAuthenticated: !!token && !!user,
     isLoading,
     login,
+    adminLogin,
     register,
     logout,
     updateUser,
