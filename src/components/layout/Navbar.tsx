@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
-import { LogOut, User, Settings, Shield, Droplets } from 'lucide-react';
+import { LogOut, User, Settings, Shield, Droplets, Home } from 'lucide-react';
 import './Navbar.css';
 
 const Navbar: React.FC = () => {
@@ -17,9 +17,16 @@ const Navbar: React.FC = () => {
         <header className="navbar">
             <div className="navbar-content">
                 <div className="navbar-brand">
-                    <h1 className="navbar-title" onClick={() => navigate('/dashboard')}>
-                        Food Blood Sugar Analyzer
-                    </h1>
+                    <button 
+                        className="navbar-brand-button"
+                        onClick={() => navigate('/dashboard')}
+                        aria-label="Go to Dashboard"
+                    >
+                        <Home className="navbar-home-icon" />
+                        <h1 className="navbar-title">
+                            Food Blood Sugar Analyzer
+                        </h1>
+                    </button>
                 </div>
                 <nav className="navbar-nav">
                     <div className="navbar-user-info">

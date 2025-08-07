@@ -21,11 +21,32 @@
     align-items: center;
 }
 
+.navbar-brand-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+    transition: all 0.2s;
+}
+
+.navbar-brand-button:hover {
+    background-color: #f3f4f6;
+}
+
+.navbar-home-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    color: #667eea;
+}
+
 .navbar-title {
     font-size: 1.5rem;
     font-weight: 600;
     color: #111827;
-    cursor: pointer;
     margin: 0;
 }
 
@@ -133,5 +154,10 @@
 
     .navbar-title {
         font-size: 1.25rem;
+    }
+    
+    .navbar-home-icon {
+        width: 1.25rem;
+        height: 1.25rem;
     }
 }
