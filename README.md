@@ -1,91 +1,18 @@
 # Food & Blood Sugar Analyzer - Frontend
 
-A modern React application for diabetes management and blood sugar tracking, built with TypeScript and featuring a beautiful, accessible UI.
+A comprehensive web application for tracking and analyzing food intake, blood sugar levels, and their correlations. Built with React 19, TypeScript, and modern web technologies.
 
-## 🏥 About
+## 🚀 **Quick Start**
 
-The Food & Blood Sugar Analyzer helps users track and manage their diabetes by logging glucose readings, meals, activities, and insulin doses. The application provides detailed analytics and visualizations to help users understand patterns and make informed health decisions.
-
-## 🚀 Tech Stack
-
-- **Framework**: React 19 with TypeScript
-- **Build Tool**: Vite for fast development and optimized builds
-- **Styling**: Pure CSS with modern design approach (gradient backgrounds, glass-morphism effects)
-- **Routing**: React Router with protected routes
-- **Forms**: React Hook Form with validation
-- **Data Management**: React Query with QueryClientProvider for server state
-- **HTTP Client**: Axios with JWT token interceptors
-- **Charts**: Recharts for data visualization
-- **Icons**: Lucide React
-- **Deployment**: Render (Static Site)
-- **Testing**: Vitest + React Testing Library + MSW
-
-## ✨ Features
-
-### Authentication
-- 🔐 Secure JWT-based authentication with proper token management
-- 🎨 Modern UI with gradient backgrounds and glass-morphism effects
-- 📱 Responsive design (mobile-first approach)
-- ♿ Accessibility features (ARIA labels, keyboard navigation, screen reader support)
-- ✨ Smooth animations and micro-interactions
-- 🔍 Real-time form validation with animated error states
-- 📊 Admin features (user stats, management)
-- 🔄 React Query integration for efficient data fetching
-- 🛡️ Proper error handling for auth failures with no unwanted redirects
-- 👤 Complete user profile with weight management
-- ✅ Enhanced form validation with password complexity requirements
-- 🚫 Prevention of form submission on validation errors
-- 📍 Stay on same page after failed login attempts
-- ⚖️ Weight data persistence from registration to profile
-- ♿ Full accessibility compliance with proper label associations
-
-### Core Features (Coming Soon)
-- 🩸 Glucose readings tracking with unit conversion (mg/dL ↔ mmol/L)
-- 🍽️ Meal logging with nutrition calculations
-- 🏃 Activity tracking with calorie calculations
-- 💉 Insulin dose management
-- 📊 Dashboard with charts and key metrics
-- 📈 Analytics and trend visualization
-- 📋 Condition logs and health tracking
-
-## 🛠️ Development
-
-### Prerequisites
+### **Prerequisites**
 - Node.js 18+ 
 - npm or yarn
+- Modern web browser
 
-### Environment Configuration
-The application uses environment variables for configuration. Create a `.env.local` file for local development:
-
-```env
-VITE_API_BASE_URL=http://localhost:8000
-VITE_APP_NAME=Blood Sugar Analyzer
-VITE_DEBUG_MODE=true
-```
-
-### Production Deployment
-The application is deployed on Render with automatic deployments from the main branch. Production environment uses:
-
-```env
-VITE_API_BASE_URL=https://back-end-food-blood-sugar-analyzer.onrender.com
-VITE_APP_NAME=Food & Blood Sugar Analyzer
-VITE_DEBUG_MODE=false
-```
-
-### Recent Updates (December 2024)
-- ✅ **Admin Login Routing**: Fixed 404 errors for admin login URLs with comprehensive routing configuration
-- ✅ **Static Site Configuration**: Enhanced routing configuration for Render deployment with multiple fallback options
-- ✅ **Debugging Capabilities**: Added detailed logging for API connectivity and authentication flow
-- ✅ **Favicon Fix**: Resolved favicon.ico 404 error with proper file and HTML links
-- ✅ **Error Handling**: Enhanced API error handling for better user experience
-
-### Installation
-
+### **Installation**
 ```bash
 # Clone the repository
-git clone https://github.com/TatyanaA90/front-end-food-blood-sugar-analyzer.git
-
-# Navigate to project directory
+git clone <repository-url>
 cd front-end-food-blood-sugar-analyzer
 
 # Install dependencies
@@ -93,192 +20,286 @@ npm install
 
 # Start development server
 npm run dev
-```
 
-### Available Scripts
-
-```bash
-# Development server
-npm run dev
-
-# Production build
+# Build for production
 npm run build
 
 # Preview production build
 npm run preview
-
-# Lint code
-npm run lint
-
-# Run tests
-npm run test
-
-# Run tests once
-npm run test:run
-
-# Run tests with coverage
-npm run test:coverage
-
-# Open test UI
-npm run test:ui
 ```
 
-## 🚀 Deployment
+### **Environment Variables**
+Create a `.env` file in the root directory:
+```env
+VITE_API_BASE_URL=https://your-backend-url.com
+```
 
-### Production URLs
-- **Frontend Application**: https://food-blood-sugar-analyzer-frontend.onrender.com
-- **Backend API**: https://back-end-food-blood-sugar-analyzer.onrender.com
-- **API Documentation**: https://back-end-food-blood-sugar-analyzer.onrender.com/docs
+## 🎯 **Features**
 
-### Admin Access
-- **Admin Login**: https://food-blood-sugar-analyzer-frontend.onrender.com/admin/login
-- **Admin Dashboard**: https://food-blood-sugar-analyzer-frontend.onrender.com/admin
-- **Default Credentials**: admin / Admin123! (change in production)
-
-### Environment Configuration
-The application is configured for production deployment on Render with:
-- Static site deployment for frontend
-- Environment variables for API endpoints
-- Proper CORS configuration
-- Client-side routing support
-
-## 📊 Project Status
-
-### ✅ Completed Features
-- **Authentication System**: Complete with JWT tokens and role-based access
-- **User Management**: Registration, login, profile management
-- **Admin System**: Full admin functionality with user management
+### **✅ Core Features**
+- **User Authentication**: Secure login/register with JWT
+- **Glucose Readings Management**: Complete CRUD operations with filtering
+- **Admin Dashboard**: User management and system administration
+- **Profile Management**: User information and password management
 - **Responsive Design**: Mobile-first approach with modern UI
-- **Accessibility**: WCAG 2.1 AA compliant with screen reader support
-- **Error Handling**: Comprehensive error handling and user feedback
-- **Testing**: 100% test coverage for critical user flows
-- **Deployment**: Production-ready with proper routing configuration
 
-### 🔄 In Progress
-- **Core Data Management**: Forms for glucose readings, meals, activities
-- **Analytics Dashboard**: Charts and data visualization
-- **Advanced Features**: Data import/export, advanced filtering
+### **🔄 In Development**
+- **Meals Management**: Food tracking and nutrition analysis
+- **Activities Tracking**: Exercise and physical activity logging
+- **Insulin Doses**: Medication tracking and management
 
-### 📈 Performance Metrics
-- **Build Time**: ~5s with optimized output
-- **Bundle Size**: 46.31 kB CSS, 318.00 kB JS (gzipped: 7.29 kB + 94.24 kB)
-- **Load Time**: < 2s on 3G connection
-- **Lint Score**: 0 errors, 0 warnings
-- **Test Coverage**: 100% critical paths
+### **⏳ Planned Features**
+- **Advanced Analytics**: Machine learning insights
+- **Data Export**: CSV/PDF export functionality
+- **Notifications**: Reminder system for readings
 
-## 🔧 Recent Updates (December 2024)
+## 🏗️ **Architecture**
 
-### ✅ Profile Page Improvements
-- Fixed form label associations for better accessibility
-- Enhanced 401 authentication error handling
-- Added proper error states and user feedback
-- Improved React Query retry logic
+### **Tech Stack**
+- **React 19** + TypeScript - Modern web framework
+- **Vite** - Fast development and build tool
+- **React Router** - Client-side routing
+- **React Query** - Server state management
+- **React Hook Form** - Form handling and validation
+- **Axios** - HTTP client with interceptors
+- **Lucide React** - Icon library
+- **Pure CSS** - Modern styling without frameworks
 
-### ✅ Routing Fixes
-- Resolved client-side routing for static deployment
-- Added `_redirects` file for proper URL handling
-- All routes now accessible via direct URL access
-- Updated deployment configuration
-
-### ✅ Code Quality
-- Full compliance with .cursor/rules/rules.mdc
-- Eliminated all TypeScript `any` types
-- Zero linter errors and warnings
-- Enhanced error logging and debugging
-
-## 🎯 Architecture
-
-### Frontend Structure
+### **Project Structure**
 ```
 src/
 ├── components/          # Reusable UI components
+│   ├── glucose/        # Glucose reading components
 │   ├── layout/         # Layout components
-│   ├── profile/        # Profile-related components
-│   └── ui/             # Generic UI components
-├── pages/              # Page components
-├── hooks/              # Custom React hooks
-├── services/           # API services
+│   └── profile/        # Profile components
 ├── contexts/           # React contexts
-├── config/             # Configuration files
-└── assets/             # Static assets
+├── hooks/              # Custom React hooks
+├── pages/              # Route components
+├── services/           # API communication
+├── types/              # TypeScript definitions
+└── utils/              # Utility functions
 ```
 
-### Key Design Patterns
-- **Component Composition**: Reusable components with proper prop interfaces
-- **Custom Hooks**: Encapsulated logic for data fetching and state management
-- **Context API**: Global state management for authentication
-- **React Query**: Efficient server state management with caching
-- **Form Validation**: React Hook Form with comprehensive validation
+## 📊 **Glucose Readings Feature**
 
-## 🔒 Security
+### **Key Capabilities**
+- **Add Readings**: Quick form with validation
+- **Edit Readings**: In-place editing with confirmation
+- **Delete Readings**: Safe deletion with confirmation
+- **Filter & Search**: Advanced filtering by date, meal context, units
+- **Unit Conversion**: Automatic mg/dL ↔ mmol/L conversion
+- **Status Indicators**: Visual glucose level categorization
+- **Meal Context**: Track readings relative to meals
+- **Notes**: Optional notes for each reading
 
-### Authentication
-- JWT tokens with configurable expiration
-- Secure token storage in localStorage
-- Automatic token refresh and error handling
-- Role-based access control (admin/user)
+### **Usage**
+1. Navigate to "Readings" in the main navigation
+2. Click "Add Reading" to create a new glucose reading
+3. Fill in the reading value, unit, time, and meal context
+4. Use filters to find specific readings
+5. Edit or delete readings using the action buttons
 
-### Data Protection
-- Input validation with TypeScript interfaces
-- XSS prevention with proper data sanitization
-- CORS configuration for secure API communication
-- Environment variable management
+## 🔐 **Authentication**
 
-## ♿ Accessibility
+### **User Types**
+- **Regular Users**: Can manage their own data
+- **Admin Users**: Can manage all users and system data
 
-### WCAG 2.1 AA Compliance
-- Proper semantic HTML structure
-- ARIA labels and descriptions
-- Keyboard navigation support
-- Screen reader compatibility
-- Color contrast compliance
-- Focus management
+### **Security Features**
+- JWT-based authentication
+- Automatic token refresh
+- Protected routes
+- Role-based access control
+- Secure password handling
 
-### Form Accessibility
-- Proper label associations with `htmlFor` attributes
-- Error message announcements
-- Field validation feedback
-- Keyboard form submission
+## 🎨 **Design System**
 
-## 🧪 Testing
+### **Visual Design**
+- Clean, modern interface
+- Consistent color scheme
+- Responsive grid layouts
+- Smooth animations and transitions
+- Accessibility-first approach
 
-### Test Coverage
-- **Unit Tests**: Component testing with React Testing Library
-- **Integration Tests**: User flow testing
-- **API Tests**: Service layer testing
-- **Accessibility Tests**: Screen reader and keyboard navigation
+### **Components**
+- **Cards**: Information display with hover effects
+- **Forms**: Validated inputs with error states
+- **Modals**: Overlay dialogs for actions
+- **Buttons**: Consistent styling with states
+- **Status Badges**: Visual indicators for data states
 
-### Testing Tools
-- **Vitest**: Fast unit testing framework
-- **React Testing Library**: Component testing utilities
-- **MSW**: API mocking for integration tests
-- **Jest DOM**: DOM testing utilities
+## 📱 **Responsive Design**
 
-## 🤝 Contributing
+### **Breakpoints**
+- **Mobile**: < 768px
+- **Tablet**: 768px - 1024px
+- **Desktop**: > 1024px
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Make your changes
-4. Add tests for new functionality
-5. Ensure all tests pass (`npm run test`)
-6. Commit your changes (`git commit -m 'Add amazing feature'`)
-7. Push to the branch (`git push origin feature/amazing-feature`)
-8. Open a Pull Request
+### **Features**
+- Mobile-first approach
+- Touch-friendly interactions
+- Optimized layouts for all screen sizes
+- Flexible grid systems
 
-## 📄 License
+## 🧪 **Testing**
+
+### **Running Tests**
+```bash
+# Run all tests
+npm test
+
+# Run tests in watch mode
+npm run test:watch
+
+# Run tests with coverage
+npm run test:coverage
+```
+
+### **Test Structure**
+- **Unit Tests**: Component and utility testing
+- **Integration Tests**: API and user flow testing
+- **E2E Tests**: Complete user journey testing
+
+## 🚀 **Deployment**
+
+### **Build Process**
+```bash
+# Create production build
+npm run build
+
+# Preview production build
+npm run preview
+```
+
+### **Deployment Platforms**
+- **Render**: Primary deployment platform
+- **Vercel**: Alternative deployment option
+- **Netlify**: Backup deployment platform
+
+### **Environment Configuration**
+- Production API endpoints
+- Environment-specific settings
+- SSL certificate configuration
+- Domain and routing setup
+
+## 🔧 **Development**
+
+### **Code Quality**
+- **ESLint**: Code linting and formatting
+- **TypeScript**: Strict type checking
+- **Prettier**: Code formatting
+- **Git Hooks**: Pre-commit validation
+
+### **Development Workflow**
+1. Create feature branch
+2. Implement feature with tests
+3. Run linting and type checking
+4. Submit pull request
+5. Code review and merge
+
+### **Best Practices**
+- **Component Composition**: Reusable component patterns
+- **Type Safety**: Comprehensive TypeScript coverage
+- **Error Handling**: Graceful error boundaries
+- **Performance**: Optimized rendering and caching
+- **Accessibility**: WCAG compliance
+
+## 📚 **API Integration**
+
+### **Backend Communication**
+- **Base URL**: Configurable via environment variables
+- **Authentication**: JWT token management
+- **Error Handling**: Comprehensive error management
+- **Caching**: React Query for data caching
+- **Optimistic Updates**: Immediate UI feedback
+
+### **Endpoints**
+- **Authentication**: `/login`, `/register`, `/users`
+- **Glucose Readings**: `/glucose-readings`
+- **User Management**: `/profile`, `/admin/users`
+- **Analytics**: `/analytics`, `/stats`
+
+## 🔍 **Troubleshooting**
+
+### **Common Issues**
+
+#### **Build Errors**
+```bash
+# Clear cache and reinstall
+rm -rf node_modules package-lock.json
+npm install
+```
+
+#### **TypeScript Errors**
+```bash
+# Check type definitions
+npm run type-check
+
+# Fix import issues
+# Ensure type-only imports for types
+import type { MyType } from './types';
+```
+
+#### **Routing Issues**
+- Check `_redirects` file for SPA routing
+- Verify deployment platform configuration
+- Ensure all routes are properly configured
+
+### **Development Tips**
+- Use React DevTools for debugging
+- Check browser console for errors
+- Verify API endpoints are accessible
+- Test on multiple devices and browsers
+
+## 📄 **Documentation**
+
+### **Additional Resources**
+- [EXPLANATION.md](./EXPLANATION.md) - Detailed feature documentation
+- [COMMAND_LOG.md](./COMMAND_LOG.md) - Development command history
+- [PROMPT_LOG.md](./PROMPT_LOG.md) - User interaction history
+- [PROJECT_PLAN.md](./PROJECT_PLAN.md) - Project roadmap and status
+
+### **API Documentation**
+- Backend API documentation available at `/docs` endpoint
+- Interactive Swagger UI for API testing
+- Postman collection for API testing
+
+## 🤝 **Contributing**
+
+### **Guidelines**
+- Follow established coding conventions
+- Write comprehensive tests
+- Update documentation
+- Ensure accessibility compliance
+- Test on multiple devices
+
+### **Code Style**
+- Use TypeScript for all new code
+- Follow React best practices
+- Maintain consistent formatting
+- Write clear commit messages
+
+## 📄 **License**
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🆘 Support
+## 🆘 **Support**
 
-For support and questions:
-- **Documentation**: Check the README and inline code comments
-- **API Documentation**: https://back-end-food-blood-sugar-analyzer.onrender.com/docs
-- **Health Check**: https://back-end-food-blood-sugar-analyzer.onrender.com/health
-- **Issues**: Create an issue on GitHub for bugs or feature requests
+### **Getting Help**
+- Check the troubleshooting section
+- Review existing documentation
+- Search for similar issues
+- Create a detailed bug report
+
+### **Bug Reports**
+- Include browser and OS information
+- Provide steps to reproduce
+- Include error messages and console logs
+- Describe expected vs actual behavior
 
 ---
 
-**Built with ❤️ for diabetes management and blood sugar analysis**
-
-*Last updated: December 2024*
+**Version**: 1.0.0  
+**Last Updated**: December 2024  
+**Status**: Production Ready with Glucose Readings Feature  
+**Next Release**: Meals Management System

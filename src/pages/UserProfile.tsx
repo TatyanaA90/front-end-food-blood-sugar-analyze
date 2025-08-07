@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import { useUserProfile, useUpdateProfile, useDeleteAccount, useChangePassword } from '../hooks/useUserManagement';
-import ProfileHeader from '../components/profile/ProfileHeader';
+import { User as UserIcon } from 'lucide-react';
 import ProfileForm from '../components/profile/ProfileForm';
 import AdminSection from '../components/profile/AdminSection';
 import DangerZone from '../components/profile/DangerZone';
 import DeleteConfirmModal from '../components/profile/DeleteConfirmModal';
 import PasswordChangeSection from '../components/profile/PasswordChangeSection';
+import GlucoseUnitSection from '../components/profile/GlucoseUnitSection';
+import NavigationHeader from '../components/layout/NavigationHeader';
 import './UserProfile.css';
 
 interface FormData {
@@ -58,9 +60,9 @@ const UserProfile: React.FC = () => {
             });
         } catch (error: unknown) {
             console.error('Account deletion error:', error);
-            const errorMessage = (error as { response?: { data?: { detail?: string; message?: string } } })?.response?.data?.detail || 
-                               (error as { response?: { data?: { detail?: string; message?: string } } })?.response?.data?.message || 
-                               'Failed to delete account. Please try again.';
+            const errorMessage = (error as { response?: { data?: { detail?: string; message?: string } } })?.response?.data?.detail ||
+                (error as { response?: { data?: { detail?: string; message?: string } } })?.response?.data?.message ||
+                'Failed to delete account. Please try again.';
             alert(errorMessage);
             setShowDeleteConfirm(false); // Close the modal on error
         }
@@ -82,7 +84,7 @@ const UserProfile: React.FC = () => {
         return (
             <div className="profile-error">
                 <p>Unable to load profile. Please try logging in again.</p>
-                <button 
+                <button
                     onClick={() => navigate('/login')}
                     className="profile-login-btn"
                 >
@@ -94,7 +96,13 @@ const UserProfile: React.FC = () => {
 
     return (
         <main className="profile-container">
-            <ProfileHeader user={user} />
+            <NavigationHeader
+                title="User Profile"
+                icon={<UserIcon size={24} />}
+                showBack={true}
+                showDashboard={true}
+                backTo="/dashboard"
+            />
 
             <div className="profile-content">
                 <ProfileForm
@@ -117,6 +125,8 @@ const UserProfile: React.FC = () => {
                     }}
                     isChangingPassword={changePasswordMutation.isPending}
                 />
+
+                <GlucoseUnitSection />
 
                 <AdminSection user={user} />
 

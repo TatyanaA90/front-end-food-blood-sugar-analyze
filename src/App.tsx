@@ -2,6 +2,7 @@ import React from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext.tsx';
+import { GlucoseUnitProvider } from './contexts/GlucoseUnitContext.tsx';
 import ProtectedRoute from './components/ProtectedRoute';
 import AdminLoginRoute from './components/AdminLoginRoute';
 import Layout from './components/layout/Layout';
@@ -13,6 +14,7 @@ import Dashboard from './pages/Dashboard';
 import UserProfile from './pages/UserProfile';
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
+import GlucoseReadings from './pages/GlucoseReadings';
 
 // Create a client
 const queryClient = new QueryClient();
@@ -21,7 +23,8 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <Router>
+        <GlucoseUnitProvider>
+          <Router>
         <main className="App">
           <Routes>
             {/* Public routes */}
@@ -54,6 +57,16 @@ function App() {
               }
             />
             <Route
+              path="/glucose-readings"
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <GlucoseReadings />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
               path="/admin"
               element={
                 <ProtectedRoute adminOnly>
@@ -71,8 +84,9 @@ function App() {
             <Route path="*" element={<Navigate to="/login" replace />} />
           </Routes>
         </main>
-      </Router>
-    </AuthProvider>
+        </Router>
+        </GlucoseUnitProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }

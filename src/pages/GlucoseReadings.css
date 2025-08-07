@@ -1,0 +1,474 @@
+/* Glucose Readings Page Styles */
+.glucose-readings-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px;
+}
+
+/* Header Section */
+.glucose-readings-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 32px;
+    gap: 24px;
+}
+
+.glucose-readings-title-section {
+    flex: 1;
+}
+
+.glucose-readings-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin: 0 0 8px 0;
+}
+
+.glucose-readings-subtitle {
+    color: #6b7280;
+    font-size: 1rem;
+    margin: 0;
+}
+
+.glucose-readings-add-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.glucose-readings-add-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.glucose-readings-add-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Actions Section */
+.glucose-readings-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 2rem;
+    padding: 0 1rem;
+}
+
+/* Filters Section */
+.glucose-readings-filters {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e5e7eb;
+}
+
+.glucose-readings-search {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding: 12px 16px;
+    background: #f9fafb;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+}
+
+.glucose-readings-search-input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-size: 1rem;
+    outline: none;
+}
+
+.glucose-readings-search-input::placeholder {
+    color: #9ca3af;
+}
+
+.glucose-readings-filter-controls {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.glucose-readings-filter-select,
+.glucose-readings-date-input {
+    padding: 8px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    background: white;
+    min-width: 140px;
+}
+
+.glucose-readings-filter-select:focus,
+.glucose-readings-date-input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Loading State */
+.glucose-readings-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    color: #6b7280;
+}
+
+.glucose-readings-loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #e5e7eb;
+    border-top: 3px solid #3b82f6;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 16px;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Error State */
+.glucose-readings-error {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    color: #ef4444;
+    text-align: center;
+}
+
+/* Empty State */
+.glucose-readings-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    text-align: center;
+    color: #6b7280;
+}
+
+.glucose-readings-empty h3 {
+    margin: 16px 0 8px 0;
+    color: #374151;
+    font-size: 1.25rem;
+}
+
+.glucose-readings-empty p {
+    margin: 0 0 24px 0;
+    font-size: 1rem;
+}
+
+.glucose-readings-empty-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.glucose-readings-empty-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+/* Readings List */
+.glucose-readings-list {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+}
+
+.glucose-reading-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e5e7eb;
+    transition: all 0.2s;
+}
+
+.glucose-reading-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+}
+
+.glucose-reading-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+}
+
+.glucose-reading-value-section {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.glucose-reading-value {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+}
+
+.glucose-reading-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.glucose-reading-unit {
+    font-size: 1rem;
+    color: #6b7280;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.glucose-reading-converted-indicator {
+    color: #f59e0b;
+    font-weight: bold;
+    font-size: 0.75rem;
+    cursor: help;
+}
+
+.glucose-reading-status {
+    padding: 4px 8px;
+    border-radius: 6px;
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.glucose-reading-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.glucose-reading-action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 6px;
+    background: #f3f4f6;
+    color: #6b7280;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.glucose-reading-action-btn:hover {
+    background: #e5e7eb;
+    color: #374151;
+}
+
+.glucose-reading-action-btn-danger:hover {
+    background: #fee2e2;
+    color: #ef4444;
+}
+
+.glucose-reading-details {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.glucose-reading-detail {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+.glucose-reading-notes {
+    color: #374151;
+    font-style: italic;
+}
+
+/* Delete Modal */
+.glucose-delete-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+}
+
+.glucose-delete-modal {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.glucose-delete-modal h3 {
+    margin: 0 0 16px 0;
+    color: #1f2937;
+    font-size: 1.25rem;
+}
+
+.glucose-delete-modal p {
+    margin: 0 0 12px 0;
+    color: #6b7280;
+    line-height: 1.5;
+}
+
+.glucose-delete-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 24px;
+}
+
+.glucose-delete-btn {
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    min-width: 80px;
+}
+
+.glucose-delete-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.glucose-delete-btn-cancel {
+    background: #f3f4f6;
+    color: #374151;
+    border: 1px solid #d1d5db;
+}
+
+.glucose-delete-btn-cancel:hover:not(:disabled) {
+    background: #e5e7eb;
+}
+
+.glucose-delete-btn-confirm {
+    background: #ef4444;
+    color: white;
+}
+
+.glucose-delete-btn-confirm:hover:not(:disabled) {
+    background: #dc2626;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .glucose-readings-container {
+        padding: 16px;
+    }
+
+    .glucose-readings-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 16px;
+    }
+
+    .glucose-readings-title {
+        font-size: 1.75rem;
+    }
+
+    .glucose-readings-add-btn {
+        align-self: flex-start;
+    }
+
+    .glucose-readings-filter-controls {
+        flex-direction: column;
+    }
+
+    .glucose-readings-filter-select,
+    .glucose-readings-date-input {
+        min-width: auto;
+        width: 100%;
+    }
+
+    .glucose-readings-list {
+        grid-template-columns: 1fr;
+    }
+
+    .glucose-reading-card {
+        padding: 16px;
+    }
+
+    .glucose-reading-header {
+        flex-direction: column;
+        gap: 12px;
+        align-items: stretch;
+    }
+
+    .glucose-reading-value-section {
+        justify-content: space-between;
+    }
+
+    .glucose-reading-actions {
+        justify-content: flex-end;
+    }
+}
+
+@media (max-width: 480px) {
+    .glucose-readings-title {
+        font-size: 1.5rem;
+    }
+
+    .glucose-reading-number {
+        font-size: 1.75rem;
+    }
+
+    .glucose-delete-actions {
+        flex-direction: column;
+    }
+
+    .glucose-delete-btn {
+        width: 100%;
+    }
+}
