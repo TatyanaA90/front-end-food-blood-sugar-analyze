@@ -10,6 +10,8 @@
 html {
   line-height: 1.15;
   -webkit-text-size-adjust: 100%;
+  background: linear-gradient(135deg, #d0ebf9 0%, #b2e0f5 50%, #90caf9 100%);
+  min-height: 100vh;
 }
 
 body {
@@ -19,6 +21,9 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: linear-gradient(135deg, #d0ebf9 0%, #b2e0f5 50%, #90caf9 100%);
+  min-height: 100vh;
+  color: #2c3e50;
 }
 
 button,

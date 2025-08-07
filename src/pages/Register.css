@@ -1,27 +1,29 @@
 /* Register Page Styles - Medical Diabetes Management Theme */
 
 /* Calming medical background inspired by healthcare design patterns */
-.register-main {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 3rem 0;
-  position: relative;
-  /* Background image will be layered with gradient overlay */
-  background: 
-    /* Lighter gradient overlay to show background image */
-    linear-gradient(135deg, rgba(132, 219, 227, 0.65) 0%, rgba(168, 200, 202, 0.65) 30%, rgba(51, 136, 71, 0.577) 60%, rgba(204, 210, 216, 0.65) 100%),
-    /* Background image */
-    url('/assets/images/medical-background.jpg');
-    /* Fallback CSS patterns */
-    /* radial-gradient(circle at 25% 25%, rgba(132, 219, 227, 0.1) 2px, transparent 2px),
-    radial-gradient(circle at 75% 75%, rgba(84, 119, 92, 0.08) 1px, transparent 1px),
-    linear-gradient(135deg, #84dbe3 0%, #a8c8ca 30%, #54775c 60%, #ccd2d8 100%); */
-  background-size: cover, 60px 60px, 40px 40px, 100% 100%;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
+.register-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #d0ebf9 0%, #b2e0f5 50%, #90caf9 100%);
+    padding: 1rem;
+}
+
+.register-card {
+    background: linear-gradient(135deg, #ffffff 0%, #e3f2fd 50%, #c0e4f9 100%);
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    padding: 3rem;
+    width: 100%;
+    max-width: 32rem;
+    border: 1px solid rgba(144, 202, 249, 0.2);
+    transition: all 0.3s ease;
+}
+
+.register-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 32px 64px rgba(0, 0, 0, 0.15);
 }
 
 @media (min-width: 640px) {
@@ -260,22 +262,18 @@
 }
 
 .register-button {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  padding: 0.75rem 1rem;
-  border: 1px solid transparent;
-  border-radius: 0.5rem;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  font-weight: 500;
-  color: white;
-  position: relative;
-  overflow: hidden;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    width: 100%;
+    padding: 1rem 2rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #2c3e50;
+    background: linear-gradient(135deg, #ffffff 0%, #e3f2fd 50%, #c0e4f9 100%);
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .register-button:focus {
@@ -283,8 +281,8 @@
 }
 
 .register-button:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 }
 
 .register-button:active:not(:disabled) {

@@ -1,6 +1,7 @@
 import React from 'react';
 import { ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import './NavigationHeader.css';
 
 interface NavigationHeaderProps {
   title: string;
@@ -32,14 +33,22 @@ const NavigationHeader: React.FC<NavigationHeaderProps> = ({
       <div className="navigation-header-content">
         <div className="navigation-buttons">
           {showBack && (
-            <button
+            <span
               onClick={handleBack}
               className="navigation-back-button"
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  handleBack();
+                }
+              }}
               aria-label="Go back"
             >
               <ArrowLeft className="back-icon" />
               <span>Back</span>
-            </button>
+            </span>
           )}
         </div>
         <div className="navigation-title-group">
