@@ -100,7 +100,6 @@ const UserProfile: React.FC = () => {
                 title="User Profile"
                 icon={<UserIcon size={24} />}
                 showBack={true}
-                showDashboard={true}
                 backTo="/dashboard"
             />
 

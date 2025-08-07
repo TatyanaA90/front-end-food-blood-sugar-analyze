@@ -39,7 +39,6 @@ const Dashboard: React.FC = () => {
                 title="Dashboard" 
                 icon={<BarChart3 size={24} />}
                 showBack={false}
-                showDashboard={false}
             />
             <main className="dashboard-main">
                 {/* Welcome Section */}

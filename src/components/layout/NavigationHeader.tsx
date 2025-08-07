@@ -1,12 +1,11 @@
 import React from 'react';
-import { ArrowLeft, Home } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 interface NavigationHeaderProps {
   title: string;
   icon?: React.ReactNode;
   showBack?: boolean;
-  showDashboard?: boolean;
   backTo?: string;
   className?: string;
 }
@@ -15,7 +14,6 @@ const NavigationHeader: React.FC<NavigationHeaderProps> = ({
   title, 
   icon, 
   showBack = true, 
-  showDashboard = true, 
   backTo,
   className = ''
 }) => {
@@ -27,10 +25,6 @@ const NavigationHeader: React.FC<NavigationHeaderProps> = ({
     } else {
       navigate(-1); // Go back in browser history
     }
-  };
-
-  const handleDashboard = () => {
-    navigate('/dashboard');
   };
 
   return (
@@ -45,16 +39,6 @@ const NavigationHeader: React.FC<NavigationHeaderProps> = ({
             >
               <ArrowLeft className="back-icon" />
               <span>Back</span>
-            </button>
-          )}
-          {showDashboard && (
-            <button
-              onClick={handleDashboard}
-              className="navigation-dashboard-button"
-              aria-label="Go to Dashboard"
-            >
-              <Home className="dashboard-icon" />
-              <span>Dashboard</span>
             </button>
           )}
         </div>

@@ -119,7 +119,6 @@ const GlucoseReadings: React.FC = () => {
                 title="Glucose Readings" 
                 icon={<Droplets size={24} />}
                 showBack={true}
-                showDashboard={true}
             />
             
             {/* Add Reading Button */}
