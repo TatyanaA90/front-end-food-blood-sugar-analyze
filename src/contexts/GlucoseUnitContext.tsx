@@ -1,7 +1,6 @@
-import React, { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
-import type { GlucoseUnitContextType, GlucoseUnit, GlucoseUnitProviderProps } from './GlucoseUnitContext';
-
-const GlucoseUnitContext = createContext<GlucoseUnitContextType | undefined>(undefined);
+import React, { useState, useEffect } from 'react';
+import { GlucoseUnitContext } from './GlucoseUnitContextDef';
+import type { GlucoseUnitContextType, GlucoseUnit, GlucoseUnitProviderProps } from './GlucoseUnitContextDef';
 
 const STORAGE_KEY = 'glucose_preferred_unit';
 
@@ -79,10 +78,4 @@ export const GlucoseUnitProvider: React.FC<GlucoseUnitProviderProps> = ({ childr
   );
 };
 
-export const useGlucoseUnit = (): GlucoseUnitContextType => {
-  const context = useContext(GlucoseUnitContext);
-  if (context === undefined) {
-    throw new Error('useGlucoseUnit must be used within a GlucoseUnitProvider');
-  }
-  return context;
-}; 
+ 

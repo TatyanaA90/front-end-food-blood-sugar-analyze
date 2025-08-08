@@ -70,7 +70,10 @@ const Dashboard: React.FC = () => {
                             </div>
                         </button>
 
-                        <button className="dashboard-action-button">
+                        <button 
+                            className="dashboard-action-button"
+                            onClick={() => navigate('/meals')}
+                        >
                             <div className="dashboard-action-content">
                                 <Plus className="dashboard-action-icon-green" />
                                 <div>

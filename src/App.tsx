@@ -15,6 +15,7 @@ import UserProfile from './pages/UserProfile';
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
 import GlucoseReadings from './pages/GlucoseReadings';
+import Meals from './pages/Meals';
 
 // Create a client
 const queryClient = new QueryClient();
@@ -62,6 +63,16 @@ function App() {
                 <ProtectedRoute>
                   <Layout>
                     <GlucoseReadings />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/meals"
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <Meals />
                   </Layout>
                 </ProtectedRoute>
               }

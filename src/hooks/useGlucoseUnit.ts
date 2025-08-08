@@ -1,5 +1,15 @@
-import { useGlucoseUnit } from '../contexts/GlucoseUnitContext.tsx';
+import { useContext } from 'react';
+import { GlucoseUnitContext } from '../contexts/GlucoseUnitContextDef';
+import type { GlucoseUnitContextType } from '../contexts/GlucoseUnitContextDef';
 import type { GlucoseReading } from '../types/glucose';
+
+export const useGlucoseUnit = (): GlucoseUnitContextType => {
+  const context = useContext(GlucoseUnitContext);
+  if (context === undefined) {
+    throw new Error('useGlucoseUnit must be used within a GlucoseUnitProvider');
+  }
+  return context;
+};
 
 export const useGlucoseUnitUtils = () => {
     const { preferredUnit, setPreferredUnit, convertValue, formatValue, displayValue } = useGlucoseUnit();
