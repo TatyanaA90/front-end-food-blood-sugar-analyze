@@ -1,0 +1,77 @@
+{
+  "public": "dist",
+  "rewrites": [
+    {
+      "source": "/admin/login",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/admin/*",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/login/*",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/register",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/forgot-password",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/reset-password",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/profile",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/dashboard",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/glucose-readings",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/meals",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/activities",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/insulin-doses",
+      "destination": "/index.html"
+    },
+    {
+      "source": "**",
+      "destination": "/index.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "**/*.@(js|css)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "max-age=31536000"
+        }
+      ]
+    },
+    {
+      "source": "**/*.@(html)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        }
+      ]
+    }
+  ]
+}
