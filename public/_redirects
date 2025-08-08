@@ -1,3 +1,5 @@
+# SPA Fallback for React Router
+# Force redeploy to fix admin login routing
 /admin/login    /index.html   200
 /admin/*    /index.html   200
 /login/*    /index.html   200
