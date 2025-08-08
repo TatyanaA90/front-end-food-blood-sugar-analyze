@@ -37,6 +37,7 @@ export interface AdminLoginResponse {
     weight?: number;
     weight_unit?: string;
   };
+  message?: string;
 }
 
 export interface RegisterRequest {
