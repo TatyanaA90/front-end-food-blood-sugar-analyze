@@ -17,12 +17,10 @@
 /dashboard    /index.html   200
 /forgot-password    /index.html   200
 /reset-password    /index.html   200
+/glucose-readings    /index.html   200
+/meals    /index.html   200
+/activities    /index.html   200
+/insulin-doses    /index.html   200
 
 # Catch all - must be last
-/*    /index.html   200
-
-# Alternative approach - try without status code
-/admin/login    /index.html
-/admin/*    /index.html
-/login/admin    /index.html
-/login/*    /index.html 
+/*    /index.html   200 
