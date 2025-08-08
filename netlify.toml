@@ -3,6 +3,11 @@
   command = "npm install && npm run build"
 
 [[redirects]]
+  from = "/admin/login"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
   from = "/admin/*"
   to = "/index.html"
   status = 200
@@ -34,6 +39,26 @@
 
 [[redirects]]
   from = "/reset-password"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/glucose-readings"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/meals"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/activities"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/insulin-doses"
   to = "/index.html"
   status = 200
 
