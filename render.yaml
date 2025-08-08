@@ -10,11 +10,17 @@ services:
         source: /admin/login
         destination: /index.html
       - type: rewrite
+        source: /admin
+        destination: /index.html
+      - type: rewrite
         source: /admin/*
         destination: /index.html
       # Login routes
       - type: rewrite
         source: /login/admin
+        destination: /index.html
+      - type: rewrite
+        source: /login
         destination: /index.html
       - type: rewrite
         source: /login/*
