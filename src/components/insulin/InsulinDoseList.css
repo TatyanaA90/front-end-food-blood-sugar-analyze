@@ -317,6 +317,29 @@
   color: #d1d5db;
 }
 
+.dose-meal-context {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.meal-icon {
+  width: 1rem;
+  height: 1rem;
+  color: #6b7280;
+}
+
+.meal-context-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: white;
+  text-transform: capitalize;
+}
+
 .dose-actions {
   display: flex;
   gap: 0.5rem;

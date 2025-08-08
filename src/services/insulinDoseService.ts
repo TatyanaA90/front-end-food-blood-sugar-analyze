@@ -4,6 +4,7 @@ export interface InsulinDose {
   id: number;
   units: number;
   timestamp?: string;
+  meal_context?: 'Breakfast' | 'Lunch' | 'Dinner' | 'Snack' | 'Dessert' | 'Beverage' | 'Other';
   note?: string;
   user_id: number;
 }
@@ -11,12 +12,14 @@ export interface InsulinDose {
 export interface InsulinDoseCreate {
   units: number;
   timestamp?: string;
+  meal_context?: 'Breakfast' | 'Lunch' | 'Dinner' | 'Snack' | 'Dessert' | 'Beverage' | 'Other';
   note?: string;
 }
 
 export interface InsulinDoseUpdate {
   units?: number;
   timestamp?: string;
+  meal_context?: 'Breakfast' | 'Lunch' | 'Dinner' | 'Snack' | 'Dessert' | 'Beverage' | 'Other';
   note?: string;
 }
 
@@ -24,6 +27,7 @@ export interface InsulinDoseBasic {
   id: number;
   units: number;
   timestamp?: string;
+  meal_context?: 'Breakfast' | 'Lunch' | 'Dinner' | 'Snack' | 'Dessert' | 'Beverage' | 'Other';
   note?: string;
 }
 
@@ -52,6 +56,17 @@ export const insulinDoseService = {
     await api.delete(`/insulin-doses/${doseId}`);
   },
 };
+
+// Meal Context Options (same as meal types)
+export const MEAL_CONTEXT_OPTIONS = [
+  { value: 'Breakfast', label: 'Breakfast' },
+  { value: 'Lunch', label: 'Lunch' },
+  { value: 'Dinner', label: 'Dinner' },
+  { value: 'Snack', label: 'Snack' },
+  { value: 'Dessert', label: 'Dessert' },
+  { value: 'Beverage', label: 'Beverage' },
+  { value: 'Other', label: 'Other' }
+] as const;
 
 export const insulinDoseUtils = {
   formatUnits: (units: number): string => {
@@ -93,6 +108,34 @@ export const insulinDoseUtils = {
       case 'medium': return 'Medium';
       case 'high': return 'High';
       default: return 'Not specified';
+    }
+  },
+
+  formatMealContext: (mealContext?: string): string => {
+    if (!mealContext) return 'Not specified';
+    const option = MEAL_CONTEXT_OPTIONS.find(opt => opt.value === mealContext);
+    return option ? option.label : mealContext;
+  },
+
+  getMealContextColor: (mealContext?: string): string => {
+    if (!mealContext) return '#6b7280'; // gray
+    switch (mealContext) {
+      case 'Breakfast':
+        return '#f59e0b'; // amber
+      case 'Lunch':
+        return '#10b981'; // green
+      case 'Dinner':
+        return '#3b82f6'; // blue
+      case 'Snack':
+        return '#8b5cf6'; // purple
+      case 'Dessert':
+        return '#ec4899'; // pink
+      case 'Beverage':
+        return '#06b6d4'; // cyan
+      case 'Other':
+        return '#6b7280'; // gray
+      default:
+        return '#6b7280'; // gray
     }
   },
 };

@@ -88,6 +88,14 @@
   - [x] TypeScript type safety and validation
   - [x] React Query integration with caching
   - [x] Error handling and loading states
+  - [x] **Predefined Meal System**: Template-based meal creation with quantity and weight adjustments
+    - [x] PredefinedMealSelector component with search, filter, and customization
+    - [x] Template browsing by category (breakfast, lunch, dinner, snack, dessert, beverage)
+    - [x] Quantity scaling (1-10 portions) with automatic ingredient scaling
+    - [x] Individual ingredient weight adjustments
+    - [x] Live nutrition calculation based on user adjustments
+    - [x] Modal interface for clean template selection
+    - [x] Integration with existing MealForm component
 - [ ] Create activities page with CRUD operations
   - [ ] List view with activity types and durations
   - [ ] Add new activity form

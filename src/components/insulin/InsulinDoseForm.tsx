@@ -1,7 +1,8 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { Syringe, Clock, FileText, Save, X } from 'lucide-react';
+import { Syringe, Clock, FileText, Save, X, Utensils } from 'lucide-react';
 import type { InsulinDoseCreate, InsulinDoseUpdate } from '../../services/insulinDoseService';
+import { MEAL_CONTEXT_OPTIONS } from '../../services/insulinDoseService';
 import './InsulinDoseForm.css';
 
 interface InsulinDoseFormProps {
@@ -14,6 +15,7 @@ interface InsulinDoseFormProps {
 
 interface InsulinDoseFormData {
   units: number;
+  meal_context: string;
   note: string;
   timestamp: string;
 }
@@ -32,6 +34,7 @@ const InsulinDoseForm: React.FC<InsulinDoseFormProps> = ({
   } = useForm<InsulinDoseFormData>({
     defaultValues: {
       units: (initialData as any)?.units || 1,
+      meal_context: (initialData as any)?.meal_context || '',
       note: (initialData as any)?.note || '',
       timestamp: (initialData as any)?.timestamp 
         ? new Date((initialData as any).timestamp).toISOString().slice(0, 16)
@@ -99,6 +102,30 @@ const InsulinDoseForm: React.FC<InsulinDoseFormProps> = ({
             />
             {errors.timestamp && (
               <span className="error-message">{errors.timestamp.message}</span>
+            )}
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="meal_context">
+              <Utensils className="input-icon" />
+              Meal Context
+            </label>
+            <select
+              id="meal_context"
+              {...register('meal_context', {
+                required: 'Meal context is required',
+              })}
+              className={errors.meal_context ? 'error' : ''}
+            >
+              <option value="">Select meal context...</option>
+              {MEAL_CONTEXT_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+            {errors.meal_context && (
+              <span className="error-message">{errors.meal_context.message}</span>
             )}
           </div>
 

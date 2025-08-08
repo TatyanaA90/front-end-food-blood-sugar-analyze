@@ -41,10 +41,11 @@ VITE_API_BASE_URL=https://your-backend-url.com
 - **Glucose Readings Management**: Complete CRUD operations with filtering
 - **Admin Dashboard**: User management and system administration
 - **Profile Management**: User information and password management
+- **Meals Management**: Food tracking with predefined meal templates and custom meals
+- **Predefined Meal System**: Template-based meal creation with quantity and weight adjustments
 - **Responsive Design**: Mobile-first approach with modern UI
 
 ### **🔄 In Development**
-- **Meals Management**: Food tracking and nutrition analysis
 - **Activities Tracking**: Exercise and physical activity logging
 - **Insulin Doses**: Medication tracking and management
 
@@ -98,6 +99,32 @@ src/
 3. Fill in the reading value, unit, time, and meal context
 4. Use filters to find specific readings
 5. Edit or delete readings using the action buttons
+
+## 🍽️ **Predefined Meal System**
+
+### **Key Features**
+- **Template Selection**: Browse predefined meal templates by category
+- **Quantity Scaling**: Select 1-10 portions with automatic ingredient scaling
+- **Weight Adjustments**: Customize individual ingredient weights
+- **Live Nutrition Calculation**: Real-time nutrition updates as you adjust
+- **Search & Filter**: Find meals by name, description, or category
+- **Modal Interface**: Clean, focused template selection experience
+
+### **Usage**
+1. Navigate to "Meals" in the main navigation
+2. Click "Add Meal" to open the meal form
+3. Click "Choose from Templates" to browse predefined meals
+4. Select a meal template and customize quantity/weights
+5. Review calculated nutrition and confirm to create the meal
+6. Or create a custom meal from scratch using the form
+
+### **Template Categories**
+- **Breakfast**: Oatmeal, eggs, yogurt, etc.
+- **Lunch**: Salads, sandwiches, pasta, etc.
+- **Dinner**: Main dishes, sides, etc.
+- **Snack**: Light snacks and treats
+- **Dessert**: Sweet treats and desserts
+- **Beverage**: Drinks and smoothies
 
 ## 🔐 **Authentication**
 

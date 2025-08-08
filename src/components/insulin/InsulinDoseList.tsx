@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Search, Filter, SortAsc, SortDesc, Plus, Edit, Trash2, Syringe, Calendar, Zap } from 'lucide-react';
+import { Search, Filter, SortAsc, SortDesc, Plus, Edit, Trash2, Syringe, Calendar, Zap, Utensils } from 'lucide-react';
 import type { InsulinDoseBasic } from '../../services/insulinDoseService';
 import { insulinDoseUtils } from '../../services/insulinDoseService';
 import './InsulinDoseList.css';
@@ -12,7 +12,7 @@ interface InsulinDoseListProps {
   isLoading?: boolean;
 }
 
-type SortField = 'timestamp' | 'units';
+type SortField = 'timestamp' | 'units' | 'meal_context';
 type SortDirection = 'asc' | 'desc';
 
 const InsulinDoseList: React.FC<InsulinDoseListProps> = ({
@@ -30,9 +30,11 @@ const InsulinDoseList: React.FC<InsulinDoseListProps> = ({
   const filteredAndSortedDoses = useMemo(() => {
     const filtered = doses.filter(dose => {
       const searchLower = searchTerm.toLowerCase();
+      const mealContextText = insulinDoseUtils.formatMealContext(dose.meal_context);
       return (
         dose.note?.toLowerCase().includes(searchLower) ||
-        insulinDoseUtils.formatUnits(dose.units).toLowerCase().includes(searchLower)
+        insulinDoseUtils.formatUnits(dose.units).toLowerCase().includes(searchLower) ||
+        mealContextText.toLowerCase().includes(searchLower)
       );
     });
 
@@ -145,6 +147,12 @@ const InsulinDoseList: React.FC<InsulinDoseListProps> = ({
               >
                 Units {getSortIcon('units')}
               </button>
+              <button
+                onClick={() => handleSort('meal_context')}
+                className={`sort-btn ${sortField === 'meal_context' ? 'active' : ''}`}
+              >
+                Meal Context {getSortIcon('meal_context')}
+              </button>
             </div>
           </div>
         </div>
@@ -188,6 +196,17 @@ const InsulinDoseList: React.FC<InsulinDoseListProps> = ({
                     <span className="time-separator">•</span>
                     <span>{formatTime(dose.timestamp || '')}</span>
                   </div>
+                  {dose.meal_context && (
+                    <div className="dose-meal-context">
+                      <Utensils className="meal-icon" />
+                      <span 
+                        className="meal-context-badge"
+                        style={{ backgroundColor: insulinDoseUtils.getMealContextColor(dose.meal_context) }}
+                      >
+                        {insulinDoseUtils.formatMealContext(dose.meal_context)}
+                      </span>
+                    </div>
+                  )}
                 </div>
                 <div className="dose-actions">
                   <button
