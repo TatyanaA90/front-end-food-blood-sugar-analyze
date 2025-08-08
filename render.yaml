@@ -54,13 +54,16 @@ services:
     headers:
       - path: /*
         name: Cache-Control
-        value: no-cache
+        value: no-cache, no-store, must-revalidate
       - path: /*
         name: X-Frame-Options
         value: DENY
       - path: /*
         name: X-Content-Type-Options
         value: nosniff
+      - path: /admin/*
+        name: Cache-Control
+        value: no-cache, no-store, must-revalidate
     envVars:
       - key: VITE_API_BASE_URL
         value: https://back-end-food-blood-sugar-analyzer.onrender.com

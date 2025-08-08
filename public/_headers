@@ -1,17 +1,23 @@
+# Security Headers
 /*
   X-Frame-Options: DENY
   X-Content-Type-Options: nosniff
-  Cache-Control: no-cache
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
 
-/index.html
-  Cache-Control: no-cache
+# Cache Control for SPA
+/*
+  Cache-Control: no-cache, no-store, must-revalidate
 
+# Admin routes - no caching
 /admin/*
+  Cache-Control: no-cache, no-store, must-revalidate
   X-Frame-Options: DENY
-  X-Content-Type-Options: nosniff
-  Cache-Control: no-cache
 
-/login/*
-  X-Frame-Options: DENY
-  X-Content-Type-Options: nosniff
-  Cache-Control: no-cache 
+# Static assets - cache for performance
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# HTML files - no caching for SPA
+*.html
+  Cache-Control: no-cache, no-store, must-revalidate 
