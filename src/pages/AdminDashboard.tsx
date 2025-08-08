@@ -25,16 +25,28 @@ const AdminDashboard: React.FC = () => {
   const [newPassword, setNewPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
-  // React Query hooks
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // React Query hooks with better error handling
   const { data: users = [], isLoading: usersLoading, refetch: refetchUsers, error: usersError } = useAllUsers();
   const { data: usersDetailed = [], isLoading: detailedLoading, refetch: refetchDetailed, error: detailedError } = useUsersDetailed();
   const { data: userStats = null, refetch: refetchStats, error: statsError } = useUserStats();
   const deleteUserMutation = useDeleteUser();
   const truncateUsersMutation = useTruncateUsers();
   const resetPasswordMutation = useResetUserPassword();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const updateUserMutation = useUpdateUserAdmin();
+
+  // Debug information
+  useEffect(() => {
+    console.log('🔍 Admin Dashboard Debug Info:');
+    console.log('Current user:', user);
+    console.log('Token present:', !!authService.getToken());
+    console.log('Users loading:', usersLoading);
+    console.log('Users error:', usersError);
+    console.log('Detailed loading:', detailedLoading);
+    console.log('Detailed error:', detailedError);
+    console.log('Stats error:', statsError);
+    console.log('Users count:', users.length);
+    console.log('Detailed users count:', usersDetailed.length);
+  }, [user, usersLoading, usersError, detailedLoading, detailedError, statsError, users.length, usersDetailed.length]);
 
   // Check admin access
   useEffect(() => {
