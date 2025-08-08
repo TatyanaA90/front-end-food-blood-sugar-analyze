@@ -16,6 +16,7 @@ interface MealFormProps {
 
 interface MealFormData {
   description: string;
+  meal_type: string;
   timestamp: string;
   note: string;
   photo_url: string;
@@ -75,6 +76,7 @@ const MealForm: React.FC<MealFormProps> = ({
   } = useForm<MealFormData>({
     defaultValues: {
       description: initialData?.description || '',
+      meal_type: (initialData as any)?.meal_type || '',
       timestamp: initialData?.timestamp 
         ? new Date(initialData.timestamp).toISOString().slice(0, 16)
         : new Date().toISOString().slice(0, 16),
@@ -253,19 +255,45 @@ const MealForm: React.FC<MealFormProps> = ({
                   </div>
                 </div>
               ) : (
-                <input
-                  id="description"
-                  type="text"
-                  placeholder="e.g., Breakfast, Lunch, Dinner, or specific meal name"
-                  {...register('description', {
-                    required: 'Description is required',
-                    minLength: {
-                      value: 2,
-                      message: 'Description must be at least 2 characters',
-                    },
-                  })}
-                  className={errors.description ? 'error' : ''}
-                />
+                <div className="custom-description-container">
+                  <div className="form-group">
+                    <label htmlFor="meal-type-custom">Meal Type</label>
+                    <select
+                      id="meal-type-custom"
+                      {...register('meal_type', {
+                        required: 'Meal type is required',
+                      })}
+                      className={errors.meal_type ? 'error' : ''}
+                    >
+                      <option value="">Select meal type...</option>
+                      {mealTypes.map((type) => (
+                        <option key={type} value={type}>
+                          {type}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.meal_type && (
+                      <span className="error-message">{errors.meal_type.message}</span>
+                    )}
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="description">Custom Description</label>
+                    <input
+                      id="description"
+                      type="text"
+                      placeholder="e.g., Grilled Chicken with Vegetables, Homemade Pizza, etc."
+                      {...register('description', {
+                        required: 'Description is required',
+                        minLength: {
+                          value: 2,
+                          message: 'Description must be at least 2 characters',
+                        },
+                      })}
+                      className={errors.description ? 'error' : ''}
+                    />
+                  </div>
+                </div>
               )}
               
               {errors.description && (

@@ -420,7 +420,8 @@
   border-color: #1976d2;
 }
 
-.preset-description-container {
+.preset-description-container,
+.custom-description-container {
   background: rgba(255, 255, 255, 0.9);
   border-radius: 8px;
   padding: 1rem;
@@ -461,7 +462,8 @@
     width: 100%;
   }
   
-  .preset-description-container {
+  .preset-description-container,
+  .custom-description-container {
     padding: 0.75rem;
   }
 }
@@ -476,7 +478,8 @@
     font-size: 0.8rem;
   }
   
-  .preset-description-container {
+  .preset-description-container,
+  .custom-description-container {
     padding: 0.5rem;
   }
 }
