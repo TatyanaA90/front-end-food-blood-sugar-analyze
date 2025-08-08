@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { XCircle } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { useAllUsers, useUsersDetailed, useUserStats, useDeleteUser, useTruncateUsers, useResetUserPassword, useUpdateUserAdmin } from '../hooks/useUserManagement';
+import { authService } from '../services/authService';
 import AdminHeader from '../components/admin/AdminHeader';
 import UserManagementSection from '../components/admin/UserManagementSection';
 import DeleteUserModal from '../components/admin/DeleteUserModal';
@@ -26,9 +27,9 @@ const AdminDashboard: React.FC = () => {
 
   // React Query hooks
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { data: users = [], isLoading: usersLoading, refetch: refetchUsers } = useAllUsers();
-  const { data: usersDetailed = [], isLoading: detailedLoading, refetch: refetchDetailed } = useUsersDetailed();
-  const { data: userStats = null, refetch: refetchStats } = useUserStats();
+  const { data: users = [], isLoading: usersLoading, refetch: refetchUsers, error: usersError } = useAllUsers();
+  const { data: usersDetailed = [], isLoading: detailedLoading, refetch: refetchDetailed, error: detailedError } = useUsersDetailed();
+  const { data: userStats = null, refetch: refetchStats, error: statsError } = useUserStats();
   const deleteUserMutation = useDeleteUser();
   const truncateUsersMutation = useTruncateUsers();
   const resetPasswordMutation = useResetUserPassword();
@@ -170,6 +171,14 @@ const AdminDashboard: React.FC = () => {
         <p>Loading admin dashboard...</p>
         <p>Current user: {user?.username}</p>
         <p>Is admin: {user?.is_admin ? 'Yes' : 'No'}</p>
+        <p>Users loading: {usersLoading ? 'Yes' : 'No'}</p>
+        <p>Detailed loading: {detailedLoading ? 'Yes' : 'No'}</p>
+        <p>Users error: {usersError ? 'Yes' : 'No'}</p>
+        <p>Detailed error: {detailedError ? 'Yes' : 'No'}</p>
+        <p>Stats error: {statsError ? 'Yes' : 'No'}</p>
+        {usersError && <p>Users Error: {JSON.stringify(usersError)}</p>}
+        {detailedError && <p>Detailed Error: {JSON.stringify(detailedError)}</p>}
+        {statsError && <p>Stats Error: {JSON.stringify(statsError)}</p>}
       </div>
     );
   }
@@ -181,6 +190,16 @@ const AdminDashboard: React.FC = () => {
       />
 
       <div className="admin-content">
+        {/* Debug information */}
+        <div style={{ background: '#f0f0f0', padding: '10px', margin: '10px 0', borderRadius: '5px' }}>
+          <h4>Debug Info:</h4>
+          <p>Users count: {users.length}</p>
+          <p>Users detailed count: {usersDetailed.length}</p>
+          <p>User stats: {userStats ? JSON.stringify(userStats) : 'null'}</p>
+          <p>Current user ID: {user.id}</p>
+          <p>Token: {authService.getToken() ? 'Present' : 'Missing'}</p>
+        </div>
+
         <UserManagementSection
           users={usersDetailed}
           currentUserId={user.id}
