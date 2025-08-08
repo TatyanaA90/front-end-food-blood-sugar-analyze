@@ -16,6 +16,8 @@ import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
 import GlucoseReadings from './pages/GlucoseReadings';
 import Meals from './pages/Meals';
+import Activities from './pages/Activities';
+import InsulinDoses from './pages/InsulinDoses';
 
 // Create a client
 const queryClient = new QueryClient();
@@ -73,6 +75,26 @@ function App() {
                 <ProtectedRoute>
                   <Layout>
                     <Meals />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/activities"
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <Activities />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/insulin-doses"
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <InsulinDoses />
                   </Layout>
                 </ProtectedRoute>
               }

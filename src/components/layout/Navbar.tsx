@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
-import { LogOut, User, Settings, Shield, Droplets, Home, Utensils } from 'lucide-react';
+import { LogOut, User, Settings, Shield, Droplets, Home, Utensils, Activity, Syringe } from 'lucide-react';
 import './Navbar.css';
 
 const Navbar: React.FC = () => {
@@ -55,6 +55,22 @@ const Navbar: React.FC = () => {
                         >
                             <Utensils className="button-icon" />
                             <span>Meals</span>
+                        </button>
+                                                <button
+                          onClick={() => navigate('/activities')}
+                          className="navbar-button"
+                          aria-label="Activities"
+                        >
+                          <Activity className="button-icon" />
+                          <span>Activities</span>
+                        </button>
+                        <button
+                          onClick={() => navigate('/insulin-doses')}
+                          className="navbar-button"
+                          aria-label="Insulin Doses"
+                        >
+                          <Syringe className="button-icon" />
+                          <span>Insulin</span>
                         </button>
                         <button
                             onClick={() => navigate('/profile')}

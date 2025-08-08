@@ -10,6 +10,39 @@ export interface MealIngredient {
   note?: string;
 }
 
+// Predefined meal interfaces
+export interface PredefinedMealIngredient {
+  id: number;
+  name: string;
+  base_weight: number; // base weight in grams for 1 portion
+  carbs_per_100g: number; // carbs per 100g of this ingredient
+  glycemic_index?: number;
+  note?: string;
+}
+
+export interface PredefinedMeal {
+  id: number;
+  name: string;
+  description?: string;
+  category?: string;
+  ingredients: PredefinedMealIngredient[];
+  total_carbs_per_portion: number;
+  total_weight_per_portion: number;
+  average_glycemic_index?: number;
+}
+
+export interface MealFromPredefinedCreate {
+  predefined_meal_id: number;
+  quantity: number; // number of portions (1-10)
+  timestamp?: string;
+  note?: string;
+  photo_url?: string;
+  ingredient_adjustments?: Array<{
+    ingredient_id: number;
+    adjusted_weight: number;
+  }>;
+}
+
 export interface Meal {
   id: number;
   description?: string;
@@ -85,6 +118,28 @@ export const mealService = {
   deleteMeal: async (mealId: number): Promise<void> => {
     await api.delete(`/meals/${mealId}`);
   },
+
+  // Predefined meal functions
+  getPredefinedMeals: async (category?: string): Promise<PredefinedMeal[]> => {
+    const params = category ? { category } : {};
+    const response = await api.get<PredefinedMeal[]>('/predefined-meals', { params });
+    return response.data;
+  },
+
+  getPredefinedMeal: async (mealId: number): Promise<PredefinedMeal> => {
+    const response = await api.get<PredefinedMeal>(`/predefined-meals/${mealId}`);
+    return response.data;
+  },
+
+  createMealFromPredefined: async (mealData: MealFromPredefinedCreate): Promise<Meal> => {
+    const response = await api.post<Meal>('/meals/from-predefined', mealData);
+    return response.data;
+  },
+
+  getMealCategories: async (): Promise<string[]> => {
+    const response = await api.get<string[]>('/predefined-meals/categories/list');
+    return response.data;
+  },
 };
 
 // Utility functions for meal calculations
@@ -135,5 +190,57 @@ export const mealUtils = {
     }
     
     return 'Meal';
+  },
+
+  // Predefined meal utilities
+  calculateScaledIngredient: (
+    ingredient: PredefinedMealIngredient, 
+    quantity: number, 
+    adjustedWeight?: number
+  ): MealIngredient => {
+    const baseWeight = ingredient.base_weight * quantity;
+    const finalWeight = adjustedWeight ?? baseWeight;
+    const carbs = (finalWeight / 100) * ingredient.carbs_per_100g;
+    
+    return {
+      name: ingredient.name,
+      weight: finalWeight,
+      carbs: Math.round(carbs * 100) / 100, // Round to 2 decimal places
+      glycemic_index: ingredient.glycemic_index,
+      note: ingredient.note
+    };
+  },
+
+  calculateScaledMealNutrition: (
+    predefinedMeal: PredefinedMeal, 
+    quantity: number, 
+    ingredientAdjustments?: Array<{ingredient_id: number, adjusted_weight: number}>
+  ): { total_carbs: number; total_weight: number; ingredients: MealIngredient[] } => {
+    const adjustments = ingredientAdjustments?.reduce((acc, adj) => {
+      acc[adj.ingredient_id] = adj.adjusted_weight;
+      return acc;
+    }, {} as Record<number, number>) ?? {};
+
+    let total_carbs = 0;
+    let total_weight = 0;
+    const ingredients: MealIngredient[] = [];
+
+    for (const ingredient of predefinedMeal.ingredients) {
+      const scaledIngredient = mealUtils.calculateScaledIngredient(
+        ingredient, 
+        quantity, 
+        adjustments[ingredient.id]
+      );
+      
+      total_carbs += scaledIngredient.carbs;
+      total_weight += scaledIngredient.weight || 0;
+      ingredients.push(scaledIngredient);
+    }
+
+    return {
+      total_carbs: Math.round(total_carbs * 100) / 100,
+      total_weight: Math.round(total_weight * 100) / 100,
+      ingredients
+    };
   },
 };

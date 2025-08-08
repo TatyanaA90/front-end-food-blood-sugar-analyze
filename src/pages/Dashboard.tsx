@@ -83,7 +83,10 @@ const Dashboard: React.FC = () => {
                             </div>
                         </button>
 
-                        <button className="dashboard-action-button">
+                        <button 
+                            className="dashboard-action-button"
+                            onClick={() => navigate('/activities')}
+                        >
                             <div className="dashboard-action-content">
                                 <Activity className="dashboard-action-icon-purple" />
                                 <div>
