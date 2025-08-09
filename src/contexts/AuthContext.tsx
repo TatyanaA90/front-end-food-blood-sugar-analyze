@@ -25,7 +25,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         console.error('Auth initialization error:', error);
         authService.logout();
       } finally {
-        setIsLoading(false);
+        queueMicrotask(() => setIsLoading(false));
       }
     };
 
@@ -35,16 +35,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const login = async (username: string, password: string) => {
     try {
       setIsLoading(true);
-      
+
       const data = await authService.login({ username, password });
-      
+
       // Set auth state
       setToken(data.access_token);
       setUser(data.user);
-      
+
     } catch (error) {
       console.error('Login error:', error);
-      
+
       // Handle specific error types for better user feedback
       if (error.response?.status === 401) {
         throw new Error('Invalid username or password. Please check your credentials and try again.');
@@ -56,23 +56,23 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         throw new Error('Login failed. Please try again.');
       }
     } finally {
-      setIsLoading(false);
+      queueMicrotask(() => setIsLoading(false));
     }
   };
 
   const adminLogin = async (username: string, password: string) => {
     try {
       setIsLoading(true);
-      
+
       const data = await authService.adminLogin({ username, password });
-      
+
       // Set auth state
       setToken(data.access_token);
       setUser(data.user);
-      
+
     } catch (error) {
       console.error('Admin login error:', error);
-      
+
       // Handle specific error types for better user feedback
       if (error.response?.status === 401) {
         throw new Error('Invalid admin credentials. Please check your username and password.');
@@ -86,14 +86,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         throw new Error('Admin login failed. Please try again.');
       }
     } finally {
-      setIsLoading(false);
+      queueMicrotask(() => setIsLoading(false));
     }
   };
 
   const register = async (username: string, email: string, password: string, weight?: string, weight_unit?: string) => {
     try {
       setIsLoading(true);
-      
+
       const data = await authService.register({
         name: username,
         username,
@@ -102,14 +102,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         weight: weight ? parseFloat(weight) : undefined,
         weight_unit: weight_unit || 'kg'
       });
-      
+
       // Set auth state for immediate login
       setToken(data.access_token);
       setUser(data.user);
-      
+
     } catch (error) {
       console.error('Registration error:', error);
-      
+
       // Handle specific error types
       if (error.response?.status === 409) {
         throw new Error('Username or email already exists. Please try different credentials.');
@@ -121,7 +121,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         throw new Error('Registration failed. Please try again.');
       }
     } finally {
-      setIsLoading(false);
+      queueMicrotask(() => setIsLoading(false));
     }
   };
 
@@ -156,4 +156,3 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   );
 };
 
- 

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { XCircle } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
-import { useAllUsers, useUsersDetailed, useUserStats, useDeleteUser, useTruncateUsers, useResetUserPassword, useUpdateUserAdmin } from '../hooks/useUserManagement';
+import { useAllUsers, useUsersDetailed, useUserStats, useDeleteUser, useTruncateUsers, useResetUserPassword } from '../hooks/useUserManagement';
 import { authService } from '../services/authService';
 import AdminHeader from '../components/admin/AdminHeader';
 import UserManagementSection from '../components/admin/UserManagementSection';
@@ -32,7 +32,7 @@ const AdminDashboard: React.FC = () => {
   const deleteUserMutation = useDeleteUser();
   const truncateUsersMutation = useTruncateUsers();
   const resetPasswordMutation = useResetUserPassword();
-  const updateUserMutation = useUpdateUserAdmin();
+  // const updateUserMutation = useUpdateUserAdmin();
 
   // Debug information
   useEffect(() => {
@@ -208,13 +208,13 @@ const AdminDashboard: React.FC = () => {
           <p>Users count: {users.length}</p>
           <p>Users detailed count: {usersDetailed.length}</p>
           <p>User stats: {userStats ? JSON.stringify(userStats) : 'null'}</p>
-          <p>Current user ID: {user.id}</p>
+          <p>Current user ID: {user?.id}</p>
           <p>Token: {authService.getToken() ? 'Present' : 'Missing'}</p>
         </div>
 
         <UserManagementSection
           users={usersDetailed}
-          currentUserId={user.id}
+          currentUserId={user?.id as number}
           onRefresh={handleRefreshData}
           onTruncateUsers={() => setShowTruncateModal(true)}
           onPasswordReset={handlePasswordResetRequest}

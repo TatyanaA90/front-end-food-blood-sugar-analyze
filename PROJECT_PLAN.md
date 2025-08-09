@@ -258,6 +258,8 @@
   - [ ] CDN configuration
   - [ ] Caching strategies
 
+Note: Documentation sync pass completed on 2025-08-07 (updated README footer; logs aligned with rules).
+
 ## API Integration Points
 
 ### Authentication Endpoints

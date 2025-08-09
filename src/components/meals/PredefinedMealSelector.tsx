@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { Search, Filter, ChevronDown, ChevronUp, Scale, Calculator } from 'lucide-react';
-import { mealService, type PredefinedMeal, type MealIngredient } from '../../services/mealService';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Search, Filter, ChevronDown, Scale, Calculator } from 'lucide-react';
+import { mealService, mealUtils, type PredefinedMeal } from '../../services/mealService';
 import './PredefinedMealSelector.css';
 
 interface PredefinedMealSelectorProps {
@@ -19,16 +19,10 @@ const PredefinedMealSelector: React.FC<PredefinedMealSelectorProps> = ({
     const [selectedMeal, setSelectedMeal] = useState<PredefinedMeal | null>(null);
     const [quantity, setQuantity] = useState(1);
     const [ingredientAdjustments, setIngredientAdjustments] = useState<Record<number, number>>({});
-    const [showDetails, setShowDetails] = useState(false);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-        loadPredefinedMeals();
-        loadCategories();
-    }, []);
-
-    const loadPredefinedMeals = async () => {
+    const reloadPredefinedMeals = useCallback(async () => {
         try {
             setLoading(true);
             const meals = await mealService.getPredefinedMeals(selectedCategory || undefined);
@@ -39,20 +33,23 @@ const PredefinedMealSelector: React.FC<PredefinedMealSelectorProps> = ({
         } finally {
             setLoading(false);
         }
-    };
-
-    const loadCategories = async () => {
-        try {
-            const cats = await mealService.getMealCategories();
-            setCategories(cats);
-        } catch (err) {
-            console.error('Error loading categories:', err);
-        }
-    };
+    }, [selectedCategory]);
 
     useEffect(() => {
-        loadPredefinedMeals();
-    }, [selectedCategory]);
+        // Load categories once on mount
+        (async () => {
+            try {
+                const cats = await mealService.getMealCategories();
+                setCategories(cats);
+            } catch (err) {
+                console.error('Error loading categories:', err);
+            }
+        })();
+    }, []);
+
+    useEffect(() => {
+        reloadPredefinedMeals();
+    }, [reloadPredefinedMeals]);
 
     const filteredMeals = predefinedMeals.filter(meal =>
         meal.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -64,7 +61,6 @@ const PredefinedMealSelector: React.FC<PredefinedMealSelectorProps> = ({
         setSelectedMeal(meal);
         setQuantity(1);
         setIngredientAdjustments({});
-        setShowDetails(true);
     };
 
     const handleQuantityChange = (newQuantity: number) => {
@@ -96,7 +92,7 @@ const PredefinedMealSelector: React.FC<PredefinedMealSelectorProps> = ({
     const calculateScaledNutrition = () => {
         if (!selectedMeal) return null;
 
-        const nutrition = mealService.mealUtils.calculateScaledMealNutrition(
+        const nutrition = mealUtils.calculateScaledMealNutrition(
             selectedMeal,
             quantity,
             Object.entries(ingredientAdjustments).map(([id, weight]) => ({
@@ -122,7 +118,7 @@ const PredefinedMealSelector: React.FC<PredefinedMealSelectorProps> = ({
         return (
             <div className="predefined-meal-selector">
                 <div className="error">{error}</div>
-                <button onClick={loadPredefinedMeals} className="retry-btn">Retry</button>
+                <button onClick={reloadPredefinedMeals} className="retry-btn">Retry</button>
             </div>
         );
     }

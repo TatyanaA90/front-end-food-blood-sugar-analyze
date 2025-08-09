@@ -46,6 +46,7 @@ export interface MealFromPredefinedCreate {
 export interface Meal {
   id: number;
   description?: string;
+  meal_type?: string;
   total_weight?: number;
   total_carbs?: number;
   glycemic_index?: number;
@@ -57,6 +58,7 @@ export interface Meal {
 
 export interface MealCreate {
   description?: string;
+  meal_type?: string;
   total_weight?: number;
   total_carbs?: number;
   glycemic_index?: number;
@@ -68,6 +70,7 @@ export interface MealCreate {
 
 export interface MealUpdate {
   description?: string;
+  meal_type?: string;
   total_weight?: number;
   total_carbs?: number;
   glycemic_index?: number;
@@ -80,6 +83,7 @@ export interface MealUpdate {
 export interface MealBasic {
   id: number;
   description?: string;
+  meal_type?: string;
   total_weight?: number;
   total_carbs?: number;
   glycemic_index?: number;

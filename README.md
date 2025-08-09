@@ -281,9 +281,6 @@ import type { MyType } from './types';
 ## 📄 **Documentation**
 
 ### **Additional Resources**
-- [EXPLANATION.md](./EXPLANATION.md) - Detailed feature documentation
-- [COMMAND_LOG.md](./COMMAND_LOG.md) - Development command history
-- [PROMPT_LOG.md](./PROMPT_LOG.md) - User interaction history
 - [PROJECT_PLAN.md](./PROJECT_PLAN.md) - Project roadmap and status
 
 ### **API Documentation**
@@ -326,7 +323,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**Version**: 1.0.0  
-**Last Updated**: December 2024  
-**Status**: Production Ready with Glucose Readings Feature  
-**Next Release**: Meals Management System# Dashboard and Glucose Reading Implementation
+**Version**: 1.1.0  
+**Last Updated**: August 2025  
+**Status**: Production Ready with Glucose Readings, Meals Management, Admin Dashboard, and Global Unit Selection  
+**Next Release**: Activities and Insulin Doses pages

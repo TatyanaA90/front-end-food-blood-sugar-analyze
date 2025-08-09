@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
@@ -20,7 +20,16 @@ const Login: React.FC = () => {
     register,
     handleSubmit,
     formState: { errors },
+    watch,
   } = useForm<LoginFormData>();
+
+  const watchedUsername = watch('username');
+  const watchedPassword = watch('password');
+
+  useEffect(() => {
+    // Clear any prior error when the user edits the form fields
+    setError('');
+  }, [watchedUsername, watchedPassword]);
 
   const onSubmit = async (data: LoginFormData) => {
     try {
@@ -28,7 +37,7 @@ const Login: React.FC = () => {
       await login(data.username, data.password);
       navigate('/dashboard');
     } catch {
-      setError('Invalid username or password');
+      setError('Invalid username or password. Please check your credentials and try again.');
       // Prevent navigation on error - stay on the same page
     }
   };

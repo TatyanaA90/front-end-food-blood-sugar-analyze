@@ -52,6 +52,8 @@ const MealList: React.FC<MealListProps> = ({
       // Handle string sorting
       if (typeof aValue === 'string') {
         aValue = aValue.toLowerCase();
+      }
+      if (typeof bValue === 'string') {
         bValue = bValue.toLowerCase();
       }
 
@@ -197,8 +199,8 @@ const MealList: React.FC<MealListProps> = ({
               <div className="meal-header">
                 <div className="meal-info">
                   <div className="meal-title">
-                    <h3>{meal.description || mealUtils.getMealType(meal)}</h3>
-                    <span className="meal-type">{mealUtils.getMealType(meal)}</span>
+                    <h3>{meal.description || 'Untitled Meal'}</h3>
+                    <span className="meal-type">{meal.meal_type || mealUtils.getMealType(meal)}</span>
                   </div>
                   <div className="meal-time">
                     <Calendar className="time-icon" />

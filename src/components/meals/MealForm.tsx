@@ -76,7 +76,7 @@ const MealForm: React.FC<MealFormProps> = ({
   } = useForm<MealFormData>({
     defaultValues: {
       description: initialData?.description || '',
-      meal_type: (initialData as any)?.meal_type || '',
+      meal_type: initialData?.meal_type ?? '',
       timestamp: initialData?.timestamp 
         ? new Date(initialData.timestamp).toISOString().slice(0, 16)
         : new Date().toISOString().slice(0, 16),
@@ -193,16 +193,10 @@ const MealForm: React.FC<MealFormProps> = ({
                     <label htmlFor="meal-type">Meal Type</label>
                     <select
                       id="meal-type"
-                      onChange={(e) => {
-                        if (e.target.value) {
-                          const form = document.querySelector('form');
-                          const descriptionInput = form?.querySelector('#description') as HTMLInputElement;
-                          if (descriptionInput) {
-                            descriptionInput.value = e.target.value;
-                          }
-                        }
-                      }}
-                      className="meal-type-select"
+                      {...register('meal_type', {
+                        required: 'Meal type is required',
+                      })}
+                      className={errors.meal_type ? 'error' : ''}
                     >
                       <option value="">Select meal type...</option>
                       {mealTypes.map((type) => (
@@ -211,6 +205,9 @@ const MealForm: React.FC<MealFormProps> = ({
                         </option>
                       ))}
                     </select>
+                    {errors.meal_type && (
+                      <span className="error-message">{errors.meal_type.message}</span>
+                    )}
                   </div>
 
                   <div className="form-group">

@@ -33,11 +33,11 @@ const InsulinDoseForm: React.FC<InsulinDoseFormProps> = ({
     formState: { errors },
   } = useForm<InsulinDoseFormData>({
     defaultValues: {
-      units: (initialData as any)?.units || 1,
-      meal_context: (initialData as any)?.meal_context || '',
-      note: (initialData as any)?.note || '',
-      timestamp: (initialData as any)?.timestamp 
-        ? new Date((initialData as any).timestamp).toISOString().slice(0, 16)
+      units: (initialData as (InsulinDoseCreate | InsulinDoseUpdate) | undefined)?.units ?? 1,
+      meal_context: (initialData as (InsulinDoseCreate | InsulinDoseUpdate) | undefined)?.meal_context ?? '',
+      note: (initialData as (InsulinDoseCreate | InsulinDoseUpdate) | undefined)?.note ?? '',
+      timestamp: (initialData as (InsulinDoseCreate | InsulinDoseUpdate) | undefined)?.timestamp
+        ? new Date((initialData as (InsulinDoseCreate | InsulinDoseUpdate)).timestamp as string).toISOString().slice(0, 16)
         : new Date().toISOString().slice(0, 16),
     },
   });
