@@ -4,7 +4,8 @@ services:
     plan: free
     buildCommand: npm install && npm run build && cp serve.json dist/
     # Use SPA fallback and explicit config to ensure rewrites for deep links like /admin/login
-    startCommand: npx serve -s dist -l $PORT -c dist/serve.json
+    # NOTE: '-C' specifies the config file; '-c' is cache-control and would be incorrect here
+    startCommand: npx serve -s dist -l $PORT -C dist/serve.json
     envVars:
       - key: VITE_API_BASE_URL
         value: https://back-end-food-blood-sugar-analyzer.onrender.com
