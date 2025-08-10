@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { Search, Filter, SortAsc, SortDesc, Plus, Edit, Trash2, Utensils, Calendar, Calculator } from 'lucide-react';
 import type { MealBasic } from '../../services/mealService';
-import { mealUtils } from '../../services/mealService';
+import { mealUtils, mealService } from '../../services/mealService';
 import './MealList.css';
 
 interface MealListProps {
@@ -129,7 +129,7 @@ const MealList: React.FC<MealListProps> = ({
             className="search-input"
           />
         </div>
-        
+
         <button
           onClick={() => setShowFilters(!showFilters)}
           className={`filter-toggle-btn ${showFilters ? 'active' : ''}`}
@@ -181,7 +181,7 @@ const MealList: React.FC<MealListProps> = ({
             <Utensils className="empty-icon" />
             <h3>No meals found</h3>
             <p>
-              {searchTerm 
+              {searchTerm
                 ? `No meals match "${searchTerm}". Try adjusting your search.`
                 : "You haven't logged any meals yet. Add your first meal to get started!"
               }
@@ -216,6 +216,20 @@ const MealList: React.FC<MealListProps> = ({
                     title="Edit meal"
                   >
                     <Edit className="btn-icon" />
+                  </button>
+                  <button
+                    onClick={async () => {
+                      try {
+                        await mealService.createPredefinedFromMeal(meal.id);
+                        alert('Saved as personal template');
+                      } catch (e: any) {
+                        alert(e?.response?.data?.detail || 'Failed to save template');
+                      }
+                    }}
+                    className="action-btn edit-btn"
+                    title="Save as Template"
+                  >
+                    <Plus className="btn-icon" />
                   </button>
                   <button
                     onClick={() => onDeleteMeal(meal)}

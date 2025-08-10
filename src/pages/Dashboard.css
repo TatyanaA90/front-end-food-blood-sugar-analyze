@@ -167,6 +167,18 @@
     margin-bottom: 0.5rem;
 }
 
+.dashboard-stat-value.trend-up {
+    color: #ef4444;
+}
+
+.dashboard-stat-value.trend-down {
+    color: #10b981;
+}
+
+.dashboard-stat-value.trend-stable {
+    color: #6b7280;
+}
+
 .dashboard-stat-label {
     font-size: 0.875rem;
     color: #64748b;
@@ -241,28 +253,28 @@
     .dashboard-container {
         padding: 1rem;
     }
-    
+
     .dashboard-card {
         padding: 1.5rem;
     }
-    
+
     .dashboard-action-button {
         padding: 1.5rem;
     }
-    
+
     .dashboard-section-title {
         font-size: 1.5rem;
     }
-    
+
     .dashboard-welcome-title {
         font-size: 1.75rem;
     }
-    
+
     .dashboard-grid {
         grid-template-columns: 1fr;
         gap: 1rem;
     }
-    
+
     .dashboard-stats-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 1rem;

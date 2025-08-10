@@ -1,22 +1,25 @@
 import React from 'react';
 import { useAuth } from '../hooks/useAuth';
-import { useGlucoseReadings } from '../hooks/useGlucoseReadings';
+import { useRecentGlucoseReadings } from '../hooks/useGlucoseReadings';
 import { useGlucoseUnitUtils } from '../hooks/useGlucoseUnit';
 import { Activity, BarChart3, Plus, Droplets, Clock, TrendingUp, TrendingDown, Minus } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import NavigationHeader from '../components/layout/NavigationHeader';
+import RecentGlucoseChart from '../components/dashboards/RecentGlucoseChart';
 import './Dashboard.css';
 
 const Dashboard: React.FC = () => {
     const { user } = useAuth();
     const navigate = useNavigate();
-    const { data: readings = [], isLoading } = useGlucoseReadings({});
+    const { data: readings = [], isLoading } = useRecentGlucoseReadings();
     const { convertReading, getReadingStatus, preferredUnit, getRangeLabels } = useGlucoseUnitUtils();
     const rangeLabels = getRangeLabels();
 
-    // Get recent readings (last 5)
-    const recentReadings = readings.slice(0, 5);
-    
+    // Get recent readings (last 5), ordered by displayed time (newest first)
+    const recentReadings = [...readings]
+        .sort((a, b) => new Date(b.reading_time).getTime() - new Date(a.reading_time).getTime())
+        .slice(0, 5);
+
     // Calculate summary stats
     const totalReadings = readings.length;
     const todayReadings = readings.filter(reading => {
@@ -35,8 +38,8 @@ const Dashboard: React.FC = () => {
 
     return (
         <div className="dashboard-container">
-            <NavigationHeader 
-                title="Dashboard" 
+            <NavigationHeader
+                title="Dashboard"
                 icon={<BarChart3 size={24} />}
                 showBack={false}
             />
@@ -57,7 +60,7 @@ const Dashboard: React.FC = () => {
                 <section className="dashboard-section">
                     <h3 className="dashboard-section-title">Quick Actions</h3>
                     <div className="dashboard-grid">
-                        <button 
+                        <button
                             className="dashboard-action-button"
                             onClick={() => navigate('/glucose-readings')}
                         >
@@ -70,7 +73,7 @@ const Dashboard: React.FC = () => {
                             </div>
                         </button>
 
-                        <button 
+                        <button
                             className="dashboard-action-button"
                             onClick={() => navigate('/meals')}
                         >
@@ -83,7 +86,7 @@ const Dashboard: React.FC = () => {
                             </div>
                         </button>
 
-                        <button 
+                        <button
                             className="dashboard-action-button"
                             onClick={() => navigate('/activities')}
                         >
@@ -96,7 +99,10 @@ const Dashboard: React.FC = () => {
                             </div>
                         </button>
 
-                        <button className="dashboard-action-button">
+                        <button
+                            className="dashboard-action-button"
+                            onClick={() => navigate('/analytics')}
+                        >
                             <div className="dashboard-action-content">
                                 <BarChart3 className="dashboard-action-icon-orange" />
                                 <div>
@@ -120,7 +126,7 @@ const Dashboard: React.FC = () => {
                                 Unit: {preferredUnit}
                             </div>
                         </div>
-                        
+
                         <div className="dashboard-stats-grid">
                             <div className="dashboard-stat-item">
                                 <div className="dashboard-stat-value">{totalReadings}</div>
@@ -134,26 +140,72 @@ const Dashboard: React.FC = () => {
                                 <div className="dashboard-stat-value">{rangeLabels.normal}</div>
                                 <div className="dashboard-stat-label">Target Range</div>
                             </div>
+                            <div className="dashboard-stat-item">
+                                <div className={`dashboard-stat-value ${(() => {
+                                    if (readings.length < 2) return '';
+
+                                    const sortedReadings = [...readings]
+                                        .sort((a, b) => new Date(a.reading_time).getTime() - new Date(b.reading_time).getTime());
+
+                                    const firstReading = convertReading(sortedReadings[0]);
+                                    const lastReading = convertReading(sortedReadings[sortedReadings.length - 1]);
+                                    const change = lastReading.displayValue - firstReading.displayValue;
+
+                                    if (Math.abs(change) < 5) return 'trend-stable';
+                                    return change > 0 ? 'trend-up' : 'trend-down';
+                                })()}`}>
+                                    {(() => {
+                                        if (readings.length < 2) return '--';
+
+                                        const sortedReadings = [...readings]
+                                            .sort((a, b) => new Date(a.reading_time).getTime() - new Date(b.reading_time).getTime());
+
+                                        const firstReading = convertReading(sortedReadings[0]);
+                                        const lastReading = convertReading(sortedReadings[sortedReadings.length - 1]);
+                                        const change = lastReading.displayValue - firstReading.displayValue;
+
+                                        if (Math.abs(change) < 5) return '→';
+                                        return change > 0 ? '↗' : '↘';
+                                    })()}
+                                </div>
+                                <div className="dashboard-stat-label">
+                                    Last Hour Trend
+                                    {(() => {
+                                        if (readings.length < 2) return '';
+
+                                        const sortedReadings = [...readings]
+                                            .sort((a, b) => new Date(a.reading_time).getTime() - new Date(b.reading_time).getTime());
+
+                                        const firstReading = convertReading(sortedReadings[0]);
+                                        const lastReading = convertReading(sortedReadings[sortedReadings.length - 1]);
+                                        const change = lastReading.displayValue - firstReading.displayValue;
+
+                                        if (Math.abs(change) < 5) return '';
+                                        const sign = change > 0 ? '+' : '';
+                                        return ` (${sign}${Math.round(change)})`;
+                                    })()}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </section>
 
-                {/* Recent Glucose Readings */}
+                {/* Recent Glucose Readings (Last Hour) */}
                 <section className="dashboard-section">
                     <div className="dashboard-card">
                         <div className="dashboard-card-header">
                             <h3 className="dashboard-section-title">
                                 <Clock size={20} />
-                                Recent Glucose Readings
+                                Recent Glucose Readings (Last Hour)
                             </h3>
-                            <button 
+                            <button
                                 className="dashboard-view-all-btn"
                                 onClick={() => navigate('/glucose-readings')}
                             >
                                 View All
                             </button>
                         </div>
-                        
+
                         {isLoading ? (
                             <div className="dashboard-loading">
                                 <p>Loading recent readings...</p>
@@ -161,9 +213,9 @@ const Dashboard: React.FC = () => {
                         ) : recentReadings.length === 0 ? (
                             <div className="dashboard-empty-state">
                                 <Droplets className="dashboard-empty-icon" />
-                                <p className="dashboard-empty-text">No glucose readings yet</p>
+                                <p className="dashboard-empty-text">No glucose readings in the last hour</p>
                                 <p className="dashboard-empty-subtext">Start by adding your first blood sugar reading</p>
-                                <button 
+                                <button
                                     className="dashboard-empty-btn"
                                     onClick={() => navigate('/glucose-readings')}
                                 >
@@ -211,4 +263,4 @@ const Dashboard: React.FC = () => {
     );
 };
 
-export default Dashboard; 
+export default Dashboard;

@@ -30,6 +30,8 @@ export interface UpdateGlucoseReadingRequest {
 export interface GlucoseReadingFilters {
     start_date?: string;
     end_date?: string;
+    start_datetime?: string;
+    end_datetime?: string;
     meal_context?: string;
     unit?: 'mg/dL' | 'mmol/L';
     search?: string;
@@ -48,10 +50,4 @@ export const MEAL_CONTEXT_OPTIONS = [
 ] as const;
 
 // Unit Conversion Functions
-export const convertMgDlToMmolL = (mgDl: number): number => {
-    return Math.round((mgDl / 18) * 10) / 10;
-};
-
-export const convertMmolLToMgDl = (mmolL: number): number => {
-    return Math.round(mmolL * 18);
-}; 
+// Moved conversions to utils/glucoseUtils to avoid duplication

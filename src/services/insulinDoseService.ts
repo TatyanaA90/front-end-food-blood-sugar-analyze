@@ -12,6 +12,7 @@ export interface InsulinDose {
 export interface InsulinDoseCreate {
   units: number;
   timestamp?: string;
+  type?: string;
   meal_context?: 'Breakfast' | 'Lunch' | 'Dinner' | 'Snack' | 'Dessert' | 'Beverage' | 'Other';
   note?: string;
 }
@@ -19,6 +20,7 @@ export interface InsulinDoseCreate {
 export interface InsulinDoseUpdate {
   units?: number;
   timestamp?: string;
+  type?: string;
   meal_context?: 'Breakfast' | 'Lunch' | 'Dinner' | 'Snack' | 'Dessert' | 'Beverage' | 'Other';
   note?: string;
 }

@@ -8,7 +8,7 @@ import './MealForm.css';
 
 interface MealFormProps {
   initialData?: MealCreate | MealUpdate;
-  onSubmit: (data: MealCreate | MealUpdate) => void;
+  onSubmit: (data: MealCreate | MealUpdate, options?: { saveAsTemplate?: boolean }) => void;
   onCancel: () => void;
   isLoading?: boolean;
   isEdit?: boolean;
@@ -32,39 +32,22 @@ const MealForm: React.FC<MealFormProps> = ({
 }) => {
   const [showNutritionSummary, setShowNutritionSummary] = useState(false);
   const [showPredefinedSelector, setShowPredefinedSelector] = useState(false);
-  const [descriptionType, setDescriptionType] = useState<'custom' | 'preset'>('custom');
+  const [descriptionType, setDescriptionType] = useState<'custom' | 'predefined'>('custom');
+  const [saveAsTemplate, setSaveAsTemplate] = useState(false);
 
-  // Predefined meal options
+  const toLocalInputValue = (d: Date) => {
+    const pad = (n: number) => String(n).padStart(2, '0');
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  };
+
+  // Meal type options
   const mealTypes = [
     'Breakfast',
-    'Lunch', 
+    'Lunch',
     'Dinner',
     'Snack',
     'Dessert',
     'Beverage'
-  ];
-
-  const commonMeals = [
-    'Oatmeal with Berries',
-    'Scrambled Eggs with Toast',
-    'Greek Yogurt with Honey',
-    'Grilled Chicken Salad',
-    'Pasta with Tomato Sauce',
-    'Rice with Vegetables',
-    'Grilled Salmon',
-    'Beef Stir Fry',
-    'Vegetable Soup',
-    'Caesar Salad',
-    'Pizza',
-    'Burger with Fries',
-    'Sushi Roll',
-    'Taco Bowl',
-    'Quinoa Bowl',
-    'Smoothie Bowl',
-    'Chocolate Cake',
-    'Ice Cream',
-    'Fruit Salad',
-    'Nuts and Seeds Mix'
   ];
 
   const {
@@ -72,14 +55,15 @@ const MealForm: React.FC<MealFormProps> = ({
     control,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors },
   } = useForm<MealFormData>({
     defaultValues: {
       description: initialData?.description || '',
       meal_type: initialData?.meal_type ?? '',
-      timestamp: initialData?.timestamp 
-        ? new Date(initialData.timestamp).toISOString().slice(0, 16)
-        : new Date().toISOString().slice(0, 16),
+      timestamp: initialData?.timestamp
+        ? toLocalInputValue(new Date(initialData.timestamp))
+        : toLocalInputValue(new Date()),
       note: initialData?.note || '',
       photo_url: initialData?.photo_url || '',
       ingredients: initialData?.ingredients || [{ name: '', carbs: 0, weight: 0 }],
@@ -107,7 +91,7 @@ const MealForm: React.FC<MealFormProps> = ({
       ingredients: data.ingredients.filter(ing => ing.name.trim() !== ''),
     };
 
-    onSubmit(mealData as MealCreate | MealUpdate);
+    onSubmit(mealData as MealCreate | MealUpdate, { saveAsTemplate });
   };
 
   const addIngredient = () => {
@@ -121,8 +105,8 @@ const MealForm: React.FC<MealFormProps> = ({
   };
 
   const handlePredefinedMealSelected = async (
-    meal: PredefinedMeal, 
-    quantity: number, 
+    meal: PredefinedMeal,
+    quantity: number,
     ingredientAdjustments: Array<{ingredient_id: number, adjusted_weight: number}>
   ) => {
     try {
@@ -141,6 +125,32 @@ const MealForm: React.FC<MealFormProps> = ({
     }
   };
 
+  const handleLoadPredefinedIntoForm = (data: { description: string; ingredients: MealIngredient[]; meal_type?: string }) => {
+    // Set description using react-hook-form to keep form state in sync
+    setValue('description', data.description, { shouldValidate: true, shouldDirty: true });
+    if (data.meal_type) {
+      setValue('meal_type', data.meal_type, { shouldValidate: true, shouldDirty: true });
+    }
+
+    // Reset ingredient fields to match provided list
+    // Remove existing fields
+    for (let i = fields.length - 1; i >= 0; i--) {
+      remove(i);
+    }
+    // Append new ingredients
+    data.ingredients.forEach((ing) => {
+      append({
+        name: ing.name,
+        weight: ing.weight ?? 0,
+        carbs: ing.carbs ?? 0,
+        glycemic_index: ing.glycemic_index,
+        note: ing.note ?? ''
+      });
+    });
+
+    setShowPredefinedSelector(false);
+  };
+
   return (
     <>
       <div className="meal-form-container">
@@ -148,48 +158,50 @@ const MealForm: React.FC<MealFormProps> = ({
           <div className="form-header">
             <Utensils className="form-icon" />
             <h2>{isEdit ? 'Edit Meal' : 'Add New Meal'}</h2>
-            {!isEdit && (
-              <button
-                type="button"
-                onClick={() => setShowPredefinedSelector(true)}
-                className="predefined-meal-btn"
-              >
-                <BookOpen className="btn-icon" />
-                Choose from Templates
-              </button>
-            )}
           </div>
 
           {/* Basic Meal Information */}
           <div className="form-section">
             <h3>Meal Information</h3>
-            
+
             <div className="form-group">
               <label htmlFor="description">
                 <FileText className="input-icon" />
                 Meal Description
               </label>
-              
+
               <div className="description-type-toggle">
                 <button
                   type="button"
-                  className={`toggle-btn ${descriptionType === 'preset' ? 'active' : ''}`}
-                  onClick={() => setDescriptionType('preset')}
+                  className={`toggle-btn ${descriptionType === 'predefined' ? 'active' : ''}`}
+                  onClick={() => setDescriptionType('predefined')}
                 >
-                  Choose from Options
+                  Predefined Template
                 </button>
                 <button
                   type="button"
                   className={`toggle-btn ${descriptionType === 'custom' ? 'active' : ''}`}
                   onClick={() => setDescriptionType('custom')}
                 >
-                  Custom Description
+                  Custom
                 </button>
               </div>
 
-              {descriptionType === 'preset' ? (
+              {descriptionType === 'predefined' ? (
                 <div className="preset-description-container">
-                  <div className="form-group">
+                  {/* Predefined selection UX */}
+                  {!isEdit && (
+                    <button
+                      type="button"
+                      onClick={() => setShowPredefinedSelector(true)}
+                      className="predefined-meal-btn"
+                    >
+                      <BookOpen className="btn-icon" />
+                      Choose Predefined Meal
+                    </button>
+                  )}
+
+                  <div className="form-group" style={{ marginTop: 12 }}>
                     <label htmlFor="meal-type">Meal Type</label>
                     <select
                       id="meal-type"
@@ -211,35 +223,11 @@ const MealForm: React.FC<MealFormProps> = ({
                   </div>
 
                   <div className="form-group">
-                    <label htmlFor="common-meal">Common Meals</label>
-                    <select
-                      id="common-meal"
-                      onChange={(e) => {
-                        if (e.target.value) {
-                          const form = document.querySelector('form');
-                          const descriptionInput = form?.querySelector('#description') as HTMLInputElement;
-                          if (descriptionInput) {
-                            descriptionInput.value = e.target.value;
-                          }
-                        }
-                      }}
-                      className="common-meal-select"
-                    >
-                      <option value="">Select a common meal...</option>
-                      {commonMeals.map((meal) => (
-                        <option key={meal} value={meal}>
-                          {meal}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div className="form-group">
-                    <label htmlFor="description">Selected Description</label>
+                    <label htmlFor="description">Description</label>
                     <input
                       id="description"
                       type="text"
-                      placeholder="Choose from options above or type custom description"
+                      placeholder="Choose a template or type description"
                       {...register('description', {
                         required: 'Description is required',
                         minLength: {
@@ -292,7 +280,7 @@ const MealForm: React.FC<MealFormProps> = ({
                   </div>
                 </div>
               )}
-              
+
               {errors.description && (
                 <span className="error-message">{errors.description.message}</span>
               )}
@@ -525,6 +513,13 @@ const MealForm: React.FC<MealFormProps> = ({
             >
               Cancel
             </button>
+            <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <input
+                type="checkbox"
+                onChange={(e) => setSaveAsTemplate(e.target.checked)}
+              />
+              Save as template (personal)
+            </label>
             <button
               type="submit"
               className="submit-btn"
@@ -543,6 +538,12 @@ const MealForm: React.FC<MealFormProps> = ({
             <PredefinedMealSelector
               onMealSelected={handlePredefinedMealSelected}
               onCancel={() => setShowPredefinedSelector(false)}
+              onLoadIntoForm={(payload) => handleLoadPredefinedIntoForm({
+                description: payload.description,
+                ingredients: payload.ingredients,
+                meal_type: payload.meal_type
+              })}
+              autoLoadOnSelect
             />
           </div>
         </div>

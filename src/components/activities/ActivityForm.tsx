@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { Calendar, FileText, Activity, Zap, Clock, Calculator } from 'lucide-react';
 import type { ActivityCreate, ActivityUpdate } from '../../services/activityService';
 import { activityUtils } from '../../services/activityService';
+import { toLocalDateTimeString } from '../../utils/dateUtils';
 import './ActivityForm.css';
 
 interface ActivityFormProps {
@@ -42,9 +43,9 @@ const ActivityForm: React.FC<ActivityFormProps> = ({
       duration_min: initialData?.duration_min || 30,
       intensity: initialData?.intensity || 'medium',
       note: initialData?.note || '',
-      timestamp: initialData?.timestamp 
-        ? new Date(initialData.timestamp).toISOString().slice(0, 16)
-        : new Date().toISOString().slice(0, 16),
+      timestamp: initialData?.timestamp
+        ? toLocalDateTimeString(new Date(initialData.timestamp))
+        : toLocalDateTimeString(new Date()),
     },
   });
 
@@ -99,7 +100,7 @@ const ActivityForm: React.FC<ActivityFormProps> = ({
 
         <div className="form-section">
           <h3>Activity Information</h3>
-          
+
           <div className="form-group">
             <label htmlFor="type">
               <Activity className="input-icon" />

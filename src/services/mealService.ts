@@ -20,6 +20,14 @@ export interface PredefinedMealIngredient {
   note?: string;
 }
 
+export interface PredefinedMealIngredientCreate {
+  name: string;
+  base_weight: number;
+  carbs_per_100g: number;
+  glycemic_index?: number;
+  note?: string;
+}
+
 export interface PredefinedMeal {
   id: number;
   name: string;
@@ -29,7 +37,20 @@ export interface PredefinedMeal {
   total_carbs_per_portion: number;
   total_weight_per_portion: number;
   average_glycemic_index?: number;
+  created_by_admin: boolean;
+  owner_user_id?: number | null;
 }
+
+export interface PredefinedMealCreate {
+  name: string;
+  description?: string;
+  category?: string;
+  is_active?: boolean;
+  created_by_admin?: boolean;
+  ingredients: PredefinedMealIngredientCreate[];
+}
+
+export interface PredefinedMealUpdate extends Partial<PredefinedMealCreate> {}
 
 export interface MealFromPredefinedCreate {
   predefined_meal_id: number;
@@ -130,13 +151,40 @@ export const mealService = {
     return response.data;
   },
 
+  // Admin + personal templates
+  getAvailableTemplates: async (category?: string): Promise<PredefinedMeal[]> => {
+    const params = category ? { category } : {};
+    const response = await api.get<PredefinedMeal[]>('/predefined-meals/available', { params });
+    return response.data;
+  },
+
   getPredefinedMeal: async (mealId: number): Promise<PredefinedMeal> => {
     const response = await api.get<PredefinedMeal>(`/predefined-meals/${mealId}`);
     return response.data;
   },
 
+  // Admin-only predefined meal management
+  createPredefinedMeal: async (data: PredefinedMealCreate) => {
+    const response = await api.post(`/predefined-meals`, data);
+    return response.data;
+  },
+
+  updatePredefinedMeal: async (mealId: number, data: PredefinedMealUpdate) => {
+    const response = await api.put(`/predefined-meals/${mealId}`, data);
+    return response.data;
+  },
+
+  deletePredefinedMeal: async (mealId: number) => {
+    await api.delete(`/predefined-meals/${mealId}`);
+  },
+
   createMealFromPredefined: async (mealData: MealFromPredefinedCreate): Promise<Meal> => {
     const response = await api.post<Meal>('/meals/from-predefined', mealData);
+    return response.data;
+  },
+
+  createPredefinedFromMeal: async (mealId: number) => {
+    const response = await api.post('/predefined-meals/from-meal/' + mealId);
     return response.data;
   },
 
@@ -163,9 +211,9 @@ export const mealUtils = {
     const validGIs = ingredients
       .map(ing => ing.glycemic_index)
       .filter(gi => gi !== undefined && gi !== null) as number[];
-    
+
     if (validGIs.length === 0) return undefined;
-    
+
     return validGIs.reduce((sum, gi) => sum + gi, 0) / validGIs.length;
   },
 
@@ -183,7 +231,7 @@ export const mealUtils = {
       if (desc.includes('dinner')) return 'Dinner';
       if (desc.includes('snack')) return 'Snack';
     }
-    
+
     // Fallback to time-based meal type
     if (meal.timestamp) {
       const hour = new Date(meal.timestamp).getHours();
@@ -192,20 +240,20 @@ export const mealUtils = {
       if (hour >= 16 && hour < 22) return 'Dinner';
       return 'Snack';
     }
-    
+
     return 'Meal';
   },
 
   // Predefined meal utilities
   calculateScaledIngredient: (
-    ingredient: PredefinedMealIngredient, 
-    quantity: number, 
+    ingredient: PredefinedMealIngredient,
+    quantity: number,
     adjustedWeight?: number
   ): MealIngredient => {
     const baseWeight = ingredient.base_weight * quantity;
     const finalWeight = adjustedWeight ?? baseWeight;
     const carbs = (finalWeight / 100) * ingredient.carbs_per_100g;
-    
+
     return {
       name: ingredient.name,
       weight: finalWeight,
@@ -216,8 +264,8 @@ export const mealUtils = {
   },
 
   calculateScaledMealNutrition: (
-    predefinedMeal: PredefinedMeal, 
-    quantity: number, 
+    predefinedMeal: PredefinedMeal,
+    quantity: number,
     ingredientAdjustments?: Array<{ingredient_id: number, adjusted_weight: number}>
   ): { total_carbs: number; total_weight: number; ingredients: MealIngredient[] } => {
     const adjustments = ingredientAdjustments?.reduce((acc, adj) => {
@@ -231,11 +279,11 @@ export const mealUtils = {
 
     for (const ingredient of predefinedMeal.ingredients) {
       const scaledIngredient = mealUtils.calculateScaledIngredient(
-        ingredient, 
-        quantity, 
+        ingredient,
+        quantity,
         adjustments[ingredient.id]
       );
-      
+
       total_carbs += scaledIngredient.carbs;
       total_weight += scaledIngredient.weight || 0;
       ingredients.push(scaledIngredient);

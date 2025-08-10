@@ -1,17 +1,27 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Search, Filter, ChevronDown, Scale, Calculator } from 'lucide-react';
-import { mealService, mealUtils, type PredefinedMeal } from '../../services/mealService';
+import { mealService, mealUtils, type PredefinedMeal, type MealIngredient } from '../../services/mealService';
 import './PredefinedMealSelector.css';
 
 interface PredefinedMealSelectorProps {
     onMealSelected: (meal: PredefinedMeal, quantity: number, ingredientAdjustments: Array<{ ingredient_id: number, adjusted_weight: number }>) => void;
     onCancel: () => void;
+    onLoadIntoForm?: (data: { description: string; ingredients: MealIngredient[]; meal_type?: string }) => void;
+    autoLoadOnSelect?: boolean;
 }
 
 const PredefinedMealSelector: React.FC<PredefinedMealSelectorProps> = ({
     onMealSelected,
-    onCancel
+    onCancel,
+    onLoadIntoForm,
+    autoLoadOnSelect
 }) => {
+    const toTitleCase = (s?: string | null) => s ? s.charAt(0).toUpperCase() + s.slice(1).toLowerCase() : undefined;
+    const mapCategoryToMealType = (category?: string | null) => {
+        const c = toTitleCase(category || undefined);
+        const allowed = ["Breakfast","Lunch","Dinner","Snack","Dessert","Beverage"];
+        return allowed.includes(c || "") ? c : undefined;
+    };
     const [predefinedMeals, setPredefinedMeals] = useState<PredefinedMeal[]>([]);
     const [categories, setCategories] = useState<string[]>([]);
     const [selectedCategory, setSelectedCategory] = useState<string>('');
@@ -25,7 +35,8 @@ const PredefinedMealSelector: React.FC<PredefinedMealSelectorProps> = ({
     const reloadPredefinedMeals = useCallback(async () => {
         try {
             setLoading(true);
-            const meals = await mealService.getPredefinedMeals(selectedCategory || undefined);
+            // Load admin templates + current user's personal templates
+            const meals = await mealService.getAvailableTemplates(selectedCategory || undefined);
             setPredefinedMeals(meals);
         } catch (err) {
             setError('Failed to load predefined meals');
@@ -58,6 +69,13 @@ const PredefinedMealSelector: React.FC<PredefinedMealSelectorProps> = ({
     );
 
     const handleMealSelect = (meal: PredefinedMeal) => {
+        if (autoLoadOnSelect && onLoadIntoForm) {
+            // Immediately load defaults into the form (quantity=1, no adjustments)
+            const nutrition = mealUtils.calculateScaledMealNutrition(meal, quantity, []);
+            onLoadIntoForm({ description: meal.name, ingredients: nutrition.ingredients, meal_type: mapCategoryToMealType(meal.category) });
+            onCancel();
+            return;
+        }
         setSelectedMeal(meal);
         setQuantity(1);
         setIngredientAdjustments({});
@@ -160,6 +178,41 @@ const PredefinedMealSelector: React.FC<PredefinedMealSelectorProps> = ({
                                 ))}
                             </select>
                         </div>
+
+                        {autoLoadOnSelect && (
+                            <div className="filter-box" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                                <label style={{ fontSize: 14 }}>Portions</label>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                                    <button
+                                        onClick={() => handleQuantityChange(quantity - 1)}
+                                        disabled={quantity <= 1}
+                                        className="quantity-btn"
+                                        type="button"
+                                    >
+                                        -
+                                    </button>
+                                    <input
+                                        type="number"
+                                        min={1}
+                                        max={10}
+                                        value={quantity}
+                                        onChange={(e) => {
+                                            const val = parseInt(e.target.value || '1', 10);
+                                            handleQuantityChange(isNaN(val) ? 1 : val);
+                                        }}
+                                        style={{ width: 56, textAlign: 'center' }}
+                                    />
+                                    <button
+                                        onClick={() => handleQuantityChange(quantity + 1)}
+                                        disabled={quantity >= 10}
+                                        className="quantity-btn"
+                                        type="button"
+                                    >
+                                        +
+                                    </button>
+                                </div>
+                            </div>
+                        )}
                     </div>
 
                     {/* Meal List */}
@@ -178,9 +231,22 @@ const PredefinedMealSelector: React.FC<PredefinedMealSelectorProps> = ({
                                     <div className="meal-info">
                                         <h3>{meal.name}</h3>
                                         {meal.description && <p className="meal-description">{meal.description}</p>}
-                                        {meal.category && (
-                                            <span className="meal-category">{meal.category}</span>
-                                        )}
+                                        <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginTop: 4 }}>
+                                            {meal.category && (
+                                                <span className="meal-category">{meal.category}</span>
+                                            )}
+                                            {'created_by_admin' in meal && (
+                                                <span
+                                                    className="meal-category"
+                                                    style={{
+                                                        background: (meal as any).created_by_admin ? '#2563eb' : '#059669',
+                                                        color: '#fff'
+                                                    }}
+                                                >
+                                                    {(meal as any).created_by_admin ? 'System' : 'My Template'}
+                                                </span>
+                                            )}
+                                        </div>
                                     </div>
                                     <div className="meal-nutrition">
                                         <div className="nutrition-item">
@@ -302,6 +368,18 @@ const PredefinedMealSelector: React.FC<PredefinedMealSelectorProps> = ({
                         <button onClick={onCancel} className="cancel-btn">
                             Cancel
                         </button>
+                        {onLoadIntoForm && scaledNutrition && selectedMeal && (
+                            <button
+                                onClick={() => onLoadIntoForm({
+                                    description: selectedMeal.name,
+                                    ingredients: scaledNutrition.ingredients,
+                                    meal_type: mapCategoryToMealType(selectedMeal.category)
+                                })}
+                                className="confirm-btn"
+                            >
+                                Load Into Form
+                            </button>
+                        )}
                         <button onClick={handleConfirm} className="confirm-btn">
                             Add This Meal
                         </button>

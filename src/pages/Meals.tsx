@@ -5,6 +5,7 @@ import MealList from '../components/meals/MealList';
 import MealForm from '../components/meals/MealForm';
 import { useMeals, useCreateMeal, useUpdateMeal, useDeleteMeal } from '../hooks/useMealManagement';
 import type { MealBasic, MealCreate, MealUpdate } from '../services/mealService';
+import { mealService } from '../services/mealService';
 import './Meals.css';
 
 const Meals: React.FC = () => {
@@ -29,16 +30,22 @@ const Meals: React.FC = () => {
   };
 
   // Handle form submission
-  const handleFormSubmit = async (mealData: MealCreate | MealUpdate) => {
+  const handleFormSubmit = async (mealData: MealCreate | MealUpdate, options?: { saveAsTemplate?: boolean }) => {
     try {
       if (editingMeal) {
-        await updateMealMutation.mutateAsync({
+        const updated = await updateMealMutation.mutateAsync({
           mealId: editingMeal.id,
           mealData: mealData as MealUpdate,
         });
+        if (options?.saveAsTemplate) {
+          await mealService.createPredefinedFromMeal(updated.id);
+        }
         showNotification('success', 'Meal updated successfully!');
       } else {
-        await createMealMutation.mutateAsync(mealData as MealCreate);
+        const created = await createMealMutation.mutateAsync(mealData as MealCreate);
+        if (options?.saveAsTemplate) {
+          await mealService.createPredefinedFromMeal(created.id);
+        }
         showNotification('success', 'Meal added successfully!');
       }
       handleCloseForm();
@@ -109,7 +116,7 @@ const Meals: React.FC = () => {
   return (
     <div className="meals-page">
       <NavigationHeader />
-      
+
       {/* Notification */}
       {notification && (
         <div className={`notification ${notification.type}`}>

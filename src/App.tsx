@@ -11,6 +11,7 @@ import Register from './pages/Register';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import Dashboard from './pages/Dashboard';
+import Analytics from './pages/Analytics';
 import UserProfile from './pages/UserProfile';
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
@@ -37,8 +38,18 @@ function App() {
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/admin/login" element={<AdminLoginRoute><AdminLogin /></AdminLoginRoute>} />
             <Route path="/login/admin" element={<Navigate to="/admin/login" replace />} />
-            
+
             {/* Protected routes */}
+            <Route
+              path="/analytics"
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <Analytics />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
             <Route
               path="/dashboard"
               element={
@@ -109,10 +120,10 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            
+
             {/* Default redirect */}
             <Route path="/" element={<Navigate to="/login" replace />} />
-            
+
             {/* Catch all route */}
             <Route path="*" element={<Navigate to="/login" replace />} />
           </Routes>

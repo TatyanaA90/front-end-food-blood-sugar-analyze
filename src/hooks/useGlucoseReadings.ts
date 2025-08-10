@@ -10,6 +10,7 @@ export const glucoseKeys = {
     details: () => [...glucoseKeys.all, 'detail'] as const,
     detail: (id: number) => [...glucoseKeys.details(), id] as const,
     stats: (filters: GlucoseReadingFilters) => [...glucoseKeys.all, 'stats', filters] as const,
+    recent: () => [...glucoseKeys.all, 'recent'] as const,
 };
 
 // Hook to get glucose readings with filters
@@ -18,6 +19,19 @@ export const useGlucoseReadings = (filters: GlucoseReadingFilters = {}) => {
         queryKey: glucoseKeys.list(filters),
         queryFn: () => glucoseService.getGlucoseReadings(filters),
         staleTime: 5 * 60 * 1000, // 5 minutes
+    });
+};
+
+// Hook to get recent glucose readings (last hour)
+export const useRecentGlucoseReadings = () => {
+    return useQuery({
+        queryKey: glucoseKeys.recent(),
+        queryFn: () => {
+            const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+            return glucoseService.getGlucoseReadings({ start_datetime: oneHourAgo });
+        },
+        staleTime: 30 * 1000, // 30 seconds
+        refetchInterval: 60 * 1000, // Refetch every minute
     });
 };
 
@@ -50,6 +64,7 @@ export const useCreateGlucoseReading = () => {
             // Invalidate and refetch glucose readings
             queryClient.invalidateQueries({ queryKey: glucoseKeys.lists() });
             queryClient.invalidateQueries({ queryKey: glucoseKeys.all });
+            queryClient.invalidateQueries({ queryKey: glucoseKeys.recent() });
         },
     });
 };
@@ -67,6 +82,7 @@ export const useUpdateGlucoseReading = () => {
             // Invalidate and refetch lists
             queryClient.invalidateQueries({ queryKey: glucoseKeys.lists() });
             queryClient.invalidateQueries({ queryKey: glucoseKeys.all });
+            queryClient.invalidateQueries({ queryKey: glucoseKeys.recent() });
         },
     });
 };
@@ -83,6 +99,7 @@ export const useDeleteGlucoseReading = () => {
             // Invalidate and refetch lists
             queryClient.invalidateQueries({ queryKey: glucoseKeys.lists() });
             queryClient.invalidateQueries({ queryKey: glucoseKeys.all });
+            queryClient.invalidateQueries({ queryKey: glucoseKeys.recent() });
         },
     });
-}; 
+};

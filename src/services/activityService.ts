@@ -92,14 +92,14 @@ export const activityUtils = {
 
     const baseCalories = baseCaloriesPerMinute[activityType.toLowerCase()] || baseCaloriesPerMinute.other;
     const multiplier = intensityMultiplier[intensity];
-    
+
     return Math.round(baseCalories * duration * multiplier);
   },
 
   formatDuration: (minutes: number): string => {
     const hours = Math.floor(minutes / 60);
     const remainingMinutes = minutes % 60;
-    
+
     if (hours > 0) {
       return `${hours}h ${remainingMinutes}m`;
     }
@@ -126,9 +126,15 @@ export const activityUtils = {
 
   getIntensityLabel: (intensity?: string): string => {
     switch (intensity) {
-      case 'low': return 'Low';
-      case 'medium': return 'Medium';
-      case 'high': return 'High';
+      case 'low':
+      case 'light':
+        return 'Low';
+      case 'medium':
+      case 'moderate':
+        return 'Medium';
+      case 'high':
+      case 'vigorous':
+        return 'High';
       default: return 'Not specified';
     }
   },

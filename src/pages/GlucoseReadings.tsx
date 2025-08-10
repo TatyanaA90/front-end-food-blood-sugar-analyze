@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import {
     Plus,
     Search,
@@ -14,7 +14,9 @@ import {
     useCreateGlucoseReading,
     useUpdateGlucoseReading,
     useDeleteGlucoseReading,
+    glucoseKeys,
 } from "../hooks/useGlucoseReadings";
+import { useQueryClient } from '@tanstack/react-query';
 import type {
     GlucoseReading,
     GlucoseReadingFilters,
@@ -27,6 +29,7 @@ import {
 import { useGlucoseUnitUtils } from "../hooks/useGlucoseUnit";
 import GlucoseReadingForm from "../components/glucose/GlucoseReadingForm";
 import NavigationHeader from "../components/layout/NavigationHeader";
+import { uploadCsv } from "../services/api";
 import "./GlucoseReadings.css";
 
 const GlucoseReadings: React.FC = () => {
@@ -39,6 +42,9 @@ const GlucoseReadings: React.FC = () => {
         null
     );
     const [searchTerm, setSearchTerm] = useState("");
+    const [uploading, setUploading] = useState(false);
+    const fileInputRef = useRef<HTMLInputElement | null>(null);
+    const queryClient = useQueryClient();
 
     // Glucose unit utilities
     const { convertReading, getReadingStatus } = useGlucoseUnitUtils();
@@ -115,14 +121,14 @@ const GlucoseReadings: React.FC = () => {
     return (
         <div className="glucose-readings-container">
             {/* Navigation Header */}
-            <NavigationHeader 
-                title="Glucose Readings" 
+            <NavigationHeader
+                title="Glucose Readings"
                 icon={<Droplets size={24} />}
                 showBack={true}
             />
-            
-            {/* Add Reading Button */}
-            <div className="glucose-readings-actions">
+
+            {/* Add Reading / Import CSV */}
+            <div className="glucose-readings-actions" style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                 <button
                     onClick={() => setShowForm(true)}
                     className="glucose-readings-add-btn"
@@ -130,6 +136,37 @@ const GlucoseReadings: React.FC = () => {
                 >
                     <Plus size={16} />
                     Add Reading
+                </button>
+                <input
+                    type="file"
+                    accept=".csv,text/csv"
+                    ref={fileInputRef}
+                    style={{ display: 'none' }}
+                    onChange={async (e) => {
+                        const file = e.target.files?.[0];
+                        if (!file) return;
+                        setUploading(true);
+                        try {
+                            const res = await uploadCsv(file);
+                            alert(`Imported: ${res.imported}, Skipped: ${res.skipped}`);
+                            // Refresh readings after import
+                            queryClient.invalidateQueries({ queryKey: glucoseKeys.all });
+                        } catch (err: any) {
+                            alert(`Upload failed: ${err?.response?.data?.detail || err.message}`);
+                        } finally {
+                            setUploading(false);
+                            if (fileInputRef.current) fileInputRef.current.value = '';
+                        }
+                    }}
+                />
+                <button
+                    onClick={() => fileInputRef.current?.click()}
+                    className="glucose-readings-add-btn"
+                    disabled={uploading}
+                    title="Import CGM CSV"
+                >
+                    <FileText size={16} />
+                    {uploading ? 'Importing...' : 'Import CSV'}
                 </button>
             </div>
 

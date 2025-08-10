@@ -4,6 +4,7 @@ import { Droplets, Clock, Utensils, FileText, X, Save } from 'lucide-react';
 import type { GlucoseReading, CreateGlucoseReadingRequest, UpdateGlucoseReadingRequest } from '../../types/glucose';
 import { MEAL_CONTEXT_OPTIONS } from '../../types/glucose';
 import { useGlucoseUnitUtils } from '../../hooks/useGlucoseUnit';
+import { toLocalDateTimeString } from '../../utils/dateUtils';
 import './GlucoseReadingForm.css';
 
 interface GlucoseReadingFormProps {
@@ -20,7 +21,7 @@ const GlucoseReadingForm: React.FC<GlucoseReadingFormProps> = ({
   isLoading = false
 }) => {
   const { preferredUnit, getValidationRanges } = useGlucoseUnitUtils();
-  
+
   const {
     register,
     handleSubmit,
@@ -32,7 +33,9 @@ const GlucoseReadingForm: React.FC<GlucoseReadingFormProps> = ({
     defaultValues: {
       reading: reading?.reading || 0,
       unit: reading?.unit || preferredUnit,
-      reading_time: reading?.reading_time ? new Date(reading.reading_time).toISOString().slice(0, 16) : new Date().toISOString().slice(0, 16),
+      reading_time: reading?.reading_time
+        ? toLocalDateTimeString(new Date(reading.reading_time))
+        : toLocalDateTimeString(new Date()),
       meal_context: reading?.meal_context || 'other',
       notes: reading?.notes || ''
     }
@@ -42,7 +45,12 @@ const GlucoseReadingForm: React.FC<GlucoseReadingFormProps> = ({
   const validationRanges = getValidationRanges();
 
   const handleFormSubmit = (data: CreateGlucoseReadingRequest) => {
-    onSubmit(data);
+    const payload: CreateGlucoseReadingRequest = {
+      ...data,
+      // Convert browser-local datetime to UTC ISO before sending
+      reading_time: data.reading_time ? new Date(data.reading_time).toISOString() : data.reading_time,
+    };
+    onSubmit(payload);
   };
 
   return (
@@ -79,9 +87,9 @@ const GlucoseReadingForm: React.FC<GlucoseReadingFormProps> = ({
                 {...register('reading', {
                   required: 'Glucose reading is required',
                   min: { value: validationRanges.min, message: 'Reading must be positive' },
-                  max: { 
-                    value: validationRanges.max, 
-                    message: `Reading must be less than ${validationRanges.max} ${watchedUnit}` 
+                  max: {
+                    value: validationRanges.max,
+                    message: `Reading must be less than ${validationRanges.max} ${watchedUnit}`
                   }
                 })}
                 className={`glucose-form-input ${errors.reading ? 'glucose-form-input-error' : ''}`}
@@ -194,4 +202,4 @@ const GlucoseReadingForm: React.FC<GlucoseReadingFormProps> = ({
   );
 };
 
-export default GlucoseReadingForm; 
+export default GlucoseReadingForm;

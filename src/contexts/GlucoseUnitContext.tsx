@@ -1,17 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { GlucoseUnitContext } from './GlucoseUnitContextDef';
 import type { GlucoseUnitContextType, GlucoseUnit, GlucoseUnitProviderProps } from './GlucoseUnitContextDef';
+import { convertMgDlToMmolL, convertMmolLToMgDl } from '../utils/glucoseUtils';
 
 const STORAGE_KEY = 'glucose_preferred_unit';
 
-// Unit conversion functions
-const convertMgDlToMmolL = (mgDl: number): number => {
-  return Math.round((mgDl / 18) * 10) / 10;
-};
-
-const convertMmolLToMgDl = (mmolL: number): number => {
-  return Math.round(mmolL * 18);
-};
+// Unit conversion provided by shared utils
 
 export const GlucoseUnitProvider: React.FC<GlucoseUnitProviderProps> = ({ children }) => {
   const [preferredUnit, setPreferredUnitState] = useState<GlucoseUnit>('mg/dL');
@@ -31,7 +25,7 @@ export const GlucoseUnitProvider: React.FC<GlucoseUnitProviderProps> = ({ childr
 
   const convertValue = (value: number, fromUnit: GlucoseUnit, toUnit?: GlucoseUnit): number => {
     const targetUnit = toUnit || preferredUnit;
-    
+
     if (fromUnit === targetUnit) {
       return value;
     }
@@ -55,7 +49,7 @@ export const GlucoseUnitProvider: React.FC<GlucoseUnitProviderProps> = ({ childr
   const displayValue = (value: number, originalUnit: GlucoseUnit) => {
     const converted = originalUnit !== preferredUnit;
     const displayValue = converted ? convertValue(value, originalUnit, preferredUnit) : value;
-    
+
     return {
       value: displayValue,
       unit: preferredUnit,
@@ -78,4 +72,3 @@ export const GlucoseUnitProvider: React.FC<GlucoseUnitProviderProps> = ({ childr
   );
 };
 
- 

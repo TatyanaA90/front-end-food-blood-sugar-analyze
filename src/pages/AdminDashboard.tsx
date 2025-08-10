@@ -6,6 +6,7 @@ import { useAllUsers, useUsersDetailed, useUserStats, useDeleteUser, useTruncate
 import { authService } from '../services/authService';
 import AdminHeader from '../components/admin/AdminHeader';
 import UserManagementSection from '../components/admin/UserManagementSection';
+import PredefinedMealsAdmin from '../components/admin/PredefinedMealsAdmin';
 import DeleteUserModal from '../components/admin/DeleteUserModal';
 import TruncateUsersModal from '../components/admin/TruncateUsersModal';
 import PasswordResetModal from '../components/admin/PasswordResetModal';
@@ -16,7 +17,7 @@ import './AdminDashboard.css';
 const AdminDashboard: React.FC = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  
+
   const [selectedUser, setSelectedUser] = useState<UserDetail | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showTruncateModal, setShowTruncateModal] = useState(false);
@@ -54,7 +55,7 @@ const AdminDashboard: React.FC = () => {
       navigate('/login');
       return;
     }
-    
+
     if (!user.is_admin) {
       navigate('/dashboard');
       return;
@@ -68,17 +69,17 @@ const AdminDashboard: React.FC = () => {
       console.log('Attempting to delete user:', selectedUser);
       console.log('User ID:', selectedUser.id);
       console.log('Current user:', user);
-      
+
       await deleteUserMutation.mutateAsync(selectedUser.id);
       setShowDeleteModal(false);
       setSelectedUser(null);
       alert('User deleted successfully!');
     } catch (error) {
       console.error('Error deleting user:', error);
-      
+
       // More detailed error handling
       let errorMessage = 'Failed to delete user';
-      
+
       if (error.response) {
         // Server responded with error status
         if (error.response.status === 401) {
@@ -99,7 +100,7 @@ const AdminDashboard: React.FC = () => {
         // Other error
         errorMessage = error.message || 'Unknown error occurred';
       }
-      
+
       alert(`Failed to delete user: ${errorMessage}`);
     }
   };
@@ -197,7 +198,7 @@ const AdminDashboard: React.FC = () => {
 
   return (
     <main className="admin-container">
-      <AdminHeader 
+      <AdminHeader
         userStats={userStats}
       />
 
@@ -212,15 +213,19 @@ const AdminDashboard: React.FC = () => {
           <p>Token: {authService.getToken() ? 'Present' : 'Missing'}</p>
         </div>
 
-        <UserManagementSection
-          users={usersDetailed}
-          currentUserId={user?.id as number}
-          onRefresh={handleRefreshData}
-          onTruncateUsers={() => setShowTruncateModal(true)}
-          onPasswordReset={handlePasswordResetRequest}
-          onDeleteUser={handleDeleteUserRequest}
-          onViewUserDetail={handleViewUserDetail}
-        />
+        <div style={{ display: 'grid', gap: 24 }}>
+          <UserManagementSection
+            users={usersDetailed}
+            currentUserId={user?.id as number}
+            onRefresh={handleRefreshData}
+            onTruncateUsers={() => setShowTruncateModal(true)}
+            onPasswordReset={handlePasswordResetRequest}
+            onDeleteUser={handleDeleteUserRequest}
+            onViewUserDetail={handleViewUserDetail}
+          />
+
+          <PredefinedMealsAdmin />
+        </div>
       </div>
 
       <DeleteUserModal
