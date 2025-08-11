@@ -34,6 +34,87 @@ Create a `.env` file in the root directory:
 VITE_API_BASE_URL=https://your-backend-url.com
 ```
 
+## 🛠️ **First Setup & Migration (Fresh Install)**
+
+Follow these steps when setting up the project for the first time.
+
+### **1. Prerequisites**
+Before starting, make sure you have installed:
+
+- Python 3.10+
+- PostgreSQL 14+
+- Node.js 18+ & npm
+- Git
+- Alembic (installed with backend dependencies)
+
+### **2. Clone the Repository**
+```bash
+git clone https://github.com/yourusername/capstone_food_blood_sugar_analyzer_final.git
+cd capstone_food_blood_sugar_analyzer_final
+```
+
+### **3. Start PostgreSQL**
+Make sure your PostgreSQL service is running.
+
+### **4. Create & Configure .env Files**
+
+**Backend .env (example):**
+```ini
+DATABASE_URL=postgresql+psycopg2://username:password@localhost:5432/your_db_name
+SECRET_KEY=your_secret_key
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=30
+```
+
+**Frontend .env (example):**
+```ini
+VITE_API_URL=http://localhost:8000
+```
+
+### **5. Create the Database**
+In PostgreSQL, recreate the database (if starting fresh):
+
+```sql
+DROP DATABASE IF EXISTS your_db_name;
+CREATE DATABASE your_db_name;
+```
+
+### **6. Backend Setup**
+```bash
+cd back-end-food-blood-sugar-analyzer
+python3 -m venv venv
+source venv/bin/activate   # On Windows: venv\Scripts\activate
+pip3 install -r requirements.txt
+```
+
+### **7. Apply Database Migrations**
+```bash
+alembic upgrade head
+```
+
+### **8. Start the Backend**
+```bash
+uvicorn app.main:app --reload
+```
+
+The backend will be available at: http://localhost:8000
+
+### **9. Frontend Setup**
+```bash
+cd ../front-end-food-blood-sugar-analyze
+npm install
+npm run dev
+```
+
+The frontend will be available at: http://localhost:5173 (or as shown in your terminal).
+
+### **10. Verify the Setup**
+1. Open the frontend in your browser
+2. Register a new user or log in
+3. Test API connections and basic functionality
+
+**Note**: These steps ensure a complete fresh setup for any developer cloning the project for the first time.
+
 ## 🎯 **Features**
 
 ### **✅ Core Features**

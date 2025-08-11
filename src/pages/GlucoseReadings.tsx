@@ -129,15 +129,15 @@ const GlucoseReadings: React.FC = () => {
 
             {/* Add Reading / Import CSV */}
             <div className="glucose-readings-actions" style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                <button
+                    <button
                     onClick={() => setShowForm(true)}
                     className="glucose-readings-add-btn"
                     disabled={isLoading}
                 >
                     <Plus size={16} />
                     Add Reading
-                </button>
-                <input
+                    </button>
+                            <input
                     type="file"
                     accept=".csv,text/csv"
                     ref={fileInputRef}
@@ -168,23 +168,23 @@ const GlucoseReadings: React.FC = () => {
                     <FileText size={16} />
                     {uploading ? 'Importing...' : 'Import CSV'}
                 </button>
-            </div>
+                    </div>
 
             {/* Filters and Search */}
             <div className="glucose-readings-filters">
                 <div className="glucose-readings-search">
                     <Search size={16} />
-                    <input
+                        <input
                         type="text"
                         placeholder="Search readings..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         className="glucose-readings-search-input"
                     />
-                </div>
+                    </div>
 
                 <div className="glucose-readings-filter-controls">
-                    <select
+                        <select
                         value={filters.meal_context || ""}
                         onChange={(e) =>
                             setFilters((prev) => ({
@@ -196,11 +196,11 @@ const GlucoseReadings: React.FC = () => {
                     >
                         <option value="">All Meal Contexts</option>
                         {MEAL_CONTEXT_OPTIONS.map((option) => (
-                            <option key={option.value} value={option.value}>
-                                {option.label}
-                            </option>
-                        ))}
-                    </select>
+                                <option key={option.value} value={option.value}>
+                                    {option.label}
+                                </option>
+                            ))}
+                        </select>
 
                     <select
                         value={filters.unit || ""}
@@ -330,7 +330,7 @@ const GlucoseReadings: React.FC = () => {
                                                 <span>
                                                     {getMealContextLabel(reading.meal_context || "other")}
                                                 </span>
-                                            </div>
+                    </div>
 
                                             {reading.notes && (
                                                 <div className="glucose-reading-detail">
@@ -345,8 +345,8 @@ const GlucoseReadings: React.FC = () => {
                                 );
                             })}
                         </div>
-                    )}
-                </div>
+                        )}
+                    </div>
             )}
 
             {/* Add/Edit Form Modal */}
@@ -374,23 +374,23 @@ const GlucoseReadings: React.FC = () => {
                         <p>This action cannot be undone.</p>
 
                         <div className="glucose-delete-actions">
-                            <button
+                        <button
                                 onClick={() => setDeletingReading(null)}
                                 className="glucose-delete-btn glucose-delete-btn-cancel"
                                 disabled={deleteMutation.isPending}
-                            >
-                                Cancel
-                            </button>
-                            <button
+                        >
+                            Cancel
+                        </button>
+                        <button
                                 onClick={() => handleDeleteReading(deletingReading)}
                                 className="glucose-delete-btn glucose-delete-btn-confirm"
                                 disabled={deleteMutation.isPending}
                             >
                                 {deleteMutation.isPending ? "Deleting..." : "Delete"}
-                            </button>
+                        </button>
                         </div>
                     </div>
-                </div>
+            </div>
             )}
         </div>
     );
