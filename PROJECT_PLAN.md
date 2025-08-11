@@ -49,7 +49,7 @@
 - [x] Fix weight data persistence from registration to profile
 - [x] Add accessibility improvements (id attributes, aria-labels)
 - [x] Remove unused imports and fix linter errors
-- [x] Create password reset functionality (if backend supports)
+ - [x] Create password reset functionality (pages/ForgotPassword.tsx, pages/ResetPassword.tsx; hooks/useUserManagement.ts; services/userService.ts)
 - [x] Test authentication flow end-to-end
 - [x] Implement comprehensive admin feature system
   - [x] Create admin dashboard with user management
@@ -96,35 +96,34 @@
     - [x] Live nutrition calculation based on user adjustments
     - [x] Modal interface for clean template selection
     - [x] Integration with existing MealForm component
-- [ ] Create activities page with CRUD operations
-  - [ ] List view with activity types and durations
-  - [ ] Add new activity form
-  - [ ] Edit activity functionality
-  - [ ] Delete activity with confirmation
-  - [ ] Calorie calculation display
-- [ ] Create insulin doses page with CRUD operations
-  - [ ] List view with insulin types and units
-  - [ ] Add new insulin dose form
-  - [ ] Edit insulin dose functionality
-  - [ ] Delete insulin dose with confirmation
+ - [x] Create activities page with CRUD operations (pages/Activities.tsx; components/activities/*; services/activityService.ts; hooks/useActivityManagement.ts)
+   - [x] List view with activity types and durations (components/activities/ActivityList.tsx)
+   - [x] Add new activity form (components/activities/ActivityForm.tsx)
+   - [x] Edit activity functionality (components/activities/ActivityList.tsx)
+   - [x] Delete activity with confirmation (components/activities/ActivityList.tsx)
+   - [ ] Calorie calculation display (Not implemented)
+ - [x] Create insulin doses page with CRUD operations (pages/InsulinDoses.tsx; components/insulin/*; services/insulinDoseService.ts; hooks/useInsulinDoseManagement.ts)
+   - [x] List view with insulin types and units (components/insulin/InsulinDoseList.tsx)
+   - [x] Add new insulin dose form (components/insulin/InsulinDoseForm.tsx)
+   - [x] Edit insulin dose functionality (components/insulin/InsulinDoseList.tsx)
+   - [x] Delete insulin dose with confirmation (components/insulin/InsulinDoseList.tsx)
 
 ### Phase 4: Dashboard and Analytics
-- [ ] Create main dashboard page
+- [x] Create main dashboard page (pages/Dashboard.tsx)
   - [ ] Overview cards with key metrics
-  - [ ] Recent glucose readings chart
-  - [ ] Meal impact visualization
+  - [x] Recent glucose readings chart (components/dashboards/RecentGlucoseChart.tsx)
+  - [x] Meal impact visualization (components/dashboards/ImpactBarChart.tsx)
   - [ ] Quick action buttons
   - [ ] Time in range indicator
-- [ ] Create analytics page with charts
-  - [ ] Glucose trend line chart
+- [x] Create analytics page with charts (pages/Analytics.tsx)
+  - [x] Glucose trend line/timeline (components/dashboards/TimelineWithEventsChart.tsx, RecentGlucoseChart.tsx)
   - [ ] Time in range pie chart
   - [ ] Glucose variability chart
-  - [ ] Meal impact analysis chart
+  - [x] Meal impact analysis chart (components/dashboards/ImpactBarChart.tsx)
   - [ ] Activity impact analysis chart
   - [ ] Insulin-glucose correlation scatter plot
 - [ ] Create visualization data page
-  - [ ] AGP (Ambulatory Glucose Profile) overlay
-  - [ ] Glucose timeline with events
+  - [x] Glucose timeline with events (components/dashboards/TimelineWithEventsChart.tsx)
   - [ ] Data quality metrics
   - [ ] Unit conversion controls
 
@@ -137,19 +136,19 @@
   - [ ] Health condition tracking
   - [ ] Symptom logging
   - [ ] Medication tracking
-- [ ] Create CGM upload functionality
-  - [ ] CSV file upload interface
-  - [ ] File validation and parsing
-  - [ ] Upload progress indicator
+ - [ ] Create CGM upload functionality
+   - [x] CSV file upload interface (pages/GlucoseReadings.tsx; services/api.ts → uploadCsv)
+   - [ ] File validation and parsing
+   - [x] Upload progress indicator (pages/GlucoseReadings.tsx → importing state/UI)
 - [ ] Create recommendations page
   - [ ] AI-generated insights display
   - [ ] Personalized tips and alerts
   - [ ] Trend analysis recommendations
 
 ### Phase 6: Data Visualization and Charts
-- [ ] Implement Recharts components
-  - [ ] Line charts for glucose trends
-  - [ ] Bar charts for meal impact
+- [x] Implement Recharts components
+  - [x] Line/timeline charts for glucose trends (RecentGlucoseChart.tsx, TimelineWithEventsChart.tsx)
+  - [x] Bar charts for meal impact (ImpactBarChart.tsx)
   - [ ] Pie charts for time in range
   - [ ] Scatter plots for correlations
   - [ ] Area charts for glucose profiles
@@ -174,35 +173,35 @@
 - [ ] Implement form submission states
 
 ### Phase 8: API Integration and Data Management
-- [ ] Create API service layer
-  - [ ] Authentication API calls
-  - [ ] Glucose readings API calls
-  - [ ] Meals API calls
-  - [ ] Activities API calls
+- [x] Create API service layer
+  - [x] Authentication API calls (services/authService.ts)
+  - [x] Glucose readings API calls (services/glucoseService.ts)
+  - [x] Meals API calls (services/mealService.ts)
+  - [x] Activities API calls (services/activityService.ts)
   - [ ] Analytics API calls
-- [ ] Implement React Query hooks
-  - [ ] Custom hooks for each API endpoint
+- [x] Implement React Query hooks
+  - [x] Custom hooks for core endpoints (hooks/useGlucoseReadings.ts, useMealManagement.ts, useActivityManagement.ts, useInsulinDoseManagement.ts, useUserManagement.ts)
   - [ ] Optimistic updates
-  - [ ] Error handling and retry logic
-  - [ ] Cache invalidation strategies
-- [ ] Create data transformation utilities
-  - [ ] Unit conversion functions
-  - [ ] Date formatting utilities
+  - [x] Error handling and retry logic (utils/retry.ts)
+  - [x] Cache invalidation strategies (e.g., glucoseKeys in pages/GlucoseReadings.tsx)
+- [x] Create data transformation utilities
+  - [x] Unit conversion functions (utils/glucoseUtils.ts, hooks/useGlucoseUnit.ts)
+  - [x] Date formatting utilities (utils/dateUtils.ts)
   - [ ] Data aggregation functions
 
 ### Phase 9: UI/UX and Responsive Web Design
-- [ ] Implement responsive web design
-  - [ ] Mobile-first responsive approach for web browsers
-  - [ ] Tablet and desktop browser layouts
-  - [ ] Touch-friendly interactions for mobile web browsers
-- [ ] Create consistent web design system
-  - [ ] Color palette and theming for web interface
-  - [ ] Typography system optimized for web readability
-  - [ ] Spacing and layout grid for web components
+- [x] Implement responsive web design (global CSS across pages/*.css and components/*/*.css)
+  - [x] Mobile-first responsive approach for web browsers
+  - [x] Tablet and desktop browser layouts
+  - [x] Touch-friendly interactions for mobile web browsers
+- [x] Create consistent web design system
+  - [x] Color palette and theming for web interface
+  - [x] Typography system optimized for web readability
+  - [x] Spacing and layout grid for web components
   - [ ] Web component library
-- [ ] Implement web accessibility features
-  - [ ] ARIA labels and roles for web accessibility
-  - [ ] Keyboard navigation for web interface
+- [x] Implement web accessibility features
+  - [x] ARIA labels and roles for web accessibility
+  - [x] Keyboard navigation for web interface
   - [ ] Screen reader support for web content
   - [ ] Color contrast compliance for web display
 

@@ -31,6 +31,8 @@ const Login: React.FC = () => {
     setError('');
   }, [watchedUsername, watchedPassword]);
 
+
+
   const onSubmit = async (data: LoginFormData) => {
     try {
       setError('');
@@ -42,15 +44,27 @@ const Login: React.FC = () => {
     }
   };
 
+  // Get today's date in ISO format
+  const today = new Date().toISOString().slice(0, 10);
+
   return (
     <main className="login-main">
       <section className="login-header-section">
+        <h2 className="login-subtitle login-title-pill">
+          Food & Blood Sugar Analyzer
+        </h2>
+        
+        <p className="login-desc">
+          A personal digital health diary that helps you set goals, track food, activity, and lifestyle factors via manual logs or CGMs and understand their impact on your health.
+        </p>
+        
         <header className="login-header">
           <LogIn className="login-header-icon" />
+          <h1 className="login-title">
+            Sign in to your account
+          </h1>
         </header>
-        <h1 className="login-title">
-          Sign in to your account
-        </h1>
+        
         <p className="login-subtitle">
           Or{' '}
           <Link
@@ -180,6 +194,13 @@ const Login: React.FC = () => {
           </footer>
         </div>
       </section>
+
+      {/* Author + Date Badge */}
+      <div className="login-meta">
+        <span>Tatyana Ageyeva — Ada Developers Academy (C23)</span>
+        <span className="mx-1">•</span>
+        <span>{today}</span>
+      </div>
     </main>
   );
 };
