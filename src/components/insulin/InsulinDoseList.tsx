@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Search, Filter, SortAsc, SortDesc, Plus, Edit, Trash2, Syringe, Calendar, Zap, Utensils } from 'lucide-react';
+import { Search, Filter, SortAsc, SortDesc, Plus, Edit, Trash2, Syringe, Calendar, Zap, Utensils, ArrowUpDown } from 'lucide-react';
 import type { InsulinDoseBasic } from '../../services/insulinDoseService';
 import { insulinDoseUtils } from '../../services/insulinDoseService';
 import './InsulinDoseList.css';
@@ -120,6 +120,19 @@ const InsulinDoseList: React.FC<InsulinDoseListProps> = ({
             className="search-input"
           />
         </div>
+
+        {/* Quick Sort Button */}
+        <button
+          onClick={() => handleSort('timestamp')}
+          className="quick-sort-btn"
+          title={`Sort by ${sortField === 'timestamp' ? (sortDirection === 'asc' ? 'oldest' : 'newest') : 'date'} first`}
+        >
+          <ArrowUpDown className="btn-icon" />
+          {sortField === 'timestamp' 
+            ? (sortDirection === 'asc' ? 'Oldest First' : 'Newest First')
+            : 'Sort by Date'
+          }
+        </button>
         
         <button
           onClick={() => setShowFilters(!showFilters)}

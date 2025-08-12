@@ -169,11 +169,13 @@ const AdminDashboard: React.FC = () => {
   if (!user?.is_admin) {
     return (
       <div className="admin-unauthorized">
-        <XCircle className="unauthorized-icon" />
-        <h1>Access Denied</h1>
-        <p>You don't have administrator privileges to access this page.</p>
-        <p>Current user: {user?.username || 'Not logged in'}</p>
-        <p>Is admin: {user?.is_admin ? 'Yes' : 'No'}</p>
+        <AdminHeader userStats={null} />
+        <div className="error-container">
+          <XCircle className="error-icon" />
+          <h2>Access Denied</h2>
+          <p>You don't have administrator privileges to access this page.</p>
+          <p className="error-details">Current user: {user?.username || 'Not logged in'}</p>
+        </div>
       </div>
     );
   }
@@ -181,17 +183,12 @@ const AdminDashboard: React.FC = () => {
   if (usersLoading || detailedLoading) {
     return (
       <div className="admin-loading">
-        <p>Loading admin dashboard...</p>
-        <p>Current user: {user?.username}</p>
-        <p>Is admin: {user?.is_admin ? 'Yes' : 'No'}</p>
-        <p>Users loading: {usersLoading ? 'Yes' : 'No'}</p>
-        <p>Detailed loading: {detailedLoading ? 'Yes' : 'No'}</p>
-        <p>Users error: {usersError ? 'Yes' : 'No'}</p>
-        <p>Detailed error: {detailedError ? 'Yes' : 'No'}</p>
-        <p>Stats error: {statsError ? 'Yes' : 'No'}</p>
-        {usersError && <p>Users Error: {JSON.stringify(usersError)}</p>}
-        {detailedError && <p>Detailed Error: {JSON.stringify(detailedError)}</p>}
-        {statsError && <p>Stats Error: {JSON.stringify(statsError)}</p>}
+        <AdminHeader userStats={null} />
+        <div className="loading-container">
+          <div className="loading-spinner"></div>
+          <h2>Loading Admin Dashboard</h2>
+          <p>Please wait while we load the administrative data...</p>
+        </div>
       </div>
     );
   }

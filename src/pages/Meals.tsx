@@ -102,7 +102,7 @@ const Meals: React.FC = () => {
   if (error) {
     return (
       <div className="meals-error">
-        <NavigationHeader />
+        <NavigationHeader title="Meals" />
         <div className="error-container">
           <XCircle className="error-icon" />
           <h2>Error Loading Meals</h2>
@@ -115,7 +115,7 @@ const Meals: React.FC = () => {
 
   return (
     <div className="meals-page">
-      <NavigationHeader />
+      <NavigationHeader title="Meals" />
 
       {/* Notification */}
       {notification && (

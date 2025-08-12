@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import { useUserProfile, useUpdateProfile, useDeleteAccount, useChangePassword } from '../hooks/useUserManagement';
-import { User as UserIcon } from 'lucide-react';
+import { User as UserIcon, XCircle } from 'lucide-react';
 import ProfileForm from '../components/profile/ProfileForm';
 import AdminSection from '../components/profile/AdminSection';
 import DangerZone from '../components/profile/DangerZone';
@@ -75,7 +75,12 @@ const UserProfile: React.FC = () => {
     if (isLoading) {
         return (
             <div className="profile-loading">
-                <p>Loading profile...</p>
+                <NavigationHeader title="User Profile" />
+                <div className="loading-container">
+                    <div className="loading-spinner"></div>
+                    <h2>Loading Profile</h2>
+                    <p>Please wait while we load your profile information...</p>
+                </div>
             </div>
         );
     }
@@ -83,13 +88,18 @@ const UserProfile: React.FC = () => {
     if (!user) {
         return (
             <div className="profile-error">
-                <p>Unable to load profile. Please try logging in again.</p>
-                <button
-                    onClick={() => navigate('/login')}
-                    className="profile-login-btn"
-                >
-                    Go to Login
-                </button>
+                <NavigationHeader title="User Profile" />
+                <div className="error-container">
+                    <XCircle className="error-icon" />
+                    <h2>Unable to Load Profile</h2>
+                    <p>Unable to load profile. Please try logging in again.</p>
+                    <button
+                        onClick={() => navigate('/login')}
+                        className="profile-login-btn"
+                    >
+                        Go to Login
+                    </button>
+                </div>
             </div>
         );
     }

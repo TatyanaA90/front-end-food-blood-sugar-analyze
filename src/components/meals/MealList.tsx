@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Search, Filter, SortAsc, SortDesc, Plus, Edit, Trash2, Utensils, Calendar, Calculator } from 'lucide-react';
+import { Search, Filter, SortAsc, SortDesc, Plus, Edit, Trash2, Utensils, Calendar, Calculator, ArrowUpDown } from 'lucide-react';
 import type { MealBasic } from '../../services/mealService';
 import { mealUtils, mealService } from '../../services/mealService';
 import './MealList.css';
@@ -130,6 +130,19 @@ const MealList: React.FC<MealListProps> = ({
           />
         </div>
 
+        {/* Quick Sort Button */}
+        <button
+          onClick={() => handleSort('timestamp')}
+          className="quick-sort-btn"
+          title={`Sort by ${sortField === 'timestamp' ? (sortDirection === 'asc' ? 'oldest' : 'newest') : 'date'} first`}
+        >
+          <ArrowUpDown className="btn-icon" />
+          {sortField === 'timestamp' 
+            ? (sortDirection === 'asc' ? 'Oldest First' : 'Newest First')
+            : 'Sort by Date'
+          }
+        </button>
+
         <button
           onClick={() => setShowFilters(!showFilters)}
           className={`filter-toggle-btn ${showFilters ? 'active' : ''}`}
@@ -222,8 +235,9 @@ const MealList: React.FC<MealListProps> = ({
                       try {
                         await mealService.createPredefinedFromMeal(meal.id);
                         alert('Saved as personal template');
-                      } catch (e: any) {
-                        alert(e?.response?.data?.detail || 'Failed to save template');
+                      } catch (e: unknown) {
+                        const errorMessage = e instanceof Error ? e.message : 'Failed to save template';
+                        alert(errorMessage);
                       }
                     }}
                     className="action-btn edit-btn"

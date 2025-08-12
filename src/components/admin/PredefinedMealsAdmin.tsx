@@ -111,8 +111,9 @@ const PredefinedMealsAdmin: React.FC = () => {
     try {
       await mealService.deletePredefinedMeal(mealId);
       await loadMeals();
-    } catch (e: any) {
-      alert(e?.response?.data?.detail || 'Failed to delete predefined meal');
+    } catch (e: unknown) {
+      const errorMessage = e instanceof Error ? e.message : 'Failed to delete predefined meal';
+      alert(errorMessage);
     }
   };
 

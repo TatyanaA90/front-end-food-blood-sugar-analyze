@@ -8,6 +8,8 @@ import {
     Clock,
     Utensils,
     FileText,
+    ArrowUpDown,
+    XCircle,
 } from "lucide-react";
 import {
     useGlucoseReadings,
@@ -43,6 +45,7 @@ const GlucoseReadings: React.FC = () => {
     );
     const [searchTerm, setSearchTerm] = useState("");
     const [uploading, setUploading] = useState(false);
+    const [sortOrder, setSortOrder] = useState<'newest' | 'oldest'>('newest');
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const queryClient = useQueryClient();
 
@@ -58,8 +61,28 @@ const GlucoseReadings: React.FC = () => {
     const updateMutation = useUpdateGlucoseReading();
     const deleteMutation = useDeleteGlucoseReading();
 
-    // Use readings directly since filtering is handled by the service
-    const filteredReadings = readings;
+    // Sort readings based on sortOrder
+    const sortedReadings = React.useMemo(() => {
+        if (!readings.length) return [];
+        
+        return [...readings].sort((a, b) => {
+            const dateA = new Date(a.reading_time).getTime();
+            const dateB = new Date(b.reading_time).getTime();
+            
+            if (sortOrder === 'newest') {
+                return dateB - dateA; // Newest first
+            } else {
+                return dateA - dateB; // Oldest first
+            }
+        });
+    }, [readings, sortOrder]);
+
+    // Use sorted readings for display
+    const filteredReadings = sortedReadings;
+
+    const handleSortToggle = () => {
+        setSortOrder(prev => prev === 'newest' ? 'oldest' : 'newest');
+    };
 
     const handleCreateReading = (data: CreateGlucoseReadingRequest) => {
         createMutation.mutate(data, {
@@ -113,7 +136,13 @@ const GlucoseReadings: React.FC = () => {
     if (error) {
         return (
             <div className="glucose-readings-error">
-                <p>Error loading glucose readings. Please try again.</p>
+                <NavigationHeader title="Glucose Readings" />
+                <div className="error-container">
+                    <XCircle className="error-icon" />
+                    <h2>Error Loading Glucose Readings</h2>
+                    <p>Failed to load glucose readings. Please try refreshing the page.</p>
+                    <p className="error-details">{error.message}</p>
+                </div>
             </div>
         );
     }
@@ -151,8 +180,9 @@ const GlucoseReadings: React.FC = () => {
                             alert(`Imported: ${res.imported}, Skipped: ${res.skipped}`);
                             // Refresh readings after import
                             queryClient.invalidateQueries({ queryKey: glucoseKeys.all });
-                        } catch (err: any) {
-                            alert(`Upload failed: ${err?.response?.data?.detail || err.message}`);
+                        } catch (err: unknown) {
+                            const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
+                            alert(`Upload failed: ${errorMessage}`);
                         } finally {
                             setUploading(false);
                             if (fileInputRef.current) fileInputRef.current.value = '';
@@ -184,6 +214,16 @@ const GlucoseReadings: React.FC = () => {
                     </div>
 
                 <div className="glucose-readings-filter-controls">
+                    {/* Sort Button */}
+                    <button
+                        onClick={handleSortToggle}
+                        className="glucose-readings-sort-btn"
+                        title={`Sort by ${sortOrder === 'newest' ? 'newest' : 'oldest'} first`}
+                    >
+                        <ArrowUpDown size={16} />
+                        {sortOrder === 'newest' ? 'Newest First' : 'Oldest First'}
+                    </button>
+
                         <select
                         value={filters.meal_context || ""}
                         onChange={(e) =>
