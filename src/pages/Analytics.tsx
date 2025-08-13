@@ -9,7 +9,7 @@ import TimeRangeControls from '../components/dashboards/TimeRangeControls';
 import RecentGlucoseChart from '../components/dashboards/RecentGlucoseChart';
 import TimelineWithEventsChart from '../components/dashboards/TimelineWithEventsChart';
 import ImpactBarChart from '../components/dashboards/ImpactBarChart';
-import InsulinImpactChart from '../components/insulin/InsulinImpactChart';
+import InsulinImpactChart from '../components/dashboards/InsulinImpactChart';
 import './Analytics.css';
 
 // Interface for the API response data structure
