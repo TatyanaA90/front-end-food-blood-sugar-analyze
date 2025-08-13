@@ -358,6 +358,27 @@ html[data-theme='dark'] .glucose-readings-header .glucose-readings-subtitle { co
 html[data-theme='dark'] .glucose-form-label { color: #ffffff !important; }
 html[data-theme='dark'] .glucose-reading-notes { color: #ffffff !important; }
 
+/* ===== Predefined Meal Selector (dark mode) ===== */
+html[data-theme='dark'] .predefined-meal-selector {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--dm-border) !important;
+  box-shadow: var(--dm-shadow) !important;
+  color: var(--text-main) !important;
+}
+html[data-theme='dark'] .predefined-meal-selector .selector-header { border-color: var(--dm-border) !important; }
+html[data-theme='dark'] .predefined-meal-selector .selector-header h2 { color: #ffffff !important; }
+html[data-theme='dark'] .predefined-meal-selector .close-btn {
+  color: #ffffff !important;
+  background: rgba(255,255,255,0.06) !important;
+  border: 1px solid var(--dm-border) !important;
+}
+html[data-theme='dark'] .predefined-meal-selector .close-btn:hover {
+  background: rgba(255,255,255,0.12) !important;
+  color: #ffffff !important;
+}
+html[data-theme='dark'] .predefined-meal-selector .loading,
+html[data-theme='dark'] .predefined-meal-selector .no-meals { color: var(--text-secondary) !important; }
+
 /* ===== Meals (lists, ingredients) ===== */
 html[data-theme='dark'] .meal-list-header,
 html[data-theme='dark'] .meal-card,
