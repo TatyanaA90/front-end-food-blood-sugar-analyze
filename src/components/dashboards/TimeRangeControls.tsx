@@ -16,24 +16,24 @@ interface Props {
 const TimeRangeControls: React.FC<Props> = ({ rangeMode, startDate, endDate, onChangeMode, onChangeStart, onChangeEnd }) => {
   return (
     <div className="dashboard-card">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
-        <h3 className="dashboard-section-title" style={{ margin: 0 }}>Time Range</h3>
-        <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
-          <div style={{ display: 'flex', gap: 6 }}>
-            <button type="button" onClick={() => onChangeMode('hour')} className={`btn ${rangeMode === 'hour' ? 'active' : ''}`} style={{ padding: '4px 8px', borderRadius: 8 }}>Last Hour</button>
-            <button type="button" onClick={() => onChangeMode('day')} className={`btn ${rangeMode === 'day' ? 'active' : ''}`} style={{ padding: '4px 8px', borderRadius: 8 }}>Today</button>
-            <button type="button" onClick={() => onChangeMode('week')} className={`btn ${rangeMode === 'week' ? 'active' : ''}`} style={{ padding: '4px 8px', borderRadius: 8 }}>7 Days</button>
-            <button type="button" onClick={() => onChangeMode('custom')} className={`btn ${rangeMode === 'custom' ? 'active' : ''}`} style={{ padding: '4px 8px', borderRadius: 8 }}>Custom</button>
+      <div className="time-range-controls">
+        <h3 className="dashboard-section-title">Time Range</h3>
+        <div className="time-range-controls-right">
+          <div className="time-range-buttons">
+            <button type="button" onClick={() => onChangeMode('hour')} className={`time-range-btn ${rangeMode === 'hour' ? 'active' : ''}`}>Last Hour</button>
+            <button type="button" onClick={() => onChangeMode('day')} className={`time-range-btn ${rangeMode === 'day' ? 'active' : ''}`}>Today</button>
+            <button type="button" onClick={() => onChangeMode('week')} className={`time-range-btn ${rangeMode === 'week' ? 'active' : ''}`}>Last 7 Days</button>
+            <button type="button" onClick={() => onChangeMode('custom')} className={`time-range-btn ${rangeMode === 'custom' ? 'active' : ''}`}>Custom</button>
           </div>
           {rangeMode === 'custom' && (
-            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-              <label style={{ fontSize: 12 }}>From</label>
+            <div className="time-range-custom">
+              <label className="time-range-label">From</label>
               <input
                 type="datetime-local"
                 value={startDate}
                 onChange={(e) => onChangeStart(e.target.value)}
               />
-              <label style={{ fontSize: 12 }}>To</label>
+              <label className="time-range-label">To</label>
               <input
                 type="datetime-local"
                 value={endDate}

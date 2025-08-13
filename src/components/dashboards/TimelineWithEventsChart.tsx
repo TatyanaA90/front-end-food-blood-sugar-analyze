@@ -138,23 +138,23 @@ const TimelineWithEventsChart: React.FC<Props> = ({ data, rangeStartMs, rangeEnd
       {/* Event Summary */}
       <div className="timeline-event-summary">
         <div className="timeline-legend-item glucose">
-          <div className="timeline-legend-line glucose" style={{ width: 12, height: 3 }}></div>
+          <div className="timeline-legend-line glucose" data-w="12" data-h="3"></div>
           <span>Glucose</span>
         </div>
         <div className="timeline-legend-item target">
-          <div className="timeline-legend-line target" style={{ width: 12, height: 2 }}></div>
+          <div className="timeline-legend-line target" data-w="12" data-h="2"></div>
           <span>Target (70-180)</span>
         </div>
         <div className="timeline-legend-item meal">
-          <div className="timeline-legend-shape meal" style={{ width: 8, height: 8 }}></div>
+          <div className="timeline-legend-shape meal" data-w="8" data-h="8"></div>
           <span>Meals: {chartData.filter(d => d.meal !== null).length}</span>
         </div>
         <div className="timeline-legend-item insulin">
-          <div className="timeline-legend-shape insulin" style={{ width: 8, height: 8 }}></div>
+          <div className="timeline-legend-shape insulin" data-w="8" data-h="8"></div>
           <span>Insulin: {chartData.filter(d => d.insulin !== null).length}</span>
         </div>
         <div className="timeline-legend-item activity">
-          <div className="timeline-legend-shape activity" style={{ width: 8, height: 8 }}></div>
+          <div className="timeline-legend-shape activity" data-w="8" data-h="8"></div>
           <span>Activities: {chartData.filter(d => d.activity !== null).length}</span>
         </div>
       </div>

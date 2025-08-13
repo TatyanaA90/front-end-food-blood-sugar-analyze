@@ -172,6 +172,14 @@ const Analytics: React.FC = () => {
     return { label: 'Stable', color: '#64748b', icon: <Minus className="dashboard-trend-icon normal" /> };
   }, [recentGlucoseSeries]);
 
+  const trendClass = useMemo(() => {
+    const label = trendInfo.label.toLowerCase();
+    if (label.includes('rising')) return 'rising';
+    if (label.includes('falling')) return 'falling';
+    if (label.includes('stable')) return 'stable';
+    return 'none';
+  }, [trendInfo.label]);
+
   const safeRangeStartMs = Number.isFinite(rangeStartMs) ? rangeStartMs : Date.now() - 60 * 60 * 1000;
   const safeRangeEndMsRaw = Number.isFinite(rangeEndMs) ? rangeEndMs : Date.now();
   const safeRangeEndMs = safeRangeEndMsRaw > safeRangeStartMs ? safeRangeEndMsRaw : safeRangeStartMs + 60 * 1000;
@@ -255,11 +263,9 @@ const Analytics: React.FC = () => {
               <h3 className="dashboard-section-title">
                 Recent Glucose Readings
               </h3>
-              <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '4px 8px', borderRadius: 8, background: trendInfo.color, color: '#fff' }}>
-                  {trendInfo.icon}
-                  <span style={{ fontSize: 12 }}>Trend: {trendInfo.label}</span>
-                </div>
+              <div className={`trend-badge ${trendClass}`}>
+                {trendInfo.icon}
+                <span className="trend-badge-text">Trend: {trendInfo.label}</span>
               </div>
             </div>
 
@@ -326,9 +332,9 @@ const Analytics: React.FC = () => {
               <div className="dashboard-empty-state">
                 <p className="dashboard-empty-text">No insulin impact data for the selected range</p>
                 {/* Debug information */}
-                <details style={{ marginTop: '16px', textAlign: 'left' }}>
-                  <summary style={{ cursor: 'pointer', color: '#3b82f6' }}>Debug Info</summary>
-                  <div style={{ marginTop: '8px', fontSize: '12px', color: '#64748b' }}>
+                <details className="debug-details">
+                  <summary>Debug Info</summary>
+                  <div className="debug-body">
                     <p><strong>Time Range:</strong> {startDate} to {endDate}</p>
                     <p><strong>Raw Data:</strong> {JSON.stringify(insulinOverallAnalysis, null, 2)}</p>
                     <p><strong>Note:</strong> Insulin doses need glucose readings within 30min before and 180min after to be analyzed</p>

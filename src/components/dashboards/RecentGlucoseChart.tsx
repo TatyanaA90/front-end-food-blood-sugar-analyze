@@ -11,7 +11,7 @@ interface Props {
 
 const RecentGlucoseChart: React.FC<Props> = ({ data, rangeStartMs, rangeEndMs }) => {
   return (
-    <div style={{ marginBottom: 12, width: '100%', height: 220 }}>
+    <div className="recent-glucose-chart">
       <ResponsiveContainer width="100%" height="100%">
         <LineChart data={data} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
           <CartesianGrid strokeDasharray="3 3" />

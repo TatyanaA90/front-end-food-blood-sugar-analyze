@@ -117,6 +117,76 @@
   position: relative;
 }
 
+/* Time Range Controls */
+.time-range-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.time-range-controls-right {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.time-range-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+.time-range-btn {
+  padding: 4px 8px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  border: 1px solid rgba(0, 212, 255, 0.3);
+}
+
+.time-range-btn.active {
+  background: rgba(0, 212, 255, 0.2);
+  border-color: rgba(0, 212, 255, 0.8);
+}
+
+.time-range-custom {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.time-range-label {
+  font-size: 12px;
+}
+
+/* Trend Badge */
+.trend-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  color: #fff;
+}
+
+.trend-badge-text {
+  font-size: 12px;
+}
+
+/* Debug details */
+.debug-details {
+  margin-top: 16px;
+  text-align: left;
+}
+
+.debug-details .debug-body {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #64748b;
+}
+
 /* Event Count Badges - Neon Style */
 .event-count-badges {
   display: flex;
@@ -267,6 +337,13 @@
     padding: 3px 6px;
     font-size: 10px;
   }
+}
+
+/* Recent Glucose Chart container */
+.recent-glucose-chart {
+  margin-bottom: 12px;
+  width: 100%;
+  height: 220px;
 }
 
 @media (max-width: 480px) {

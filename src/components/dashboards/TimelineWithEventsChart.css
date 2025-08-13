@@ -164,6 +164,8 @@
 .timeline-legend-line {
   border-radius: 2px;
   transition: all 0.3s ease;
+  width: 12px;
+  height: 3px;
 }
 
 .timeline-legend-line.glucose {
@@ -175,10 +177,13 @@
   background: #00ff88;
   border-top: 1px dashed #00ff88;
   box-shadow: 0 0 8px rgba(0, 255, 136, 0.6);
+  height: 2px;
 }
 
 .timeline-legend-shape {
   transition: all 0.3s ease;
+  width: 8px;
+  height: 8px;
 }
 
 .timeline-legend-shape.meal {
