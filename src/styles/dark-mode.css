@@ -157,7 +157,9 @@ html[data-theme='dark'] .dashboard-stat-item:hover { box-shadow: 0 12px 28px rgb
 /* Cards and panels across pages */
 html[data-theme='dark'] .layout [class*='card'],
 html[data-theme='dark'] .layout [class*='panel'],
-html[data-theme='dark'] .layout [class*='container-card'] {
+html[data-theme='dark'] .layout [class*='container-card'],
+html[data-theme='dark'] .layout [class*='section'],
+html[data-theme='dark'] .layout [class*='modal'] {
   background: var(--bg-card) !important;
   border: 1px solid var(--dm-border) !important;
   box-shadow: var(--dm-shadow) !important;
@@ -192,6 +194,28 @@ html[data-theme='dark'] .navbar {
   box-shadow: var(--dm-shadow) !important;
   color: var(--text-main) !important;
 }
+
+/* Admin dashboard: reuse global dark-mode rules with minimal overrides */
+html[data-theme='dark'] .admin-container { background: var(--bg-main) !important; }
+html[data-theme='dark'] .admin-title { color: #ffffff !important; }
+html[data-theme='dark'] .stat-number { color: #ffffff !important; }
+html[data-theme='dark'] .stat-label, 
+html[data-theme='dark'] .admin-empty-state { color: var(--text-secondary) !important; }
+html[data-theme='dark'] .data-count { background: var(--accent-primary) !important; color: #001216 !important; }
+
+/* Navbar dropdown (admin-only Pages) */
+html[data-theme='dark'] .navbar-dropdown-menu {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--dm-border) !important;
+  box-shadow: var(--dm-shadow) !important;
+  color: var(--text-main) !important;
+}
+html[data-theme='dark'] .navbar-dropdown-item { color: var(--text-main) !important; }
+html[data-theme='dark'] .navbar-dropdown-item:hover { background: #606060 !important; }
+
+/* Footer copyright in dark mode */
+html[data-theme='dark'] .layout-footer { background: rgba(0,0,0,0.25) !important; border-top: 1px solid var(--dm-border) !important; }
+html[data-theme='dark'] .layout-footer-copy { color: var(--text-secondary) !important; }
 
 /* Meals and Insulin Doses pages (page wrappers that use light gradients) */
 html[data-theme='dark'] .meals-page,

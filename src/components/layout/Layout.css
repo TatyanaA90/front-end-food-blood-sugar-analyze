@@ -13,8 +13,32 @@
     width: 100%;
 }
 
+.layout-footer {
+    position: relative;
+    background: #11182708;
+    border-top: 1px solid rgba(0,0,0,0.08);
+}
+
+.layout-footer-content {
+    position: relative;
+    max-width: 1280px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0.75rem 1rem;
+}
+
+.layout-footer-copy {
+    position: absolute;
+    right: 1rem;
+    bottom: 0.75rem;
+    font-size: 0.825rem;
+    color: #6b7280; /* subtle, low-contrast */
+    letter-spacing: 0.15px;
+}
+
 @media (max-width: 768px) {
     .layout-main {
         padding: 1rem;
     }
+    .layout-footer-copy { right: 0.75rem; bottom: 0.75rem; }
 }
