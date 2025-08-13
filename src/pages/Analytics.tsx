@@ -11,6 +11,9 @@ import TimelineWithEventsChart from '../components/dashboards/TimelineWithEvents
 import ImpactBarChart from '../components/dashboards/ImpactBarChart';
 import InsulinImpactChart from '../components/dashboards/InsulinImpactChart';
 import './Analytics.css';
+import { ResponsiveContainer, ComposedChart, Line, XAxis, YAxis, Tooltip, CartesianGrid, ReferenceLine, Scatter, Legend } from 'recharts';
+import TimeInRangePie from '../components/dashboards/TimeInRangePie';
+import GlucoseVariabilityCard from '../components/dashboards/GlucoseVariabilityCard';
 
 // Interface for the API response data structure
 interface ApiTimelinePoint {
@@ -28,7 +31,7 @@ interface ApiTimelineEvent {
 }
 
 const Analytics: React.FC = () => {
-  const { preferredUnit } = useGlucoseUnitUtils();
+  const { preferredUnit, convertValue } = useGlucoseUnitUtils();
 
   // Initialize with default time range (week instead of day to show more data)
   const defaultTimeRange = getDefaultTimeRange('week');
@@ -42,7 +45,14 @@ const Analytics: React.FC = () => {
   }, [startDate, endDate]);
 
   const { isLoading } = useGlucoseReadings(datetimeFilters);
-  const [mealImpact, setMealImpact] = useState<Array<{ group: string; avg_glucose_change: number; num_meals: number }>>([]);
+  const [mealImpact, setMealImpact] = useState<Array<{ group: string; avg_glucose_change: number; avg_peak_delta?: number; num_meals: number }>>([]);
+  const [mealImpactMeta, setMealImpactMeta] = useState<any | null>(null);
+  const [mealImpactGroups, setMealImpactGroups] = useState<Array<{ key: string; n: number; avg_delta: number; peak_delta?: number; time_to_peak_min?: number; return_to_baseline_min?: number }>>([]);
+  const [mealImpactOverall, setMealImpactOverall] = useState<any | null>(null);
+  const [mealImpactTimeline, setMealImpactTimeline] = useState<Array<{ ts: string; delta_series: Array<[number, number]> }>>([]);
+  const [selectedMealIdx, setSelectedMealIdx] = useState<number>(0);
+  // Selected meal name (aggregates all occurrences in range)
+  const [selectedMealName, setSelectedMealName] = useState<string>('');
   const [insulinImpact, setInsulinImpact] = useState<Array<{
     group: string;
     avg_glucose_change: number;
@@ -63,6 +73,9 @@ const Analytics: React.FC = () => {
   const [timelineReadings, setTimelineReadings] = useState<{ time: number; value: number }[]>([]);
   const [timelineEvents, setTimelineEvents] = useState<Array<{ time: number; type: string; label: string }>>([]);
   const [seriesPoints, setSeriesPoints] = useState<Array<{ ts: number; glucose: number | null; meal: number | null; insulin: number | null; activity: number | null }>>([]);
+  const [mealGroupBy, setMealGroupBy] = useState<'time_of_day' | 'meal_type' | 'carb_range'>('time_of_day');
+  const [tirData, setTirData] = useState<any | null>(null);
+  const [variability, setVariability] = useState<any | null>(null);
 
   const handleChangeMode = (mode: 'hour' | 'day' | 'week' | 'custom') => {
     setRangeMode(mode);
@@ -78,7 +91,21 @@ const Analytics: React.FC = () => {
     params.set('start_datetime', timeRange.startIso);
     params.set('end_datetime', timeRange.endIso);
     params.set('unit', preferredUnit);
-    api.get(`/analytics/meal-impact?${params.toString()}`).then(r => setMealImpact(r.data.meal_impacts || [])).catch(() => setMealImpact([]));
+    params.set('group_by', mealGroupBy);
+    api.get(`/analytics/meal-impact?${params.toString()}`).then(r => {
+      setMealImpact(r.data.meal_impacts || r.data.groups || []);
+      setMealImpactMeta(r.data.meta || null);
+      setMealImpactGroups(r.data.groups || []);
+      setMealImpactOverall(r.data.overall || null);
+      setMealImpactTimeline(Array.isArray(r.data.timeline) ? r.data.timeline : []);
+      setSelectedMealIdx(0);
+    }).catch(() => {
+      setMealImpact([]);
+      setMealImpactMeta(null);
+      setMealImpactGroups([]);
+      setMealImpactOverall(null);
+      setMealImpactTimeline([]);
+    });
     
     const insulinParams = new URLSearchParams();
     insulinParams.set('window', 'custom');
@@ -121,18 +148,43 @@ const Analytics: React.FC = () => {
         value: p.glucose || 0
       })).filter((r) => r.value > 0);
 
-      const events = (r.data.events || r.data?.events || []).map((ev: ApiTimelineEvent) => ({
-        time: (typeof ev.timestamp === 'string' ? new Date(ev.timestamp).getTime() : Number(ev.timestamp)),
-        type: ev.type,
-        label: ev.description || ev.type
-      }));
+      const events = (r.data.events || r.data?.events || []).map((ev: any) => {
+        const time = (typeof ev.timestamp === 'string' ? new Date(ev.timestamp).getTime() : Number(ev.timestamp));
+        let label = ev.description || ev.type;
+        if (ev.type === 'activity') {
+          label = ev.activity_type || ev.type;
+        } else if (ev.type === 'insulin_dose') {
+          label = typeof ev.units === 'number' ? String(ev.units) : 'insulin';
+        }
+        return { time, type: ev.type, label };
+      });
 
       const filteredReadings = timelineReadingsData.filter((p) => p.time >= timeRange.startMs && p.time <= timeRange.endMs);
       const filteredEvents = events.filter((e) => e.time >= timeRange.startMs && e.time <= timeRange.endMs);
       setTimelineReadings(filteredReadings);
       setTimelineEvents(filteredEvents);
     }).catch(() => { setTimelineReadings([]); setTimelineEvents([]); setSeriesPoints([]); });
-  }, [startDate, endDate, preferredUnit]);
+
+    // Time in Range
+    const tirParams = new URLSearchParams();
+    tirParams.set('window', 'custom');
+    tirParams.set('start_date', timeRange.startIso.split('T')[0]);
+    tirParams.set('end_date', timeRange.endIso.split('T')[0]);
+    tirParams.set('unit', preferredUnit === 'mg/dL' ? 'mg/dl' : 'mmol/l');
+    tirParams.set('show_percentage', 'true');
+    api.get(`/analytics/time-in-range?${tirParams.toString()}`).then(r => {
+      setTirData(r.data?.time_in_range || null);
+    }).catch(() => setTirData(null));
+
+    // Glucose variability
+    const gvParams = new URLSearchParams();
+    gvParams.set('window', 'custom');
+    gvParams.set('start_date', timeRange.startIso.split('T')[0]);
+    gvParams.set('end_date', timeRange.endIso.split('T')[0]);
+    api.get(`/analytics/glucose-variability?${gvParams.toString()}`).then(r => {
+      setVariability(r.data?.variability_metrics || null);
+    }).catch(() => setVariability(null));
+  }, [startDate, endDate, preferredUnit, mealGroupBy]);
 
   const glucoseChartData = useMemo(() => {
     return timelineReadings
@@ -140,9 +192,28 @@ const Analytics: React.FC = () => {
       .sort((a, b) => a.ts - b.ts);
   }, [timelineReadings]);
 
-  const mealImpactData = useMemo(() => (
-    (mealImpact || []).map((g) => ({ group: g.group, change: g.avg_glucose_change, count: g.num_meals }))
-  ), [mealImpact]);
+  const mealImpactData = useMemo(() => {
+    const sourceUnit = (mealImpactMeta?.requested_unit as 'mg/dL' | 'mmol/L' | undefined) || 'mg/dL';
+    return (mealImpact || []).map((g: any) => {
+      const label = g.group ?? g.key ?? '—';
+      const rawDelta =
+        typeof g.avg_peak_delta === 'number'
+          ? g.avg_peak_delta
+          : typeof g.avg_glucose_change === 'number'
+          ? g.avg_glucose_change
+          : g.avg_delta ?? 0;
+      const displayPeak =
+        sourceUnit === preferredUnit
+          ? rawDelta
+          : convertValue(rawDelta, sourceUnit, preferredUnit);
+      const rawAvg = typeof g.avg_glucose_change === 'number' ? g.avg_glucose_change : g.avg_delta ?? rawDelta;
+      const displayAvg = sourceUnit === preferredUnit ? rawAvg : convertValue(rawAvg, sourceUnit, preferredUnit);
+      const count = g.num_meals ?? g.n ?? 0;
+      return { group: label, avg: displayAvg, peak: displayPeak, count };
+    });
+  }, [mealImpact, preferredUnit, mealImpactMeta]);
+
+  // Meal options in current range (moved below to reference filteredTimelineEvents safely)
 
   const timeRange = calculateTimeRange(startDate, endDate);
   const rangeStartMs = timeRange.startMs;
@@ -153,6 +224,62 @@ const Analytics: React.FC = () => {
       point.ts >= rangeStartMs && point.ts <= rangeEndMs
     );
   }, [glucoseChartData, rangeStartMs, rangeEndMs]);
+
+  // Build glucose line (converted to preferred unit) and helpers
+  const glucoseLineData = useMemo(() => {
+    return recentGlucoseSeries.map(p => ({ ts: p.ts, value: preferredUnit === 'mg/dL' ? p.value : convertValue(p.value, 'mg/dL', 'mmol/L') }));
+  }, [recentGlucoseSeries, preferredUnit, convertValue]);
+
+  // Keep vertical scale stable based only on the glucose line (not markers)
+  const yDomain = useMemo<[number, number]>(() => {
+    const values = glucoseLineData.map(d => d.value);
+    if (values.length === 0) return [0, 10];
+    let min = Math.min(...values);
+    let max = Math.max(...values);
+    if (min === max) { min -= 1; max += 1; }
+    const pad = Math.max((max - min) * 0.1, 0.5);
+    return [Math.floor(min - pad), Math.ceil(max + pad)];
+  }, [glucoseLineData]);
+
+  // Custom tooltip to show only the glucose line value (hide extra series/fields)
+  const renderGlucoseTooltip = (info: any) => {
+    const { label, payload } = info || {};
+    if (!payload || payload.length === 0) return null;
+    const lineItem = payload.find((p: any) => p && p.dataKey === 'value');
+    if (!lineItem) return null;
+    const ts = Number(label);
+    const val = Number(lineItem.value);
+    const display = preferredUnit === 'mg/dL' ? val.toFixed(0) : val.toFixed(1);
+    return (
+      <div className="tooltip-glucose">
+        <div className="tooltip-glucose-time">{new Date(ts).toLocaleString()}</div>
+        <div className="tooltip-glucose-row">
+          <span className="tooltip-swatch line" />
+          <span className="tooltip-glucose-label">Glucose:</span>
+          <span className="tooltip-glucose-value">{display}</span>
+        </div>
+        {selectedMealPoints.length > 0 && (
+          <div className="tooltip-glucose-row" style={{ marginTop: 4 }}>
+            <span className="tooltip-swatch meal" />
+            <span className="tooltip-glucose-label">Selected meals</span>
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  const nearestY = (t: number) => {
+    if (glucoseLineData.length === 0) return null;
+    let best = glucoseLineData[0];
+    let minDiff = Math.abs(glucoseLineData[0].ts - t);
+    for (const p of glucoseLineData) {
+      const d = Math.abs(p.ts - t);
+      if (d < minDiff) { best = p; minDiff = d; }
+    }
+    return best.value;
+  };
+
+  // selectedMealPoints is defined after filteredTimelineEvents to avoid initialization order issues.
 
   const trendInfo = useMemo(() => {
     if (recentGlucoseSeries.length < 2) {
@@ -193,9 +320,38 @@ const Analytics: React.FC = () => {
     [timelineEvents, rangeStartMs, rangeEndMs]
   );
 
+  // Meal options in current range (depends on filteredTimelineEvents)
+  const mealOptions = useMemo(() => {
+    return filteredTimelineEvents
+      .filter(e => e.type === 'meal')
+      .map(e => ({ ts: e.time, label: new Date(e.time).toLocaleString() }));
+  }, [filteredTimelineEvents]);
+
+  // Unique meal names for selection
+  const mealNameOptions = useMemo(() => {
+    const names = new Set<string>();
+    for (const e of filteredTimelineEvents) {
+      if (e.type === 'meal') {
+        const name = (e.label || '').trim();
+        if (name) names.add(name);
+      }
+    }
+    return Array.from(names).sort((a, b) => a.localeCompare(b));
+  }, [filteredTimelineEvents]);
+
+  const selectedMealPoints = useMemo(() => {
+    if (!selectedMealName) return [] as Array<{ ts: number; y: number }>;
+    const times: number[] = filteredTimelineEvents
+      .filter(e => e.type === 'meal' && ((e.label || '').trim() === selectedMealName))
+      .map(e => e.time);
+    return times
+      .map(ts => ({ ts, y: nearestY(ts) }))
+      .filter(p => p.y !== null) as Array<{ ts: number; y: number }>;
+  }, [selectedMealName, filteredTimelineEvents, glucoseLineData]);
+
   const baselineY = 100;
   const timelineSeriesData = useMemo(() => {
-    const byTs = new Map<number, { ts: number; glucose: number | null; meal: number | null; insulin: number | null; activity: number | null }>();
+    const byTs = new Map<number, { ts: number; glucose: number | null; meal: number | null; insulin: number | null; activity: number | null; mealLabel?: string; insulinLabel?: string; activityLabel?: string }>();
     const ensure = (ts: number) => {
       let rec = byTs.get(ts);
       if (!rec) {
@@ -233,9 +389,9 @@ const Analytics: React.FC = () => {
     for (const ev of filteredTimelineEvents) {
       const y = nearest(ev.time);
       const rec = ensure(ev.time);
-      if (ev.type === 'meal') rec.meal = y;
-      else if (ev.type === 'insulin_dose') rec.insulin = y;
-      else if (ev.type === 'activity') rec.activity = y;
+      if (ev.type === 'meal') { rec.meal = y; rec.mealLabel = ev.label; }
+      else if (ev.type === 'insulin_dose') { rec.insulin = y; rec.insulinLabel = ev.label; }
+      else if (ev.type === 'activity') { rec.activity = y; rec.activityLabel = ev.label; }
     }
 
     return Array.from(byTs.values()).sort((a, b) => a.ts - b.ts);
@@ -294,7 +450,7 @@ const Analytics: React.FC = () => {
             </div>
             <div>
                 <TimelineWithEventsChart
-                  data={seriesPoints.length ? seriesPoints : timelineSeriesData}
+                  data={timelineSeriesData}
                   rangeStartMs={safeRangeStartMs}
                   rangeEndMs={safeRangeEndMs}
                   hasRealData={filteredTimelineReadings.length > 0}
@@ -308,17 +464,109 @@ const Analytics: React.FC = () => {
           </div>
         </section>
 
+        {/* Time in Range & Variability */}
+        <section className="dashboard-section">
+          <div className="dashboard-card">
+            <div className="dashboard-card-header">
+              <h3 className="dashboard-section-title">Time in Range</h3>
+            </div>
+            {tirData ? (
+              <TimeInRangePie tir={tirData} unit={preferredUnit} />
+            ) : (
+              <div className="dashboard-empty-state"><p className="dashboard-empty-text">No TIR data</p></div>
+            )}
+          </div>
+        </section>
+
+        <section className="dashboard-section">
+          <GlucoseVariabilityCard metrics={variability || { standard_deviation: null, coefficient_of_variation: null, glucose_management_indicator: null }} unit={preferredUnit} />
+        </section>
+
         <section className="dashboard-section">
           <div className="dashboard-card">
             <div className="dashboard-card-header">
               <h3 className="dashboard-section-title">Meal Impact Analysis</h3>
+              <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                <label htmlFor="meal-name-select" style={{ fontSize: 12, opacity: 0.8 }}>Meal</label>
+                <select
+                  id="meal-name-select"
+                  value={selectedMealName}
+                  onChange={(e) => setSelectedMealName(e.target.value)}
+                  className="glucose-form-select"
+                  style={{ minWidth: 220 }}
+                >
+                  <option value="">All/None</option>
+                  {mealNameOptions.map(name => (
+                    <option key={name} value={name}>{name}</option>
+                  ))}
+                </select>
+              </div>
             </div>
             {(mealImpact || []).length === 0 ? (
               <div className="dashboard-empty-state">
                 <p className="dashboard-empty-text">No meal impact data for the selected range</p>
               </div>
             ) : (
-              <ImpactBarChart data={mealImpactData} color="#059669" label={`Avg Δ ${preferredUnit}`} />
+              <>
+                {/* Glucose line with meal markers */}
+                <div style={{ marginTop: 28 }}>
+                  <div style={{ width: '100%', height: 300 }}>
+                    <ResponsiveContainer width="100%" height="100%">
+                      <ComposedChart data={glucoseLineData} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="ts" type="number" domain={[safeRangeStartMs, safeRangeEndMs]}
+                               tickFormatter={(ts) => new Date(Number(ts)).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} />
+                        <YAxis domain={yDomain} label={{ value: `Glucose (${preferredUnit})`, angle: -90, position: 'insideLeft' }} />
+                        <Tooltip content={renderGlucoseTooltip as any} />
+                        <Legend />
+                        <Line type="monotone" dataKey="value" name={`Glucose (${preferredUnit})`} stroke="#06b6d4" dot={false} />
+                        {/* Render marker series always so legend/size stay stable */}
+                        <Scatter data={selectedMealPoints} dataKey="y" name="Selected meals" fill="#10b981" />
+                      </ComposedChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
+                <details className="debug-details" style={{ marginTop: 12 }}>
+                  <summary>Debug Info</summary>
+                  <div className="debug-body">
+                    <p><strong>Window:</strong> {mealImpactMeta?.start_date} → {mealImpactMeta?.end_date}</p>
+                    <p><strong>Params:</strong> group_by={mealGroupBy} pre={mealImpactMeta?.pre_meal_minutes ?? '—'} min_post_points={mealImpactMeta?.min_readings ?? '—'} post={mealImpactMeta?.post_meal_minutes ?? '—'} window={mealImpactMeta?.window_minutes ?? '—'} unit={mealImpactMeta?.requested_unit ?? preferredUnit}</p>
+                    <p><strong>Total meals analyzed:</strong> {mealImpactMeta?.total_meals_analyzed ?? mealImpactOverall?.meals_analyzed ?? mealImpact.reduce((s, v) => s + (v?.num_meals || 0), 0)}</p>
+                    {(mealImpactGroups?.length ?? 0) > 0 && (
+                      <div style={{ overflowX: 'auto' }}>
+                        <table className="debug-table">
+                          <thead>
+                            <tr>
+                              <th>Group</th>
+                              <th>n</th>
+                              <th>avgΔ</th>
+                              <th>peakΔ</th>
+                              <th>ttp</th>
+                              <th>rtb</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {mealImpactGroups.map((g) => {
+                              const change = preferredUnit === 'mg/dL' ? g.avg_delta : convertValue(g.avg_delta, 'mg/dL', 'mmol/L');
+                              const peak = preferredUnit === 'mg/dL' ? (g.peak_delta ?? 0) : convertValue(g.peak_delta ?? 0, 'mg/dL', 'mmol/L');
+                              return (
+                                <tr key={g.key}>
+                                  <td>{g.key}</td>
+                                  <td>{g.n}</td>
+                                  <td>{change.toFixed(preferredUnit === 'mg/dL' ? 0 : 1)}</td>
+                                  <td>{peak.toFixed(preferredUnit === 'mg/dL' ? 0 : 1)}</td>
+                                  <td>{g.time_to_peak_min ?? '—'}</td>
+                                  <td>{g.return_to_baseline_min ?? '—'}</td>
+                                </tr>
+                              );
+                            })}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+                  </div>
+                </details>
+              </>
             )}
           </div>
         </section>

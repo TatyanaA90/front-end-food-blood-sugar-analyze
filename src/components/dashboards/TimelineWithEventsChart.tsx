@@ -1,6 +1,7 @@
 import React from 'react';
 import { ResponsiveContainer, ComposedChart, Line, XAxis, YAxis, Tooltip, CartesianGrid, ReferenceLine, Scatter } from 'recharts';
-import { formatTimestampForDisplay, formatTimestampForTooltip } from '../../utils/dateUtils';
+import { formatTimestampForDisplay } from '../../utils/dateUtils';
+import { useGlucoseUnitUtils } from '../../hooks/useGlucoseUnit';
 import './TimelineWithEventsChart.css';
 
 interface SeriesPoint {
@@ -9,6 +10,9 @@ interface SeriesPoint {
   meal: number | null;
   insulin: number | null;
   activity: number | null;
+  mealLabel?: string;
+  insulinLabel?: string;
+  activityLabel?: string;
 }
 
 interface Props {
@@ -19,19 +23,23 @@ interface Props {
 }
 
 const TimelineWithEventsChart: React.FC<Props> = ({ data, rangeStartMs, rangeEndMs, hasRealData = true }) => {
-  // Define target ranges
-  const targetLow = 70;
-  const targetHigh = 180;
+  const { preferredUnit, convertValue } = useGlucoseUnitUtils();
+  // Define target ranges in display unit
+  const targetLow = preferredUnit === 'mg/dL' ? 70 : convertValue(70, 'mg/dL', 'mmol/L');
+  const targetHigh = preferredUnit === 'mg/dL' ? 180 : convertValue(180, 'mg/dL', 'mmol/L');
 
   // Transform data for visualization
   const chartData = data
     .filter(point => point.glucose !== null)
     .map(point => ({
       time: point.ts,
-      glucose: point.glucose,
-      meal: point.meal !== null ? point.glucose : null,
-      insulin: point.insulin !== null ? point.glucose : null,
-      activity: point.activity !== null ? point.glucose : null
+      glucose: preferredUnit === 'mg/dL' ? Number(point.glucose) : convertValue(Number(point.glucose), 'mg/dL', 'mmol/L'),
+      meal: point.meal !== null ? (preferredUnit === 'mg/dL' ? Number(point.glucose) : convertValue(Number(point.glucose), 'mg/dL', 'mmol/L')) : null,
+      insulin: point.insulin !== null ? (preferredUnit === 'mg/dL' ? Number(point.glucose) : convertValue(Number(point.glucose), 'mg/dL', 'mmol/L')) : null,
+      activity: point.activity !== null ? (preferredUnit === 'mg/dL' ? Number(point.glucose) : convertValue(Number(point.glucose), 'mg/dL', 'mmol/L')) : null,
+      mealLabel: point.mealLabel,
+      insulinLabel: point.insulinLabel,
+      activityLabel: point.activityLabel
     }))
     .sort((a, b) => a.time - b.time);
 
@@ -62,25 +70,37 @@ const TimelineWithEventsChart: React.FC<Props> = ({ data, rangeStartMs, rangeEnd
 
             <YAxis
               tick={{ fontSize: 10 }}
-              domain={[40, 350]}
+              domain={preferredUnit === 'mg/dL' ? [40, 350] : [2, 20]}
               axisLine={false}
               tickLine={false}
             />
 
             <Tooltip
-              labelFormatter={formatTimestampForTooltip}
-              formatter={(value: number | null, name: string) => {
-                if (name === 'glucose') return [`${value} mg/dL`, 'Glucose'];
-                if (name === 'meal') return ['Meal Event', 'Meal'];
-                if (name === 'insulin') return ['Insulin Event', 'Insulin'];
-                if (name === 'activity') return ['Activity Event', 'Activity'];
-                return [value, name];
-              }}
-              contentStyle={{
-                background: 'rgba(0, 0, 0, 0.95)',
-                border: '1px solid rgba(0, 212, 255, 0.6)',
-                borderRadius: 12,
-                backdropFilter: 'blur(15px)'
+              content={({ label, payload }) => {
+                const ts = Number(label);
+                const rows: Array<{ label: string; value: string; color: string }> = [];
+                const unit = preferredUnit === 'mg/dL' ? 'mg/dL' : 'mmol/L';
+                const g = payload?.find((p: any) => p?.dataKey === 'glucose');
+                if (g && g.value != null) rows.push({ label: 'Glucose', value: `${preferredUnit === 'mg/dL' ? Number(g.value).toFixed(0) : Number(g.value).toFixed(1)} ${unit}`, color: '#00d4ff' });
+                const meal = payload?.find((p: any) => p?.dataKey === 'meal');
+                if (meal) rows.push({ label: 'Meal', value: String(meal.payload?.mealLabel || meal.payload?.label || 'meal'), color: '#00ff88' });
+                const insulin = payload?.find((p: any) => p?.dataKey === 'insulin');
+                if (insulin) rows.push({ label: 'Insulin', value: String(insulin.payload?.insulinLabel || insulin.payload?.label || 'insulin'), color: '#ff6b35' });
+                const act = payload?.find((p: any) => p?.dataKey === 'activity');
+                if (act) rows.push({ label: 'Activity', value: String(act.payload?.activityLabel || act.payload?.label || 'activity'), color: '#8a2be2' });
+                if (rows.length === 0) return null;
+                return (
+                  <div className="tooltip-glucose">
+                    <div className="tooltip-glucose-time">{new Date(ts).toLocaleString()}</div>
+                    {rows.map((r, i) => (
+                      <div key={i} className="tooltip-glucose-row">
+                        <span className="tooltip-swatch" style={{ background: r.color }} />
+                        <span className="tooltip-glucose-label">{r.label}:</span>
+                        <span className="tooltip-glucose-value">{r.value}</span>
+                      </div>
+                    ))}
+                  </div>
+                );
               }}
             />
 

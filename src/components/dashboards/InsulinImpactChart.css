@@ -152,10 +152,13 @@
   font-size: 28px;
   font-weight: 700;
   line-height: 1;
+  /* Fallback solid color to ensure visibility across browsers/themes */
+  color: var(--text-main, #ffffff);
+  /* Attempt gradient text where supported, without hiding text if not */
   background: linear-gradient(135deg, var(--card-glow-start), var(--card-glow-end));
   -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
   background-clip: text;
+  -webkit-text-fill-color: currentColor;
   text-shadow: 0 0 20px var(--card-glow-color);
 }
 

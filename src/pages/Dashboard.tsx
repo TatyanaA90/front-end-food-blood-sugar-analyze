@@ -1,10 +1,12 @@
 import React from 'react';
 import { useAuth } from '../hooks/useAuth';
-import { useRecentGlucoseReadings } from '../hooks/useGlucoseReadings';
+import { useRecentGlucoseReadings, useGlucoseStats } from '../hooks/useGlucoseReadings';
 import { useGlucoseUnitUtils } from '../hooks/useGlucoseUnit';
 import { Activity, BarChart3, Plus, Droplets, Clock, TrendingUp, TrendingDown, Minus } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import NavigationHeader from '../components/layout/NavigationHeader';
+import TimeInRangePie from '../components/dashboards/TimeInRangePie';
+import api from '../services/api';
 import './Dashboard.css';
 
 const Dashboard: React.FC = () => {
@@ -12,7 +14,17 @@ const Dashboard: React.FC = () => {
     const navigate = useNavigate();
     const { data: readings = [], isLoading } = useRecentGlucoseReadings();
     const { convertReading, getReadingStatus, preferredUnit, getRangeLabels } = useGlucoseUnitUtils();
+    const [tirData, setTirData] = React.useState<any | null>(null);
     const rangeLabels = getRangeLabels();
+
+    // Stats window: last 7 days
+    const statsEnd = new Date();
+    const statsStart = new Date();
+    statsStart.setDate(statsEnd.getDate() - 7);
+    const statsStartStr = statsStart.toISOString().split('T')[0];
+    const statsEndStr = statsEnd.toISOString().split('T')[0];
+    const { data: glucoseStats } = useGlucoseStats({ start_date: statsStartStr, end_date: statsEndStr });
+    const [variability, setVariability] = React.useState<any | null>(null);
 
     // Get recent readings (last 5), ordered by displayed time (newest first)
     const recentReadings = [...readings]
@@ -35,6 +47,30 @@ const Dashboard: React.FC = () => {
         }
     };
 
+    React.useEffect(() => {
+        const end = new Date();
+        const start = new Date();
+        start.setDate(end.getDate() - 7);
+        const params = new URLSearchParams();
+        params.set('window', 'custom');
+        params.set('start_date', start.toISOString().split('T')[0]);
+        params.set('end_date', end.toISOString().split('T')[0]);
+        params.set('unit', preferredUnit === 'mg/dL' ? 'mg/dl' : 'mmol/l');
+        params.set('show_percentage', 'true');
+        api.get(`/analytics/time-in-range?${params.toString()}`)
+          .then(r => setTirData(r.data?.time_in_range || null))
+          .catch(() => setTirData(null));
+
+        // Also fetch variability (for GMI) and mean glucose
+        const gvParams = new URLSearchParams();
+        gvParams.set('window', 'custom');
+        gvParams.set('start_date', start.toISOString().split('T')[0]);
+        gvParams.set('end_date', end.toISOString().split('T')[0]);
+        api.get(`/analytics/glucose-variability?${gvParams.toString()}`)
+          .then(r => setVariability(r.data?.variability_metrics || null))
+          .catch(() => setVariability(null));
+    }, [preferredUnit]);
+
     return (
         <div className="dashboard-container">
             <NavigationHeader
@@ -43,15 +79,51 @@ const Dashboard: React.FC = () => {
                 showBack={false}
             />
             <main className="dashboard-main">
-                {/* Welcome Section */}
-                <section className="dashboard-section">
-                    <div className="dashboard-card">
+                {/* Welcome + Right-side Time in Range widget */}
+                <section className="dashboard-section dashboard-hero-grid">
+                    <div className="dashboard-card dashboard-hero-left">
                         <h2 className="dashboard-welcome-title">
                             Welcome back, {user?.username}!
                         </h2>
                         <p className="dashboard-welcome-text">
                             Track your blood sugar, meals, activities, and get insights to manage your diabetes effectively.
                         </p>
+                        <div className="dashboard-inline-stats">
+                            {(() => {
+                                const avgSrc = (glucoseStats?.average ?? variability?.mean_glucose ?? null) as number | null;
+                                if (avgSrc == null) {
+                                    return (
+                                        <span className="dashboard-unit-display">Average: —</span>
+                                    );
+                                }
+                                const avgDisplay = preferredUnit === 'mg/dL' ? Math.round(
+                                    preferredUnit === 'mg/dL' ? avgSrc : 0
+                                ) : 0; // placeholder, will be replaced below
+                                const avgConverted = preferredUnit === 'mg/dL' ? avgSrc : (avgSrc != null ? (useGlucoseUnitUtils().convertValue(avgSrc, 'mg/dL', 'mmol/L')) : null);
+                                const formattedAvg = avgConverted == null ? '—' : (preferredUnit === 'mg/dL' ? Math.round(avgConverted).toString() : avgConverted.toFixed(1));
+                                return (
+                                    <span className="dashboard-unit-display">Average: {formattedAvg} {preferredUnit}</span>
+                                );
+                            })()}
+                            <span className="dashboard-unit-display">GMI: {variability?.glucose_management_indicator != null ? `${Number(variability.glucose_management_indicator).toFixed(1)} %` : '—'}</span>
+                        </div>
+                    </div>
+                    <div className="dashboard-card dashboard-hero-right">
+                        <div className="dashboard-card-header" style={{ marginBottom: 8 }}>
+                            <h3 className="dashboard-section-title" style={{ fontSize: '1.125rem' }}>
+                                Time in Range
+                            </h3>
+                        </div>
+                        <div style={{ width: '100%', height: 180 }}>
+                            <TimeInRangePie
+                                tir={tirData || { very_low: 0, low: 0, in_range: 0, high: 0, very_high: 0 }}
+                                unit={preferredUnit}
+                                height={180}
+                                outerRadius={70}
+                                innerRadius={32}
+                                showLegend={false}
+                            />
+                        </div>
                     </div>
                 </section>
 

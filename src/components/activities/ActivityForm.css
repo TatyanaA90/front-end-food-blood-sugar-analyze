@@ -5,16 +5,20 @@
 }
 
 .activity-form {
+  /* background: linear-gradient(135deg, #ffffff 0%, #fdfdfd 50%, #f5f7fb 100%); */
+  /* Use the same card styling as Meal form for visual consistency */
   background: linear-gradient(135deg, #ffffff 0%, #e3f2fd 50%, #c0e4f9 100%);
-  border-radius: 20px;
-  padding: 2.5rem;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  /* border-radius: 20px; */
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(144, 202, 249, 0.2);
   transition: all 0.3s ease;
 }
 
 .activity-form:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 32px 64px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
 .form-header {
@@ -33,20 +37,27 @@
 }
 
 .form-header h2 {
-  font-size: 1.875rem;
+  /* Match Meal form heading style */
+  font-size: 1.75rem;
   font-weight: 700;
-  color: #1e293b;
+  color: #2c3e50;
   margin: 0;
 }
 
 .form-section {
   margin-bottom: 2.5rem;
+  /* Match Meal form section panel */
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 12px;
+  border: 1px solid rgba(144, 202, 249, 0.1);
 }
 
 .form-section h3 {
-  font-size: 1.5rem;
+  /* Align with Meal form */
+  font-size: 1.25rem;
   font-weight: 600;
-  color: #1e293b;
+  color: #2c3e50;
   margin-bottom: 1.5rem;
   display: flex;
   align-items: center;
@@ -68,7 +79,7 @@
   align-items: center;
   gap: 0.5rem;
   font-weight: 600;
-  color: #374151;
+  color: #2c3e50;
   margin-bottom: 0.5rem;
 }
 
@@ -82,13 +93,14 @@
 .form-group select,
 .form-group textarea {
   width: 100%;
-  padding: 0.875rem 1rem;
-  border: 2px solid #e5e7eb;
-  border-radius: 12px;
+  padding: 0.75rem;
+  /* border: 2px solid #e5e7eb; */
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
   font-size: 1rem;
   background: #ffffff;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: none;
 }
 
 .form-group input:focus,
@@ -113,7 +125,7 @@
 }
 
 .error-message {
-  color: #ef4444;
+  color: #dc2626;
   font-size: 0.875rem;
   margin-top: 0.5rem;
   display: block;
@@ -132,14 +144,14 @@
   gap: 0.5rem;
   padding: 0.75rem 1.25rem;
   background: linear-gradient(135deg, #ffffff 0%, #e3f2fd 50%, #c0e4f9 100%);
-  border: 2px solid #e5e7eb;
-  border-radius: 12px;
+  border: 1px solid rgba(144, 202, 249, 0.3);
+  border-radius: 8px;
   font-size: 0.875rem;
   font-weight: 600;
   color: #1976d2;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .toggle-calculation-btn:hover {
@@ -154,9 +166,10 @@
 }
 
 .calorie-calculation {
-  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-  border: 2px solid #e5e7eb;
-  border-radius: 16px;
+  /* Match Meal form section surface */
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(144, 202, 249, 0.1);
+  border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
@@ -212,10 +225,11 @@
 }
 
 .cancel-btn {
-  background: linear-gradient(135deg, #ffffff 0%, #f3f4f6 100%);
-  color: #6b7280;
-  border: 2px solid #e5e7eb;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  /* Match Meal form */
+  background: rgba(255, 255, 255, 0.8);
+  color: #64748b;
+  border: 1px solid rgba(100, 116, 139, 0.2);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .cancel-btn:hover {
@@ -225,9 +239,11 @@
 }
 
 .submit-btn {
+  /* Align to Meal form primary */
   background: linear-gradient(135deg, #ffffff 0%, #e3f2fd 50%, #c0e4f9 100%);
   color: #1976d2;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(25, 118, 210, 0.3);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .submit-btn:hover {

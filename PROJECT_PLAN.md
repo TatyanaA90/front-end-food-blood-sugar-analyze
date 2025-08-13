@@ -110,22 +110,21 @@
 
 ### Phase 4: Dashboard and Analytics
 - [x] Create main dashboard page (pages/Dashboard.tsx)
-  - [ ] Overview cards with key metrics
+  - [x] Overview cards with key metrics
   - [x] Recent glucose readings chart (components/dashboards/RecentGlucoseChart.tsx)
-  - [x] Meal impact visualization (components/dashboards/ImpactBarChart.tsx)
-  - [ ] Quick action buttons
-  - [ ] Time in range indicator
+  - [x] Meal impact visualization
+  - [x] Quick action buttons
+  - [x] Time in range indicator (compact TIR pie widget added to right side of welcome section; slice percentages shown)
 - [x] Create analytics page with charts (pages/Analytics.tsx)
   - [x] Glucose trend line/timeline (components/dashboards/TimelineWithEventsChart.tsx, RecentGlucoseChart.tsx)
-  - [ ] Time in range pie chart
-  - [ ] Glucose variability chart
-  - [x] Meal impact analysis chart (components/dashboards/ImpactBarChart.tsx)
-  - [ ] Activity impact analysis chart
-  - [ ] Insulin-glucose correlation scatter plot
+  - [x] Time in range pie chart (with on-slice percentage labels)
+  - [x] Glucose variability chart (SD, CV, GMI)
+  - [x] Meal Impact Analysis: Refactored to a glucose line with selectable meal markers; stable axes, custom tooltip
+  - [x] Activity Impact Analysis: Timeline tooltip now shows activity type; groundwork for per-activity overlays
+  - [x] Insulin event enhancements: tooltip shows insulin quantity (e.g., "Insulin: 2")
 - [ ] Create visualization data page
-  - [x] Glucose timeline with events (components/dashboards/TimelineWithEventsChart.tsx)
-  - [ ] Data quality metrics
-  - [ ] Unit conversion controls
+  - [x] Glucose timeline with events (hover tooltip shows exact meal name, insulin quantity, activity type)
+
 
 ### Phase 5: Advanced Features
 - [ ] Create goals page
@@ -149,7 +148,7 @@
 - [x] Implement Recharts components
   - [x] Line/timeline charts for glucose trends (RecentGlucoseChart.tsx, TimelineWithEventsChart.tsx)
   - [x] Bar charts for meal impact (ImpactBarChart.tsx)
-  - [ ] Pie charts for time in range
+  - [x] Pie charts for time in range (TimeInRangePie.tsx + dashboard widget)
   - [ ] Scatter plots for correlations
   - [ ] Area charts for glucose profiles
 - [ ] Create responsive chart layouts
@@ -626,16 +625,16 @@ Note: Documentation sync pass completed on 2025-08-07 (updated README footer; lo
 - [ ] Frontend forms for condition logs
 - [x] Data persistence and state management (glucose readings, meals)
 
-### **Phase 4: Analytics & Visualization** 🔄 **80% COMPLETE**
+### **Phase 4: Analytics & Visualization** 🔄 **88% COMPLETE**
 - [x] Backend analytics endpoints (10 comprehensive endpoints)
 - [x] Data aggregation and calculation logic
 - [x] Statistical analysis functions
 - [ ] Frontend dashboard layout
-- [ ] Glucose trend charts
-- [ ] Meal impact visualization
+- [x] Glucose trend/timeline charts
+- [x] Meal impact (line + markers)
 - [ ] Activity correlation charts
 - [ ] Insulin effectiveness graphs
-- [ ] Interactive data filtering
+- [x] Interactive data filtering (time range controls; meal selection)
 - [ ] Export functionality
 
 ### **Phase 5: Admin System** ✅ **COMPLETE**
@@ -772,10 +771,11 @@ Note: Documentation sync pass completed on 2025-08-07 (updated README footer; lo
    - Add insulin dose management
 
 2. **Enhance Analytics Dashboard**
-   - Implement Recharts visualizations
-   - Create interactive data filters
-   - Add export functionality
-   - Optimize chart performance
+   - Finalize Activity Impact view (per-activity overlays; markers with labels)
+   - Add insulin-glucose correlation scatter (by dose/time window)
+   - Add export (PNG/SVG) for charts
+   - Optimize chart performance (memoized domains, light tooltips)
+   - Dashboard: average glucose + GMI badges under welcome, TIR widget on right (DONE)
 
 3. **User Experience Improvements**
    - Add loading states and skeletons
@@ -800,7 +800,7 @@ Note: Documentation sync pass completed on 2025-08-07 (updated README footer; lo
    - Machine learning insights
    - Predictive analytics
    - Custom report generation
-   - Data visualization improvements
+   - Data visualization improvements (AGP overlay, time-in-range)
 
 ### **Long-term Vision (Next 3 months)**
 1. **Mobile App Development**

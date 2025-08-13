@@ -1,3 +1,7 @@
+/* Provide base variables so components that depend on --text-primary render in all themes */
+:root {
+  --text-primary: #2563eb;
+}
 /* Unified Dark Mode overrides (activated when html[data-theme='dark']) */
 
 html[data-theme='dark'] {
@@ -8,6 +12,7 @@ html[data-theme='dark'] {
   --text-main: #E0E0E0;       /* High-contrast text */
   --text-secondary: #B0B7C3;  /* Cool silver */
   --accent-primary: #00E5FF;  /* Neon accent */
+  --text-primary: var(--accent-primary);
 
   /* Back-compat for earlier rules */
   --dm-bg: var(--bg-main);
@@ -70,14 +75,9 @@ html[data-theme='dark'] .dashboard-section-title::after { background: linear-gra
   50% { left: 100%; }
 }
 html[data-theme='dark'] .dashboard-section-title::before {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: -100%;
-  width: 100%;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
-  animation: dmSweep 3s ease-in-out infinite;
+  /* Disable animated sweep line under section titles */
+  content: none !important;
+  animation: none !important;
 }
 
 /* NavigationHeader static subtle lines (no animation) */
@@ -274,6 +274,31 @@ html[data-theme='dark'] .recharts-xAxis .recharts-cartesian-axis-tick-value,
 html[data-theme='dark'] .recharts-yAxis .recharts-cartesian-axis-tick-value { fill: var(--chart-tick-dark) !important; text-shadow: none !important; }
 html[data-theme='dark'] .recharts-cartesian-grid-horizontal line,
 html[data-theme='dark'] .recharts-cartesian-grid-vertical line { stroke: var(--chart-grid-dark) !important; }
+
+/* Custom tooltip for glucose line */
+.tooltip-glucose {
+  background: rgba(255,255,255,0.98);
+  border: 1px solid rgba(226,232,240,0.9);
+  border-radius: 8px;
+  padding: 8px 10px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+}
+.tooltip-glucose-time { font-weight: 600; margin-bottom: 4px; color: #1f2937; }
+.tooltip-glucose-row { display: flex; align-items: center; gap: 6px; }
+.tooltip-glucose-label { font-weight: 700; color: #1f2937; opacity: 0.9; }
+.tooltip-glucose-value { font-weight: 700; color: #1f2937; }
+.tooltip-swatch { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.tooltip-swatch.line { background: #06b6d4; }
+.tooltip-swatch.meal { background: #10b981; }
+
+html[data-theme='dark'] .tooltip-glucose {
+  background: rgba(0,0,0,0.95);
+  border: 1px solid rgba(0,229,255,0.6);
+  color: var(--text-main);
+}
+html[data-theme='dark'] .tooltip-glucose-time { color: var(--dm-accent); text-shadow: 0 0 8px rgba(0,229,255,0.35); }
+html[data-theme='dark'] .tooltip-glucose-label, 
+html[data-theme='dark'] .tooltip-glucose-value { color: var(--text-main); }
 
 /* Recommendations card title */
 html[data-theme='dark'] .recommendations h4 { color: var(--dm-accent); text-shadow: none; }
@@ -579,6 +604,155 @@ html[data-theme='dark'] .dashboard-readings-list {
 html[data-theme='dark'] .dashboard-action-button {
   border-color: rgba(0,229,255,0.2) !important;
   box-shadow: 0 0 0 1px rgba(0,229,255,0.06), 0 0 24px rgba(0,229,255,0.08), 0 4px 12px rgba(0,0,0,0.08) !important;
+}
+
+
+/* ====== FORMS: Add Activity / Add Meal / Add Insulin Dose / Add Reading ====== */
+/* Containers/cards */
+html[data-theme='dark'] .activity-form,
+html[data-theme='dark'] .meal-form,
+html[data-theme='dark'] .insulin-dose-form,
+html[data-theme='dark'] .glucose-form-modal {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--dm-border) !important;
+  box-shadow: var(--dm-shadow) !important;
+  color: var(--text-main) !important;
+}
+
+/* Section headers and titles */
+html[data-theme='dark'] .activity-form .form-header h2,
+html[data-theme='dark'] .meal-form .form-header h2,
+html[data-theme='dark'] .insulin-dose-form .form-header h2,
+html[data-theme='dark'] .glucose-form-title {
+  color: #ffffff !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.6) !important;
+}
+
+html[data-theme='dark'] .activity-form .form-section h3,
+html[data-theme='dark'] .meal-form .form-section h3,
+html[data-theme='dark'] .insulin-dose-form .form-section h3 {
+  color: var(--text-main) !important;
+}
+
+/* Subtle dividers */
+html[data-theme='dark'] .activity-form .form-header,
+html[data-theme='dark'] .activity-form .form-actions,
+html[data-theme='dark'] .meal-form .form-header,
+html[data-theme='dark'] .meal-form .form-actions,
+html[data-theme='dark'] .insulin-dose-form .form-header,
+html[data-theme='dark'] .insulin-dose-form .form-actions,
+html[data-theme='dark'] .glucose-form-header,
+html[data-theme='dark'] .glucose-form-actions {
+  border-color: var(--dm-border) !important;
+}
+
+/* Labels and secondary text */
+html[data-theme='dark'] .activity-form .form-group label,
+html[data-theme='dark'] .meal-form .form-group label,
+html[data-theme='dark'] .insulin-dose-form .form-group label,
+html[data-theme='dark'] .glucose-form-label {
+  color: var(--text-secondary) !important;
+}
+
+/* Inputs/selects/textarea inside forms (override gradients) */
+html[data-theme='dark'] .activity-form input,
+html[data-theme='dark'] .activity-form select,
+html[data-theme='dark'] .activity-form textarea,
+html[data-theme='dark'] .meal-form input,
+html[data-theme='dark'] .meal-form select,
+html[data-theme='dark'] .meal-form textarea,
+html[data-theme='dark'] .insulin-dose-form input,
+html[data-theme='dark'] .insulin-dose-form select,
+html[data-theme='dark'] .insulin-dose-form textarea,
+html[data-theme='dark'] .glucose-form-input,
+html[data-theme='dark'] .glucose-form-select,
+html[data-theme='dark'] .glucose-form-unit-select,
+html[data-theme='dark'] .glucose-form-textarea {
+  background: #2f2f2f !important;
+  color: var(--text-main) !important;
+  border: 1px solid rgba(255,255,255,0.12) !important;
+  box-shadow: none !important;
+}
+html[data-theme='dark'] .activity-form input:focus,
+html[data-theme='dark'] .activity-form select:focus,
+html[data-theme='dark'] .activity-form textarea:focus,
+html[data-theme='dark'] .meal-form input:focus,
+html[data-theme='dark'] .meal-form select:focus,
+html[data-theme='dark'] .meal-form textarea:focus,
+html[data-theme='dark'] .insulin-dose-form input:focus,
+html[data-theme='dark'] .insulin-dose-form textarea:focus,
+html[data-theme='dark'] .glucose-form-input:focus,
+html[data-theme='dark'] .glucose-form-select:focus,
+html[data-theme='dark'] .glucose-form-unit-select:focus,
+html[data-theme='dark'] .glucose-form-textarea:focus {
+  border-color: var(--dm-accent) !important;
+  box-shadow: 0 0 0 3px rgba(0,229,255,0.15) !important;
+}
+html[data-theme='dark'] .activity-form input::placeholder,
+html[data-theme='dark'] .activity-form textarea::placeholder,
+html[data-theme='dark'] .meal-form input::placeholder,
+html[data-theme='dark'] .meal-form textarea::placeholder,
+html[data-theme='dark'] .insulin-dose-form input::placeholder,
+html[data-theme='dark'] .insulin-dose-form textarea::placeholder {
+  color: var(--text-secondary) !important;
+}
+
+/* Buttons inside forms (override gradients) */
+html[data-theme='dark'] .activity-form .submit-btn,
+html[data-theme='dark'] .activity-form .cancel-btn,
+html[data-theme='dark'] .activity-form .toggle-calculation-btn,
+html[data-theme='dark'] .meal-form .submit-btn,
+html[data-theme='dark'] .meal-form .cancel-btn,
+html[data-theme='dark'] .meal-form .add-ingredient-btn,
+html[data-theme='dark'] .meal-form .toggle-summary-btn,
+html[data-theme='dark'] .meal-form .predefined-meal-btn,
+html[data-theme='dark'] .insulin-dose-form .submit-btn,
+html[data-theme='dark'] .insulin-dose-form .cancel-btn,
+html[data-theme='dark'] .glucose-form-btn,
+html[data-theme='dark'] .glucose-form-btn-primary,
+html[data-theme='dark'] .glucose-form-btn-secondary,
+html[data-theme='dark'] .glucose-form-submit-btn {
+  background: #555555 !important;
+  color: var(--text-main) !important;
+  border: 1px solid var(--dm-border) !important;
+  box-shadow: none !important;
+}
+html[data-theme='dark'] .activity-form .submit-btn:hover,
+html[data-theme='dark'] .activity-form .cancel-btn:hover,
+html[data-theme='dark'] .activity-form .toggle-calculation-btn:hover,
+html[data-theme='dark'] .meal-form .submit-btn:hover,
+html[data-theme='dark'] .meal-form .cancel-btn:hover,
+html[data-theme='dark'] .meal-form .add-ingredient-btn:hover,
+html[data-theme='dark'] .meal-form .toggle-summary-btn:hover,
+html[data-theme='dark'] .meal-form .predefined-meal-btn:hover,
+html[data-theme='dark'] .insulin-dose-form .submit-btn:hover,
+html[data-theme='dark'] .insulin-dose-form .cancel-btn:hover,
+html[data-theme='dark'] .glucose-form-btn:hover,
+html[data-theme='dark'] .glucose-form-submit-btn:hover {
+  background: #606060 !important;
+  box-shadow: 0 0 18px rgba(0,229,255,0.25) !important;
+}
+
+/* Ingredients, summary, and auxiliary panels inside Meal/Activity forms */
+html[data-theme='dark'] .meal-form .form-section,
+html[data-theme='dark'] .meal-form .ingredient-row,
+html[data-theme='dark'] .meal-form .nutrition-summary,
+html[data-theme='dark'] .activity-form .calorie-calculation,
+html[data-theme='dark'] .activity-form .form-section,
+html[data-theme='dark'] .insulin-dose-form .form-section {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--dm-border) !important;
+  box-shadow: var(--dm-shadow) !important;
+  color: var(--text-main) !important;
+}
+
+/* Meal preset/custom description containers */
+html[data-theme='dark'] .preset-description-container,
+html[data-theme='dark'] .custom-description-container,
+html[data-theme='dark'] .description-type-toggle {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--dm-border) !important;
+  color: var(--text-main) !important;
 }
 
 

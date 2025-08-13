@@ -125,7 +125,9 @@ const InsulinImpactChart: React.FC<Props> = ({
             <Target className="card-icon" />
             <div className="card-content">
               <h4>Total Doses</h4>
-              <span className="card-value">{overallAnalysis.total_doses_analyzed}</span>
+              <span className="card-value" aria-label="total-doses">
+                {Number(overallAnalysis.total_doses_analyzed ?? 0)}
+              </span>
             </div>
           </div>
           
@@ -133,8 +135,8 @@ const InsulinImpactChart: React.FC<Props> = ({
             <TrendingDown className="card-icon" />
             <div className="card-content">
               <h4>Avg Sensitivity</h4>
-              <span className="card-value">
-                {overallAnalysis.avg_insulin_sensitivity 
+              <span className="card-value" aria-label="avg-sensitivity">
+                {overallAnalysis.avg_insulin_sensitivity !== null && overallAnalysis.avg_insulin_sensitivity !== undefined
                   ? formatGlucoseValue(convertGlucoseValue(overallAnalysis.avg_insulin_sensitivity, 'mg/dL', unit), unit)
                   : 'N/A'}
               </span>
@@ -145,8 +147,8 @@ const InsulinImpactChart: React.FC<Props> = ({
             <CheckCircle className="card-icon" />
             <div className="card-content">
               <h4>Most Effective</h4>
-              <span className="card-value">
-                {overallAnalysis.most_effective_dose_range?.replace('_', ' ') || 'N/A'}
+              <span className="card-value" aria-label="most-effective">
+                {(overallAnalysis.most_effective_dose_range || 'N/A').replace('_', ' ')}
               </span>
             </div>
           </div>
