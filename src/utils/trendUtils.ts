@@ -44,7 +44,7 @@ export const calculateEMA = (
  */
 export const calculateConfidenceInterval = (
   data: number[],
-  confidenceLevel: number = 0.95
+  _confidenceLevel: number = 0.95
 ): { lower: number; upper: number; mean: number } => {
   if (data.length < 2) {
     const value = data[0] || 0;
@@ -56,7 +56,7 @@ export const calculateConfidenceInterval = (
   const stdDev = Math.sqrt(variance);
   
   // Z-score for 95% confidence (1.96)
-  const zScore = 1.96;
+  const zScore = _confidenceLevel === 0.99 ? 2.576 : _confidenceLevel === 0.9 ? 1.645 : 1.96;
   const marginOfError = zScore * (stdDev / Math.sqrt(data.length));
   
   return {

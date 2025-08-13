@@ -56,7 +56,7 @@ const TimelineWithEventsChart: React.FC<Props> = ({ data, rangeStartMs, rangeEnd
       <div className="timeline-chart-container">
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart data={chartData} margin={{ top: 20, right: 20, left: 10, bottom: 20 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="rgba(0, 212, 255, 0.2)" />
+            <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid)" />
 
             <XAxis
               dataKey="time"
@@ -76,18 +76,19 @@ const TimelineWithEventsChart: React.FC<Props> = ({ data, rangeStartMs, rangeEnd
             />
 
             <Tooltip
-              content={({ label, payload }) => {
+              content={(info: { label?: number | string; payload?: Array<{ dataKey?: string; value?: number; payload?: Record<string, unknown> }> }) => {
+                const { label, payload } = info || {};
                 const ts = Number(label);
                 const rows: Array<{ label: string; value: string; color: string }> = [];
                 const unit = preferredUnit === 'mg/dL' ? 'mg/dL' : 'mmol/L';
-                const g = payload?.find((p: any) => p?.dataKey === 'glucose');
-                if (g && g.value != null) rows.push({ label: 'Glucose', value: `${preferredUnit === 'mg/dL' ? Number(g.value).toFixed(0) : Number(g.value).toFixed(1)} ${unit}`, color: '#00d4ff' });
-                const meal = payload?.find((p: any) => p?.dataKey === 'meal');
-                if (meal) rows.push({ label: 'Meal', value: String(meal.payload?.mealLabel || meal.payload?.label || 'meal'), color: '#00ff88' });
-                const insulin = payload?.find((p: any) => p?.dataKey === 'insulin');
-                if (insulin) rows.push({ label: 'Insulin', value: String(insulin.payload?.insulinLabel || insulin.payload?.label || 'insulin'), color: '#ff6b35' });
-                const act = payload?.find((p: any) => p?.dataKey === 'activity');
-                if (act) rows.push({ label: 'Activity', value: String(act.payload?.activityLabel || act.payload?.label || 'activity'), color: '#8a2be2' });
+                const g = payload?.find((p) => p?.dataKey === 'glucose');
+                if (g && g.value != null) rows.push({ label: 'Glucose', value: `${preferredUnit === 'mg/dL' ? Number(g.value).toFixed(0) : Number(g.value).toFixed(1)} ${unit}`, color: getComputedStyle(document.documentElement).getPropertyValue('--accent-primary').trim() || '#00d4ff' });
+                const meal = payload?.find((p) => p?.dataKey === 'meal');
+                if (meal) rows.push({ label: 'Meal', value: String(meal.payload?.mealLabel || meal.payload?.label || 'meal'), color: getComputedStyle(document.documentElement).getPropertyValue('--chart-meal').trim() || '#00ff88' });
+                const insulin = payload?.find((p) => p?.dataKey === 'insulin');
+                if (insulin) rows.push({ label: 'Insulin', value: String(insulin.payload?.insulinLabel || insulin.payload?.label || 'insulin'), color: getComputedStyle(document.documentElement).getPropertyValue('--chart-insulin').trim() || '#ff6b35' });
+                const act = payload?.find((p) => p?.dataKey === 'activity');
+                if (act) rows.push({ label: 'Activity', value: String(act.payload?.activityLabel || act.payload?.label || 'activity'), color: getComputedStyle(document.documentElement).getPropertyValue('--chart-activity').trim() || '#8a2be2' });
                 if (rows.length === 0) return null;
                 return (
                   <div className="tooltip-glucose">
@@ -105,18 +106,18 @@ const TimelineWithEventsChart: React.FC<Props> = ({ data, rangeStartMs, rangeEnd
             />
 
             {/* Target Range Reference Lines */}
-            <ReferenceLine y={targetLow} stroke="#00ff88" strokeDasharray="3 3" strokeWidth={2} />
-            <ReferenceLine y={targetHigh} stroke="#00ff88" strokeDasharray="3 3" strokeWidth={2} />
+            <ReferenceLine y={targetLow} stroke={getComputedStyle(document.documentElement).getPropertyValue('--chart-target').trim() || '#00ff88'} strokeDasharray="3 3" strokeWidth={2} />
+            <ReferenceLine y={targetHigh} stroke={getComputedStyle(document.documentElement).getPropertyValue('--chart-target').trim() || '#00ff88'} strokeDasharray="3 3" strokeWidth={2} />
 
             {/* Glucose Line */}
             <Line
               type="monotone"
               dataKey="glucose"
               name="glucose"
-              stroke="#00d4ff"
+              stroke={getComputedStyle(document.documentElement).getPropertyValue('--accent-primary').trim() || '#00d4ff'}
               strokeWidth={3}
-              dot={{ r: 4, fill: '#00d4ff', stroke: '#ffffff', strokeWidth: 1 }}
-              activeDot={{ r: 6, fill: '#00d4ff', stroke: '#ffffff', strokeWidth: 2 }}
+              dot={{ r: 4, fill: getComputedStyle(document.documentElement).getPropertyValue('--accent-primary').trim() || '#00d4ff', stroke: '#ffffff', strokeWidth: 1 }}
+              activeDot={{ r: 6, fill: getComputedStyle(document.documentElement).getPropertyValue('--accent-primary').trim() || '#00d4ff', stroke: '#ffffff', strokeWidth: 2 }}
               connectNulls
               isAnimationActive={false}
             />
@@ -125,8 +126,8 @@ const TimelineWithEventsChart: React.FC<Props> = ({ data, rangeStartMs, rangeEnd
             <Scatter
               dataKey="meal"
               name="meal"
-              fill="#00ff88"
-              stroke="#00cc6a"
+              fill={getComputedStyle(document.documentElement).getPropertyValue('--chart-meal').trim() || '#00ff88'}
+              stroke={getComputedStyle(document.documentElement).getPropertyValue('--chart-meal-stroke').trim() || '#00cc6a'}
               strokeWidth={2}
               r={8}
               shape="diamond"
@@ -135,8 +136,8 @@ const TimelineWithEventsChart: React.FC<Props> = ({ data, rangeStartMs, rangeEnd
             <Scatter
               dataKey="insulin"
               name="insulin"
-              fill="#ff6b35"
-              stroke="#f7931e"
+              fill={getComputedStyle(document.documentElement).getPropertyValue('--chart-insulin').trim() || '#ff6b35'}
+              stroke={getComputedStyle(document.documentElement).getPropertyValue('--chart-insulin-stroke').trim() || '#f7931e'}
               strokeWidth={2}
               r={8}
               shape="triangle"
@@ -145,8 +146,8 @@ const TimelineWithEventsChart: React.FC<Props> = ({ data, rangeStartMs, rangeEnd
             <Scatter
               dataKey="activity"
               name="activity"
-              fill="#8a2be2"
-              stroke="#6d28d9"
+              fill={getComputedStyle(document.documentElement).getPropertyValue('--chart-activity').trim() || '#8a2be2'}
+              stroke={getComputedStyle(document.documentElement).getPropertyValue('--chart-activity-stroke').trim() || '#6d28d9'}
               strokeWidth={2}
               r={8}
               shape="square"

@@ -1,0 +1,48 @@
+:root {
+  /* Surfaces */
+  --bg-main: linear-gradient(135deg, #f7fbff 0%, #eaf4ff 50%, #dbeafe 100%);
+  --bg-card: #ffffff;
+  --bg-card-alt: #f8fafc;
+
+  /* Text */
+  --text-main: #0f172a;
+  --text-secondary: #64748b;
+  --text-primary: #2563eb;
+  --text-on-emphasis: #ffffff;
+
+  /* Accents */
+  --accent-primary: #06b6d4;
+
+  /* Borders & Shadows */
+  --border-default: rgba(15, 23, 42, 0.08);
+  --shadow-elev-1: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --shadow-elev-2: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-elev-3: 0 8px 24px rgba(0, 0, 0, 0.12);
+
+  /* Semantic */
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --info: #3b82f6;
+  --violet: #8b5cf6;
+
+  /* Charts */
+  --chart-grid: rgba(0, 0, 0, 0.1);
+  --chart-tick: var(--text-secondary);
+  --chart-line: var(--accent-primary);
+  --chart-target: #00ff88;
+  --chart-meal: #10b981;
+  --chart-meal-stroke: #00cc6a;
+  --chart-insulin: #ff6b35;
+  --chart-insulin-stroke: #f7931e;
+  --chart-activity: #8a2be2;
+  --chart-activity-stroke: #6d28d9;
+
+  /* Pills & outlines */
+  --pill-bg: rgba(144, 202, 249, 0.1);
+  --pill-text: #1976d2;
+  --panel-outline: rgba(0, 212, 255, 0.25);
+  --panel-glow: rgba(0, 212, 255, 0.08);
+}
+
+

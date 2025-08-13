@@ -3,7 +3,7 @@ import {
   calculateEMA,
   calculateConfidenceInterval,
   calculateTrend,
-  calculateLoessSmoothing,
+  // calculateLoessSmoothing,
   detectOutliers,
   calculateSeasonality
 } from '../trendUtils';

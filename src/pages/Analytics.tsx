@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { Droplets, TrendingUp, TrendingDown, Minus } from 'lucide-react';
 import { useGlucoseUnitUtils } from '../hooks/useGlucoseUnit';
 import { useGlucoseReadings } from '../hooks/useGlucoseReadings';
@@ -8,10 +8,10 @@ import NavigationHeader from '../components/layout/NavigationHeader';
 import TimeRangeControls from '../components/dashboards/TimeRangeControls';
 import RecentGlucoseChart from '../components/dashboards/RecentGlucoseChart';
 import TimelineWithEventsChart from '../components/dashboards/TimelineWithEventsChart';
-import ImpactBarChart from '../components/dashboards/ImpactBarChart';
+// import ImpactBarChart from '../components/dashboards/ImpactBarChart';
 import InsulinImpactChart from '../components/dashboards/InsulinImpactChart';
 import './Analytics.css';
-import { ResponsiveContainer, ComposedChart, Line, XAxis, YAxis, Tooltip, CartesianGrid, ReferenceLine, Scatter, Legend } from 'recharts';
+import { ResponsiveContainer, ComposedChart, Line, XAxis, YAxis, Tooltip, CartesianGrid, /* ReferenceLine, */ Scatter, Legend } from 'recharts';
 import TimeInRangePie from '../components/dashboards/TimeInRangePie';
 import GlucoseVariabilityCard from '../components/dashboards/GlucoseVariabilityCard';
 
@@ -24,11 +24,11 @@ interface ApiTimelinePoint {
   activity?: number;
 }
 
-interface ApiTimelineEvent {
-  timestamp: string | number;
-  type: string;
-  description?: string;
-}
+// interface ApiTimelineEvent {
+//   timestamp: string | number;
+//   type: string;
+//   description?: string;
+// }
 
 const Analytics: React.FC = () => {
   const { preferredUnit, convertValue } = useGlucoseUnitUtils();
@@ -46,11 +46,11 @@ const Analytics: React.FC = () => {
 
   const { isLoading } = useGlucoseReadings(datetimeFilters);
   const [mealImpact, setMealImpact] = useState<Array<{ group: string; avg_glucose_change: number; avg_peak_delta?: number; num_meals: number }>>([]);
-  const [mealImpactMeta, setMealImpactMeta] = useState<any | null>(null);
+  const [mealImpactMeta, setMealImpactMeta] = useState<Record<string, unknown> | null>(null);
   const [mealImpactGroups, setMealImpactGroups] = useState<Array<{ key: string; n: number; avg_delta: number; peak_delta?: number; time_to_peak_min?: number; return_to_baseline_min?: number }>>([]);
-  const [mealImpactOverall, setMealImpactOverall] = useState<any | null>(null);
-  const [mealImpactTimeline, setMealImpactTimeline] = useState<Array<{ ts: string; delta_series: Array<[number, number]> }>>([]);
-  const [selectedMealIdx, setSelectedMealIdx] = useState<number>(0);
+  const [mealImpactOverall, setMealImpactOverall] = useState<Record<string, unknown> | null>(null);
+  // const [mealImpactTimeline, setMealImpactTimeline] = useState<Array<{ ts: string; delta_series: Array<[number, number]> }>>([]);
+  // const [selectedMealIdx, setSelectedMealIdx] = useState<number>(0);
   // Selected meal name (aggregates all occurrences in range)
   const [selectedMealName, setSelectedMealName] = useState<string>('');
   const [insulinImpact, setInsulinImpact] = useState<Array<{
@@ -72,10 +72,10 @@ const Analytics: React.FC = () => {
   } | null>(null);
   const [timelineReadings, setTimelineReadings] = useState<{ time: number; value: number }[]>([]);
   const [timelineEvents, setTimelineEvents] = useState<Array<{ time: number; type: string; label: string }>>([]);
-  const [seriesPoints, setSeriesPoints] = useState<Array<{ ts: number; glucose: number | null; meal: number | null; insulin: number | null; activity: number | null }>>([]);
-  const [mealGroupBy, setMealGroupBy] = useState<'time_of_day' | 'meal_type' | 'carb_range'>('time_of_day');
-  const [tirData, setTirData] = useState<any | null>(null);
-  const [variability, setVariability] = useState<any | null>(null);
+  // const [seriesPoints, setSeriesPoints] = useState<Array<{ ts: number; glucose: number | null; meal: number | null; insulin: number | null; activity: number | null }>>([]);
+  const [mealGroupBy] = useState<'time_of_day' | 'meal_type' | 'carb_range'>('time_of_day');
+  const [tirData, setTirData] = useState<Record<string, number> | null>(null);
+  const [variability, setVariability] = useState<Record<string, number | null> | null>(null);
 
   const handleChangeMode = (mode: 'hour' | 'day' | 'week' | 'custom') => {
     setRangeMode(mode);
@@ -97,8 +97,8 @@ const Analytics: React.FC = () => {
       setMealImpactMeta(r.data.meta || null);
       setMealImpactGroups(r.data.groups || []);
       setMealImpactOverall(r.data.overall || null);
-      setMealImpactTimeline(Array.isArray(r.data.timeline) ? r.data.timeline : []);
-      setSelectedMealIdx(0);
+      // setMealImpactTimeline(Array.isArray(r.data.timeline) ? r.data.timeline : []);
+      // setSelectedMealIdx(0);
     }).catch(() => {
       setMealImpact([]);
       setMealImpactMeta(null);
@@ -129,26 +129,26 @@ const Analytics: React.FC = () => {
     vparams.set('start_datetime', timeRange.startIso);
     vparams.set('end_datetime', timeRange.endIso);
     api.get(`/visualization/glucose-timeline?${vparams.toString()}`).then(r => {
-      const points = Array.isArray(r.data?.points) ? r.data.points : [];
-      if (points.length > 0) {
-        const mapped = points.map((p: ApiTimelinePoint) => ({
-          ts: typeof p.ts === 'string' ? new Date(p.ts).getTime() : Number(p.ts),
-          glucose: p.glucose ?? null,
-          meal: p.meal ?? null,
-          insulin: p.insulin ?? null,
-          activity: p.activity ?? null,
-        })).filter((p) => Number.isFinite(p.ts));
-        setSeriesPoints(mapped);
-      } else {
-        setSeriesPoints([]);
-      }
+       // const points = Array.isArray(r.data?.points) ? r.data.points : [];
+      // if (points.length > 0) {
+      //   const mapped = points.map((p: ApiTimelinePoint) => ({
+      //     ts: typeof p.ts === 'string' ? new Date(p.ts).getTime() : Number(p.ts),
+      //     glucose: p.glucose ?? null,
+      //     meal: p.meal ?? null,
+      //     insulin: p.insulin ?? null,
+      //     activity: p.activity ?? null,
+      //   })).filter((p) => Number.isFinite(p.ts));
+      //   setSeriesPoints(mapped);
+      // } else {
+      //   setSeriesPoints([]);
+      // }
 
       const timelineReadingsData = (r.data.points || []).map((p: ApiTimelinePoint) => ({
         time: (typeof p.ts === 'string' ? new Date(p.ts).getTime() : Number(p.ts)),
         value: p.glucose || 0
       })).filter((r) => r.value > 0);
 
-      const events = (r.data.events || r.data?.events || []).map((ev: any) => {
+      const events = (r.data.events || r.data?.events || []).map((ev: { timestamp: string | number; type: string; description?: string; activity_type?: string; units?: number }) => {
         const time = (typeof ev.timestamp === 'string' ? new Date(ev.timestamp).getTime() : Number(ev.timestamp));
         let label = ev.description || ev.type;
         if (ev.type === 'activity') {
@@ -163,7 +163,7 @@ const Analytics: React.FC = () => {
       const filteredEvents = events.filter((e) => e.time >= timeRange.startMs && e.time <= timeRange.endMs);
       setTimelineReadings(filteredReadings);
       setTimelineEvents(filteredEvents);
-    }).catch(() => { setTimelineReadings([]); setTimelineEvents([]); setSeriesPoints([]); });
+    }).catch(() => { setTimelineReadings([]); setTimelineEvents([]); /* setSeriesPoints([]); */ });
 
     // Time in Range
     const tirParams = new URLSearchParams();
@@ -184,7 +184,7 @@ const Analytics: React.FC = () => {
     api.get(`/analytics/glucose-variability?${gvParams.toString()}`).then(r => {
       setVariability(r.data?.variability_metrics || null);
     }).catch(() => setVariability(null));
-  }, [startDate, endDate, preferredUnit, mealGroupBy]);
+  }, [startDate, endDate, preferredUnit, mealGroupBy, convertValue]);
 
   const glucoseChartData = useMemo(() => {
     return timelineReadings
@@ -192,9 +192,9 @@ const Analytics: React.FC = () => {
       .sort((a, b) => a.ts - b.ts);
   }, [timelineReadings]);
 
-  const mealImpactData = useMemo(() => {
+  /* const mealImpactData = useMemo(() => {
     const sourceUnit = (mealImpactMeta?.requested_unit as 'mg/dL' | 'mmol/L' | undefined) || 'mg/dL';
-    return (mealImpact || []).map((g: any) => {
+    return (mealImpact || []).map((g: { group?: string; key?: string; avg_peak_delta?: number; avg_glucose_change?: number; avg_delta?: number; num_meals?: number; n?: number }) => {
       const label = g.group ?? g.key ?? '—';
       const rawDelta =
         typeof g.avg_peak_delta === 'number'
@@ -204,14 +204,14 @@ const Analytics: React.FC = () => {
           : g.avg_delta ?? 0;
       const displayPeak =
         sourceUnit === preferredUnit
-          ? rawDelta
+          ? g.avg_peak_delta ?? rawDelta
           : convertValue(rawDelta, sourceUnit, preferredUnit);
       const rawAvg = typeof g.avg_glucose_change === 'number' ? g.avg_glucose_change : g.avg_delta ?? rawDelta;
       const displayAvg = sourceUnit === preferredUnit ? rawAvg : convertValue(rawAvg, sourceUnit, preferredUnit);
       const count = g.num_meals ?? g.n ?? 0;
       return { group: label, avg: displayAvg, peak: displayPeak, count };
     });
-  }, [mealImpact, preferredUnit, mealImpactMeta]);
+  }, [mealImpact, preferredUnit, mealImpactMeta, convertValue]); */
 
   // Meal options in current range (moved below to reference filteredTimelineEvents safely)
 
@@ -242,10 +242,10 @@ const Analytics: React.FC = () => {
   }, [glucoseLineData]);
 
   // Custom tooltip to show only the glucose line value (hide extra series/fields)
-  const renderGlucoseTooltip = (info: any) => {
+  const renderGlucoseTooltip = (info: { label?: number | string; payload?: Array<{ dataKey?: string; value?: number }> }) => {
     const { label, payload } = info || {};
     if (!payload || payload.length === 0) return null;
-    const lineItem = payload.find((p: any) => p && p.dataKey === 'value');
+    const lineItem = payload.find((p) => p && p.dataKey === 'value');
     if (!lineItem) return null;
     const ts = Number(label);
     const val = Number(lineItem.value);
@@ -268,7 +268,7 @@ const Analytics: React.FC = () => {
     );
   };
 
-  const nearestY = (t: number) => {
+  const nearestY = useCallback((t: number) => {
     if (glucoseLineData.length === 0) return null;
     let best = glucoseLineData[0];
     let minDiff = Math.abs(glucoseLineData[0].ts - t);
@@ -277,13 +277,13 @@ const Analytics: React.FC = () => {
       if (d < minDiff) { best = p; minDiff = d; }
     }
     return best.value;
-  };
+  }, [glucoseLineData]);
 
   // selectedMealPoints is defined after filteredTimelineEvents to avoid initialization order issues.
 
   const trendInfo = useMemo(() => {
     if (recentGlucoseSeries.length < 2) {
-      return { label: 'Not enough data', color: '#64748b', icon: <Minus className="dashboard-trend-icon normal" /> };
+      return { label: 'Not enough data', color: 'var(--text-secondary)', icon: <Minus className="dashboard-trend-icon normal" /> };
     }
     const first = recentGlucoseSeries[0].value;
     const last = recentGlucoseSeries[recentGlucoseSeries.length - 1].value;
@@ -291,12 +291,12 @@ const Analytics: React.FC = () => {
     const absDelta = Math.abs(delta);
     const threshold = 10;
     if (delta > threshold) {
-      return { label: `Rising (+${absDelta.toFixed(0)})`, color: '#16a34a', icon: <TrendingUp className="dashboard-trend-icon high" /> };
+      return { label: `Rising (+${absDelta.toFixed(0)})`, color: 'var(--success)', icon: <TrendingUp className="dashboard-trend-icon high" /> };
     }
     if (delta < -threshold) {
-      return { label: `Falling (-${absDelta.toFixed(0)})`, color: '#ef4444', icon: <TrendingDown className="dashboard-trend-icon low" /> };
+      return { label: `Falling (-${absDelta.toFixed(0)})`, color: 'var(--danger)', icon: <TrendingDown className="dashboard-trend-icon low" /> };
     }
-    return { label: 'Stable', color: '#64748b', icon: <Minus className="dashboard-trend-icon normal" /> };
+    return { label: 'Stable', color: 'var(--text-secondary)', icon: <Minus className="dashboard-trend-icon normal" /> };
   }, [recentGlucoseSeries]);
 
   const trendClass = useMemo(() => {
@@ -321,11 +321,11 @@ const Analytics: React.FC = () => {
   );
 
   // Meal options in current range (depends on filteredTimelineEvents)
-  const mealOptions = useMemo(() => {
-    return filteredTimelineEvents
-      .filter(e => e.type === 'meal')
-      .map(e => ({ ts: e.time, label: new Date(e.time).toLocaleString() }));
-  }, [filteredTimelineEvents]);
+  // const mealOptions = useMemo(() => {
+  //   return filteredTimelineEvents
+  //     .filter(e => e.type === 'meal')
+  //     .map(e => ({ ts: e.time, label: new Date(e.time).toLocaleString() }));
+  // }, [filteredTimelineEvents]);
 
   // Unique meal names for selection
   const mealNameOptions = useMemo(() => {
@@ -347,7 +347,7 @@ const Analytics: React.FC = () => {
     return times
       .map(ts => ({ ts, y: nearestY(ts) }))
       .filter(p => p.y !== null) as Array<{ ts: number; y: number }>;
-  }, [selectedMealName, filteredTimelineEvents, glucoseLineData]);
+  }, [selectedMealName, filteredTimelineEvents, nearestY]);
 
   const baselineY = 100;
   const timelineSeriesData = useMemo(() => {
@@ -517,7 +517,7 @@ const Analytics: React.FC = () => {
                         <XAxis dataKey="ts" type="number" domain={[safeRangeStartMs, safeRangeEndMs]}
                                tickFormatter={(ts) => new Date(Number(ts)).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} />
                         <YAxis domain={yDomain} label={{ value: `Glucose (${preferredUnit})`, angle: -90, position: 'insideLeft' }} />
-                        <Tooltip content={renderGlucoseTooltip as any} />
+                        <Tooltip content={renderGlucoseTooltip} />
                         <Legend />
                         <Line type="monotone" dataKey="value" name={`Glucose (${preferredUnit})`} stroke="#06b6d4" dot={false} />
                         {/* Render marker series always so legend/size stay stable */}

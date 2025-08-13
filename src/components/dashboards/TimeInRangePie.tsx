@@ -19,14 +19,14 @@ interface Props {
 }
 
 const COLORS = {
-  very_low: '#ef4444',
-  low: '#f59e0b',
-  in_range: '#10b981',
-  high: '#3b82f6',
-  very_high: '#8b5cf6',
-};
+  very_low: 'var(--danger)',
+  low: 'var(--warning)',
+  in_range: 'var(--success)',
+  high: 'var(--info)',
+  very_high: 'var(--violet)'
+} as const;
 
-const TimeInRangePie: React.FC<Props> = ({ tir, unit, height = 280, outerRadius = 90, innerRadius = 40, showLegend = true }) => {
+const TimeInRangePie: React.FC<Props> = ({ tir, height = 280, outerRadius = 90, innerRadius = 40, showLegend = true }) => {
   const data = [
     { name: 'Very Low', value: tir.very_low, key: 'very_low' },
     { name: 'Low', value: tir.low, key: 'low' },
@@ -35,9 +35,9 @@ const TimeInRangePie: React.FC<Props> = ({ tir, unit, height = 280, outerRadius 
     { name: 'Very High', value: tir.very_high, key: 'very_high' },
   ];
 
-  const renderTooltip = ({ active, payload }: any) => {
+  const renderTooltip = ({ active, payload }: { active?: boolean; payload?: Array<{ name?: string; value?: number; fill?: string }> }) => {
     if (!active || !payload || payload.length === 0) return null;
-    const p = payload[0];
+    const p = payload[0] as { name?: string; value?: number; fill?: string };
     return (
       <div className="tooltip-glucose">
         <div className="tooltip-glucose-row">
@@ -50,7 +50,7 @@ const TimeInRangePie: React.FC<Props> = ({ tir, unit, height = 280, outerRadius 
   };
 
   const RADIAN = Math.PI / 180;
-  const renderLabel = (props: any) => {
+  const renderLabel = (props: { cx: number; cy: number; midAngle: number; innerRadius: number; outerRadius: number; payload: { value?: number } }) => {
     const { cx, cy, midAngle, innerRadius, outerRadius, payload } = props;
     const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
     const x = cx + radius * Math.cos(-midAngle * RADIAN);
@@ -58,7 +58,7 @@ const TimeInRangePie: React.FC<Props> = ({ tir, unit, height = 280, outerRadius 
     const value = Number(payload.value);
     if (!value || value <= 0) return null;
     return (
-      <text x={x} y={y} fill="#ffffff" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central" style={{ fontSize: 12, fontWeight: 700 }}>
+      <text x={x} y={y} fill={getComputedStyle(document.documentElement).getPropertyValue('--text-on-emphasis').trim() || '#ffffff'} textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central" style={{ fontSize: 12, fontWeight: 700 }}>
         {`${Math.round(value)}%`}
       </text>
     );
@@ -68,12 +68,12 @@ const TimeInRangePie: React.FC<Props> = ({ tir, unit, height = 280, outerRadius 
     <div className="chart-container" style={{ height }}>
       <ResponsiveContainer width="100%" height="100%">
         <PieChart>
-          <Pie data={data} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={outerRadius} innerRadius={innerRadius} stroke="none" labelLine={false} label={renderLabel as any}>
+          <Pie data={data} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={outerRadius} innerRadius={innerRadius} stroke="none" labelLine={false} label={(p: { cx: number; cy: number; midAngle: number; innerRadius: number; outerRadius: number; payload: { value?: number } }) => renderLabel(p)}>
             {data.map((entry) => (
-              <Cell key={entry.key} fill={(COLORS as any)[entry.key]} />
+              <Cell key={entry.key} fill={COLORS[entry.key as keyof typeof COLORS]} />
             ))}
           </Pie>
-          <Tooltip content={renderTooltip as any} />
+          <Tooltip content={renderTooltip} />
           {showLegend && <Legend />}
         </PieChart>
       </ResponsiveContainer>

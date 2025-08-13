@@ -14,7 +14,7 @@ const Dashboard: React.FC = () => {
     const navigate = useNavigate();
     const { data: readings = [], isLoading } = useRecentGlucoseReadings();
     const { convertReading, getReadingStatus, preferredUnit, getRangeLabels } = useGlucoseUnitUtils();
-    const [tirData, setTirData] = React.useState<any | null>(null);
+    const [tirData, setTirData] = React.useState<Record<string, number> | null>(null);
     const rangeLabels = getRangeLabels();
 
     // Stats window: last 7 days
@@ -24,7 +24,7 @@ const Dashboard: React.FC = () => {
     const statsStartStr = statsStart.toISOString().split('T')[0];
     const statsEndStr = statsEnd.toISOString().split('T')[0];
     const { data: glucoseStats } = useGlucoseStats({ start_date: statsStartStr, end_date: statsEndStr });
-    const [variability, setVariability] = React.useState<any | null>(null);
+    const [variability, setVariability] = React.useState<Record<string, number | null> | null>(null);
 
     // Get recent readings (last 5), ordered by displayed time (newest first)
     const recentReadings = [...readings]
@@ -96,10 +96,7 @@ const Dashboard: React.FC = () => {
                                         <span className="dashboard-unit-display">Average: —</span>
                                     );
                                 }
-                                const avgDisplay = preferredUnit === 'mg/dL' ? Math.round(
-                                    preferredUnit === 'mg/dL' ? avgSrc : 0
-                                ) : 0; // placeholder, will be replaced below
-                                const avgConverted = preferredUnit === 'mg/dL' ? avgSrc : (avgSrc != null ? (useGlucoseUnitUtils().convertValue(avgSrc, 'mg/dL', 'mmol/L')) : null);
+                                const avgConverted = preferredUnit === 'mg/dL' ? avgSrc : (avgSrc != null ? (convertReading({ reading: avgSrc, unit: 'mg/dL', reading_time: new Date().toISOString(), id: -1 }).displayValue) : null);
                                 const formattedAvg = avgConverted == null ? '—' : (preferredUnit === 'mg/dL' ? Math.round(avgConverted).toString() : avgConverted.toFixed(1));
                                 return (
                                     <span className="dashboard-unit-display">Average: {formattedAvg} {preferredUnit}</span>
