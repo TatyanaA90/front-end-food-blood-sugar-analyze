@@ -1,0 +1,584 @@
+/* Unified Dark Mode overrides (activated when html[data-theme='dark']) */
+
+html[data-theme='dark'] {
+  /* Core palette */
+  --bg-main: #4A4A4A;         /* Graphite Gray */
+  --bg-card: #3C3C3C;         /* Panel/card */
+  --bg-card-alt: #333333;     /* Deeper panel */
+  --text-main: #E0E0E0;       /* High-contrast text */
+  --text-secondary: #B0B7C3;  /* Cool silver */
+  --accent-primary: #00E5FF;  /* Neon accent */
+
+  /* Back-compat for earlier rules */
+  --dm-bg: var(--bg-main);
+  --dm-panel: var(--bg-card);
+  --dm-border: rgba(255,255,255,0.08);
+  --dm-text: var(--text-main);
+  --dm-muted: var(--text-secondary);
+  --dm-accent: var(--accent-primary);
+  --dm-shadow: 0 8px 24px rgba(0,0,0,0.35);
+
+  /* Chart vars */
+  --chart-grid-dark: rgba(255,255,255,0.15);
+  --chart-tick-dark: var(--text-secondary);
+  --chart-line-dark: var(--accent-primary);
+}
+
+/* Base */
+html[data-theme='dark'],
+html[data-theme='dark'] body {
+  background: var(--bg-main);
+  color: var(--text-main);
+}
+
+/* Layout/header */
+html[data-theme='dark'] .layout { background: var(--dm-bg); }
+html[data-theme='dark'] .navigation-header { background: #3c3c3c; color: var(--text-main); }
+html[data-theme='dark'] .navbar { background: #3c3c3c; }
+html[data-theme='dark'] .navbar-title { color: var(--text-main); }
+html[data-theme='dark'] .navbar-username, 
+html[data-theme='dark'] .navbar-user-icon { color: var(--text-secondary); }
+html[data-theme='dark'] .navigation-header .navigation-title {
+  color: #00d4ff !important;
+  font-weight: 500 !important;
+  font-size: 1.5rem !important;
+  text-shadow: none !important;
+}
+html[data-theme='dark'] .navbar .navbar-home-icon { color: #1976d2 !important; }
+html[data-theme='dark'] .navigation-header .navigation-header-icon { color: var(--text-main) !important; background: rgba(255,255,255,0.06) !important; }
+
+/* Cards/containers */
+html[data-theme='dark'] .dashboard-card,
+html[data-theme='dark'] .glucose-readings-filters,
+html[data-theme='dark'] .glucose-reading-card,
+html[data-theme='dark'] .insulin-doses-card,
+html[data-theme='dark'] .recommendations,
+html[data-theme='dark'] .recommendation-item,
+html[data-theme='dark'] .summary-card {
+  background: var(--bg-card) !important;
+  border: 2px solid rgba(0,229,255,0.2) !important;
+  box-shadow: 0 0 0 1px rgba(0,229,255,0.06), 0 0 24px rgba(0,229,255,0.08) !important;
+  color: var(--text-main);
+}
+
+/* Section titles/dividers */
+html[data-theme='dark'] .dashboard-section-title { color: var(--text-main); border-bottom: 2px solid var(--dm-border); text-shadow: none; }
+html[data-theme='dark'] .dashboard-section-title::after { background: linear-gradient(90deg, transparent, var(--accent-primary), transparent) !important; box-shadow: 0 0 20px rgba(0,229,255,0.35) !important; }
+/* Animated sweep line for page section titles across pages */
+@keyframes dmSweep {
+  0%, 100% { left: -100%; }
+  50% { left: 100%; }
+}
+html[data-theme='dark'] .dashboard-section-title::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: -100%;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
+  animation: dmSweep 3s ease-in-out infinite;
+}
+
+/* NavigationHeader static subtle lines (no animation) */
+html[data-theme='dark'] .navigation-header .navigation-title { position: relative; padding-bottom: 12px; }
+html[data-theme='dark'] .navigation-header .navigation-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgba(0,229,255,0.18);
+}
+
+/* Generic section header titles (Activities/Meals list headers) */
+html[data-theme='dark'] .header-title h2 { position: relative; padding-bottom: 12px; }
+html[data-theme='dark'] .header-title h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgba(0,229,255,0.18);
+}
+
+/* Buttons */
+html[data-theme='dark'] .navbar-button,
+html[data-theme='dark'] .glucose-readings-add-btn,
+html[data-theme='dark'] .chart-btn,
+html[data-theme='dark'] .time-range-btn,
+html[data-theme='dark'] .dashboard-action-button {
+  background: #555555;
+  color: var(--text-main);
+  border: 1px solid var(--dm-border);
+}
+html[data-theme='dark'] .navbar-button:hover,
+html[data-theme='dark'] .glucose-readings-add-btn:hover,
+html[data-theme='dark'] .chart-btn:hover,
+html[data-theme='dark'] .time-range-btn:hover,
+html[data-theme='dark'] .dashboard-action-button:hover {
+  background: #606060;
+  box-shadow: 0 0 18px rgba(0, 229, 255, 0.25);
+}
+html[data-theme='dark'] .chart-btn.active,
+html[data-theme='dark'] .time-range-btn.active { border-color: var(--accent-primary); }
+
+/* Navigation header back button */
+html[data-theme='dark'] .navigation-back-button,
+html[data-theme='dark'] .back-button {
+  background: #555555 !important;
+  color: var(--text-main) !important;
+  border: 1px solid var(--dm-border) !important;
+  box-shadow: var(--dm-shadow) !important;
+}
+html[data-theme='dark'] .navigation-back-button:hover,
+html[data-theme='dark'] .back-button:hover {
+  background: #606060 !important;
+  box-shadow: 0 0 18px rgba(0,229,255,0.25) !important;
+}
+html[data-theme='dark'] .navigation-header .back-icon {
+  color: var(--text-main) !important;
+}
+
+/* Dashboard cards & stats */
+html[data-theme='dark'] .dashboard-stat-item,
+html[data-theme='dark'] .dashboard-reading-item {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--dm-border) !important;
+  box-shadow: var(--dm-shadow) !important;
+}
+
+html[data-theme='dark'] .dashboard-reading-item:hover,
+html[data-theme='dark'] .dashboard-stat-item:hover { box-shadow: 0 12px 28px rgba(0,0,0,0.45); }
+
+/* ===== Global generic fallbacks for ALL pages (scoped under .layout) ===== */
+/* Cards and panels across pages */
+html[data-theme='dark'] .layout [class*='card'],
+html[data-theme='dark'] .layout [class*='panel'],
+html[data-theme='dark'] .layout [class*='container-card'] {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--dm-border) !important;
+  box-shadow: var(--dm-shadow) !important;
+  color: var(--text-main);
+}
+
+/* Page wrappers that force light gradients (Activities, etc.) */
+html[data-theme='dark'] .activities-page,
+html[data-theme='dark'] .activities-error,
+html[data-theme='dark'] .delete-confirmation-modal,
+html[data-theme='dark'] .notification.success,
+html[data-theme='dark'] .notification.error,
+html[data-theme='dark'] .error-details,
+html[data-theme='dark'] .modal-actions .cancel-btn,
+html[data-theme='dark'] .modal-actions .delete-btn {
+  background: var(--bg-card) !important;
+  color: var(--text-main) !important;
+  border: 1px solid var(--dm-border) !important;
+  box-shadow: var(--dm-shadow) !important;
+}
+
+/* Section banners/headers that ship with light gradient */
+html[data-theme='dark'] .activities-banner,
+html[data-theme='dark'] .glucose-readings-header,
+html[data-theme='dark'] .meals-banner,
+html[data-theme='dark'] .profile-banner,
+html[data-theme='dark'] .insulin-doses-banner,
+html[data-theme='dark'] .user-banner,
+html[data-theme='dark'] .navigation-header,
+html[data-theme='dark'] .navbar {
+  background: var(--bg-card) !important;
+  box-shadow: var(--dm-shadow) !important;
+  color: var(--text-main) !important;
+}
+
+/* Meals and Insulin Doses pages (page wrappers that use light gradients) */
+html[data-theme='dark'] .meals-page,
+html[data-theme='dark'] .meals-error,
+html[data-theme='dark'] .insulin-doses-page,
+html[data-theme='dark'] .insulin-doses-error {
+  background: var(--bg-main) !important;
+}
+
+/* Filter bars and toolbars */
+html[data-theme='dark'] .layout [class*='filter'],
+html[data-theme='dark'] .layout [class*='toolbar'] {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--dm-border) !important;
+  box-shadow: var(--dm-shadow) !important;
+}
+
+/* Header/title wrappers that use light gradients */
+html[data-theme='dark'] .layout [class*='header'],
+html[data-theme='dark'] .layout [class*='-header'],
+html[data-theme='dark'] .layout [class*='banner'],
+html[data-theme='dark'] .layout [class*='title-wrap'] {
+  background: var(--bg-card) !important;
+  color: var(--text-main) !important;
+  box-shadow: var(--dm-shadow) !important;
+}
+
+/* Lists/rows/cards frequently styled with light backgrounds */
+html[data-theme='dark'] .layout [class*='-card'],
+html[data-theme='dark'] .layout [class*='-row'],
+html[data-theme='dark'] .layout [class*='-item'],
+html[data-theme='dark'] .layout [class*='list-'] {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--dm-border) !important;
+  box-shadow: var(--dm-shadow) !important;
+}
+
+/* Dividers and hr */
+html[data-theme='dark'] .layout hr,
+html[data-theme='dark'] .layout .divider,
+html[data-theme='dark'] .layout [class*='divider'] {
+  border-color: var(--dm-border) !important;
+  background: var(--dm-border) !important;
+}
+
+/* Buttons */
+html[data-theme='dark'] .layout button,
+html[data-theme='dark'] .layout .btn,
+html[data-theme='dark'] .layout [class*='-btn'] {
+  background: #555555;
+  color: var(--text-main);
+  border: 1px solid var(--dm-border);
+}
+html[data-theme='dark'] .layout button:hover,
+html[data-theme='dark'] .layout .btn:hover,
+html[data-theme='dark'] .layout [class*='-btn']:hover { background: #606060; box-shadow: 0 0 18px rgba(0,229,255,0.25); }
+
+/* Inputs/selects */
+html[data-theme='dark'] .layout input,
+html[data-theme='dark'] .layout select,
+html[data-theme='dark'] .layout textarea {
+  background: #2f2f2f !important;
+  color: var(--text-main) !important;
+  border: 1px solid rgba(255,255,255,0.1) !important;
+}
+html[data-theme='dark'] .layout input::placeholder,
+html[data-theme='dark'] .layout textarea::placeholder { color: var(--text-secondary); }
+
+/* Charts – containers */
+html[data-theme='dark'] .timeline-with-events-chart,
+html[data-theme='dark'] .chart-container,
+html[data-theme='dark'] .insulin-impact-chart {
+  background: linear-gradient(135deg, #333333, #3b3b3b) !important;
+  border: 1px solid var(--dm-border) !important;
+  box-shadow: var(--dm-shadow) !important;
+}
+
+/* Charts – ticks/grid colors */
+html[data-theme='dark'] .recharts-xAxis .recharts-cartesian-axis-tick-value,
+html[data-theme='dark'] .recharts-yAxis .recharts-cartesian-axis-tick-value { fill: var(--chart-tick-dark) !important; text-shadow: none !important; }
+html[data-theme='dark'] .recharts-cartesian-grid-horizontal line,
+html[data-theme='dark'] .recharts-cartesian-grid-vertical line { stroke: var(--chart-grid-dark) !important; }
+
+/* Recommendations card title */
+html[data-theme='dark'] .recommendations h4 { color: var(--dm-accent); text-shadow: none; }
+
+/* Glucose Readings – search panel and filters */
+html[data-theme='dark'] .glucose-readings-filters {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--dm-border) !important;
+  box-shadow: var(--dm-shadow) !important;
+  color: var(--text-main) !important;
+}
+html[data-theme='dark'] .glucose-readings-search {
+  background: #2f2f2f !important;
+  border-color: var(--dm-border) !important;
+}
+html[data-theme='dark'] .glucose-readings-search-input {
+  color: var(--text-main) !important;
+}
+html[data-theme='dark'] .glucose-readings-search-input::placeholder {
+  color: var(--text-secondary) !important;
+}
+html[data-theme='dark'] .glucose-readings-filter-select,
+html[data-theme='dark'] .glucose-readings-date-input {
+  background: #2f2f2f !important;
+  color: var(--text-main) !important;
+  border-color: var(--dm-border) !important;
+}
+html[data-theme='dark'] .glucose-readings-filter-select:focus,
+html[data-theme='dark'] .glucose-readings-date-input:focus {
+  border-color: var(--dm-accent) !important;
+  box-shadow: 0 0 0 3px rgba(0,229,255,0.15) !important;
+}
+html[data-theme='dark'] .glucose-readings-sort-btn {
+  background: #555555 !important;
+  color: var(--text-main) !important;
+  box-shadow: none !important;
+}
+html[data-theme='dark'] .glucose-readings-sort-btn:hover {
+  background: #606060 !important;
+  box-shadow: 0 0 18px rgba(0,229,255,0.25) !important;
+}
+
+/* Glucose Readings – text colors aligned with Unit: mg/dL (secondary text) */
+html[data-theme='dark'] .glucose-readings-title { color: #ffffff !important; }
+html[data-theme='dark'] .glucose-readings-subtitle,
+html[data-theme='dark'] .glucose-reading-unit,
+html[data-theme='dark'] .glucose-reading-detail,
+html[data-theme='dark'] .glucose-readings-filter-controls label {
+  color: var(--text-secondary) !important;
+}
+html[data-theme='dark'] .glucose-reading-number { color: #ffffff !important; }
+html[data-theme='dark'] .glucose-reading-action-btn { color: var(--text-secondary) !important; }
+html[data-theme='dark'] .glucose-readings-title-section h1,
+html[data-theme='dark'] .glucose-readings-title-section h2 { color: #ffffff !important; }
+html[data-theme='dark'] .glucose-readings-header .glucose-readings-subtitle { color: var(--text-secondary) !important; }
+
+/* ===== Meals (lists, ingredients) ===== */
+html[data-theme='dark'] .meal-list-header,
+html[data-theme='dark'] .meal-card,
+html[data-theme='dark'] .filters-panel,
+html[data-theme='dark'] .nutrition-info,
+html[data-theme='dark'] .meal-note {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--dm-border) !important;
+  box-shadow: var(--dm-shadow) !important;
+  color: var(--text-main) !important;
+}
+html[data-theme='dark'] .header-title h2,
+html[data-theme='dark'] .meal-title h3 { color: #ffffff !important; }
+html[data-theme='dark'] .meal-time,
+html[data-theme='dark'] .nutrition-label,
+html[data-theme='dark'] .filter-group label,
+html[data-theme='dark'] .meal-list-loading p,
+html[data-theme='dark'] .empty-state p { color: var(--text-secondary) !important; }
+html[data-theme='dark'] .meal-count,
+html[data-theme='dark'] .meal-type,
+html[data-theme='dark'] .nutrition-value { color: var(--text-main) !important; }
+html[data-theme='dark'] .search-input { background: #2f2f2f !important; color: var(--text-main) !important; border-color: var(--dm-border) !important; }
+html[data-theme='dark'] .search-input::placeholder { color: var(--text-secondary) !important; }
+html[data-theme='dark'] .quick-sort-btn,
+html[data-theme='dark'] .filter-toggle-btn,
+html[data-theme='dark'] .sort-btn,
+html[data-theme='dark'] .add-meal-btn,
+html[data-theme='dark'] .add-first-meal-btn { background: #555555 !important; color: var(--text-main) !important; border: 1px solid var(--dm-border) !important; box-shadow: none !important; }
+html[data-theme='dark'] .quick-sort-btn:hover,
+html[data-theme='dark'] .filter-toggle-btn:hover,
+html[data-theme='dark'] .filter-toggle-btn.active,
+html[data-theme='dark'] .sort-btn:hover,
+html[data-theme='dark'] .sort-btn.active,
+html[data-theme='dark'] .add-meal-btn:hover,
+html[data-theme='dark'] .add-first-meal-btn:hover { background: #606060 !important; box-shadow: 0 0 18px rgba(0,229,255,0.25) !important; }
+
+/* ===== Activities ===== */
+html[data-theme='dark'] .activities-page,
+html[data-theme='dark'] .activities-error { background: var(--bg-main) !important; }
+html[data-theme='dark'] .error-container h2 { color: #ffffff !important; }
+html[data-theme='dark'] .error-container p,
+html[data-theme='dark'] .error-details { color: var(--text-secondary) !important; }
+html[data-theme='dark'] .delete-confirmation-modal { background: var(--bg-card) !important; border: 1px solid var(--dm-border) !important; }
+html[data-theme='dark'] .modal-header h3 { color: #ffffff !important; }
+html[data-theme='dark'] .modal-content p { color: var(--text-secondary) !important; }
+html[data-theme='dark'] .modal-actions .cancel-btn,
+html[data-theme='dark'] .modal-actions .delete-btn { background: #555555 !important; color: var(--text-main) !important; border: 1px solid var(--dm-border) !important; }
+html[data-theme='dark'] .modal-actions .cancel-btn:hover,
+html[data-theme='dark'] .modal-actions .delete-btn:hover { background: #606060 !important; box-shadow: 0 0 18px rgba(0,229,255,0.25) !important; }
+/* Activity list header/cards and text contrast */
+html[data-theme='dark'] .activity-list-header,
+html[data-theme='dark'] .filters-panel,
+html[data-theme='dark'] .activity-card,
+html[data-theme='dark'] .activity-stats .stat-item,
+html[data-theme='dark'] .activity-notes,
+html[data-theme='dark'] .empty-state,
+html[data-theme='dark'] .activity-list-loading {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--dm-border) !important;
+  box-shadow: var(--dm-shadow) !important;
+  color: var(--text-main) !important;
+}
+html[data-theme='dark'] .header-title h2,
+html[data-theme='dark'] .activity-title h3,
+html[data-theme='dark'] .empty-state h3 { color: #ffffff !important; }
+html[data-theme='dark'] .activity-time,
+html[data-theme='dark'] .stat-label,
+html[data-theme='dark'] .empty-state p { color: var(--text-secondary) !important; }
+html[data-theme='dark'] .stat-value { color: #ffffff !important; }
+html[data-theme='dark'] .search-input { background: #2f2f2f !important; color: var(--text-main) !important; border-color: var(--dm-border) !important; }
+html[data-theme='dark'] .search-input::placeholder { color: var(--text-secondary) !important; }
+html[data-theme='dark'] .add-activity-btn,
+html[data-theme='dark'] .filter-toggle-btn,
+html[data-theme='dark'] .sort-btn,
+html[data-theme='dark'] .add-first-activity-btn,
+html[data-theme='dark'] .edit-btn,
+html[data-theme='dark'] .delete-btn { background: #555555 !important; color: var(--text-main) !important; border: 1px solid var(--dm-border) !important; box-shadow: none !important; }
+html[data-theme='dark'] .add-activity-btn:hover,
+html[data-theme='dark'] .filter-toggle-btn:hover,
+html[data-theme='dark'] .filter-toggle-btn.active,
+html[data-theme='dark'] .sort-btn:hover,
+html[data-theme='dark'] .sort-btn.active,
+html[data-theme='dark'] .add-first-activity-btn:hover,
+html[data-theme='dark'] .edit-btn:hover,
+html[data-theme='dark'] .delete-btn:hover { background: #606060 !important; box-shadow: 0 0 18px rgba(0,229,255,0.25) !important; }
+
+/* ===== Insulin Doses List ===== */
+html[data-theme='dark'] .insulin-dose-list-container .search-input { background: #2f2f2f !important; color: var(--text-main) !important; border-color: var(--dm-border) !important; }
+html[data-theme='dark'] .insulin-dose-list-container .search-input::placeholder { color: var(--text-secondary) !important; }
+html[data-theme='dark'] .insulin-dose-list-container .quick-sort-btn,
+html[data-theme='dark'] .insulin-dose-list-container .filter-toggle-btn,
+html[data-theme='dark'] .insulin-dose-list-container .sort-btn,
+html[data-theme='dark'] .insulin-dose-list-container .add-dose-btn,
+html[data-theme='dark'] .insulin-dose-list-container .add-first-dose-btn { background: #555555 !important; color: var(--text-main) !important; border: 1px solid var(--dm-border) !important; box-shadow: none !important; }
+html[data-theme='dark'] .insulin-dose-list-container .quick-sort-btn:hover,
+html[data-theme='dark'] .insulin-dose-list-container .filter-toggle-btn:hover,
+html[data-theme='dark'] .insulin-dose-list-container .filter-toggle-btn.active,
+html[data-theme='dark'] .insulin-dose-list-container .sort-btn:hover,
+html[data-theme='dark'] .insulin-dose-list-container .sort-btn.active,
+html[data-theme='dark'] .insulin-dose-list-container .add-dose-btn:hover,
+html[data-theme='dark'] .insulin-dose-list-container .add-first-dose-btn:hover { background: #606060 !important; box-shadow: 0 0 18px rgba(0,229,255,0.25) !important; }
+html[data-theme='dark'] .insulin-dose-card,
+html[data-theme='dark'] .dose-notes { background: var(--bg-card) !important; border: 1px solid var(--dm-border) !important; box-shadow: var(--dm-shadow) !important; }
+html[data-theme='dark'] .dose-title h3,
+html[data-theme='dark'] .stat-value { color: #ffffff !important; }
+html[data-theme='dark'] .dose-time,
+html[data-theme='dark'] .stat-label { color: var(--text-secondary) !important; }
+
+/* ===== Profile – Glucose Unit Section ===== */
+html[data-theme='dark'] .glucose-unit-section,
+html[data-theme='dark'] .glucose-range-item,
+html[data-theme='dark'] .glucose-unit-ranges,
+html[data-theme='dark'] .glucose-unit-note { background: var(--bg-card) !important; border: 1px solid var(--dm-border) !important; box-shadow: var(--dm-shadow) !important; }
+html[data-theme='dark'] .glucose-unit-title { color: #ffffff !important; }
+html[data-theme='dark'] .glucose-unit-info,
+html[data-theme='dark'] .glucose-unit-label,
+html[data-theme='dark'] .glucose-unit-ranges h4,
+html[data-theme='dark'] .glucose-range-label,
+html[data-theme='dark'] .glucose-unit-note p { color: var(--text-secondary) !important; }
+html[data-theme='dark'] .glucose-range-value { color: #ffffff !important; }
+html[data-theme='dark'] .glucose-unit-select,
+html[data-theme='dark'] .profile-unit-select,
+html[data-theme='dark'] .glucose-form-unit-select { background: #2f2f2f !important; color: var(--text-main) !important; border-color: var(--dm-border) !important; }
+html[data-theme='dark'] .glucose-unit-select:focus,
+html[data-theme='dark'] .profile-unit-select:focus,
+html[data-theme='dark'] .glucose-form-unit-select:focus { border-color: var(--dm-accent) !important; box-shadow: 0 0 0 3px rgba(0,229,255,0.15) !important; }
+
+/* ===== Profile (general) ===== */
+html[data-theme='dark'] .profile-card {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--dm-border) !important;
+  box-shadow: var(--dm-shadow) !important;
+  color: var(--text-main) !important;
+}
+html[data-theme='dark'] .profile-card-title { color: #ffffff !important; }
+html[data-theme='dark'] .profile-label,
+html[data-theme='dark'] .profile-readonly-note,
+html[data-theme='dark'] .profile-modal-text,
+html[data-theme='dark'] .profile-admin-description,
+html[data-theme='dark'] .danger-action-description,
+html[data-theme='dark'] .danger-action-list { color: var(--text-secondary) !important; }
+html[data-theme='dark'] .profile-value,
+html[data-theme='dark'] .danger-action-title,
+html[data-theme='dark'] .profile-modal-title { color: #ffffff !important; }
+html[data-theme='dark'] .profile-input,
+html[data-theme='dark'] .profile-select,
+html[data-theme='dark'] .profile-weight-input {
+  background: #2f2f2f !important;
+  color: var(--text-main) !important;
+  border: 1px solid var(--dm-border) !important;
+}
+html[data-theme='dark'] .profile-input::placeholder,
+html[data-theme='dark'] .profile-weight-input::placeholder { color: var(--text-secondary) !important; }
+html[data-theme='dark'] .password-toggle-btn { color: var(--text-secondary) !important; }
+html[data-theme='dark'] .profile-input:focus,
+html[data-theme='dark'] .profile-select:focus,
+html[data-theme='dark'] .profile-weight-input:focus { border-color: var(--dm-accent) !important; box-shadow: 0 0 0 3px rgba(0,229,255,0.15) !important; }
+html[data-theme='dark'] .profile-edit-btn,
+html[data-theme='dark'] .profile-admin-btn,
+html[data-theme='dark'] .profile-save-btn,
+html[data-theme='dark'] .profile-cancel-btn,
+html[data-theme='dark'] .profile-login-btn,
+html[data-theme='dark'] .profile-delete-btn,
+html[data-theme='dark'] .profile-modal-cancel,
+html[data-theme='dark'] .profile-modal-confirm {
+  background: #555555 !important;
+  color: var(--text-main) !important;
+  border: 1px solid var(--dm-border) !important;
+  box-shadow: none !important;
+}
+html[data-theme='dark'] .profile-edit-btn:hover,
+html[data-theme='dark'] .profile-admin-btn:hover,
+html[data-theme='dark'] .profile-save-btn:hover,
+html[data-theme='dark'] .profile-cancel-btn:hover,
+html[data-theme='dark'] .profile-login-btn:hover,
+html[data-theme='dark'] .profile-delete-btn:hover,
+html[data-theme='dark'] .profile-modal-cancel:hover,
+html[data-theme='dark'] .profile-modal-confirm:hover {
+  background: #606060 !important;
+  box-shadow: 0 0 18px rgba(0,229,255,0.25) !important;
+}
+html[data-theme='dark'] .profile-modal { background: var(--bg-card) !important; border: 1px solid var(--dm-border) !important; box-shadow: var(--dm-shadow) !important; }
+
+/* Improve legibility of empty-state and info banners in Dark Mode */
+/* Empty/info messages: crisp, readable text (no heavy glow) */
+html[data-theme='dark'] .dashboard-empty-state p,
+html[data-theme='dark'] .dashboard-empty-text,
+html[data-theme='dark'] .insulin-impact-empty p {
+  color: #ffffff !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6) !important;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+/* Recommendation title stronger glow for visibility */
+html[data-theme='dark'] .recommendations h4 {
+  color: #ffffff !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.6) !important;
+  letter-spacing: 0.5px;
+}
+
+/* Recommendation body keeps high-contrast text without wash-out */
+html[data-theme='dark'] .recommendation-item { color: var(--dm-text) !important; }
+
+/* Dashboard text readability */
+html[data-theme='dark'] .dashboard-section-title,
+html[data-theme='dark'] .dashboard-welcome-title {
+  color: #ffffff !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.6) !important;
+}
+
+html[data-theme='dark'] .dashboard-welcome-text,
+html[data-theme='dark'] .dashboard-stat-label,
+html[data-theme='dark'] .dashboard-reading-time {
+  color: var(--dm-muted) !important;
+}
+
+html[data-theme='dark'] .dashboard-stat-value,
+html[data-theme='dark'] .dashboard-reading-value,
+html[data-theme='dark'] .dashboard-reading-number {
+  color: #ffffff !important;
+}
+
+/* Quick Actions card text contrast */
+html[data-theme='dark'] .dashboard-action-title {
+  color: #ffffff !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+}
+html[data-theme='dark'] .dashboard-action-subtitle {
+  color: var(--dm-muted) !important;
+}
+
+/* Ensure small pills remain legible */
+html[data-theme='dark'] .dashboard-reading-status {
+  color: #ffffff !important;
+  border: 1px solid var(--dm-border);
+}
+
+/* Dashboard container outlines in dark mode */
+html[data-theme='dark'] .dashboard-grid,
+html[data-theme='dark'] .dashboard-stats-grid,
+html[data-theme='dark'] .dashboard-readings-list {
+  border-color: rgba(0,229,255,0.2) !important;
+  box-shadow: 0 0 0 1px rgba(0,229,255,0.06), 0 0 24px rgba(0,229,255,0.08) !important;
+}
+/* Each action card outline */
+html[data-theme='dark'] .dashboard-action-button {
+  border-color: rgba(0,229,255,0.2) !important;
+  box-shadow: 0 0 0 1px rgba(0,229,255,0.06), 0 0 24px rgba(0,229,255,0.08), 0 4px 12px rgba(0,0,0,0.08) !important;
+}
+
+

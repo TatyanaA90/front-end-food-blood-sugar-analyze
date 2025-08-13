@@ -60,14 +60,14 @@
   gap: 0.5rem;
   padding: 0.875rem 1.75rem;
   background: linear-gradient(135deg, #ffffff 0%, #e3f2fd 50%, #c0e4f9 100%);
-  border: 2px solid #e5e7eb;
+  border: 2px solid rgba(0, 212, 255, 0.25);
   border-radius: 12px;
   font-size: 1rem;
   font-weight: 600;
   color: #1976d2;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 0 1px rgba(0, 212, 255, 0.08), 0 0 24px rgba(0, 212, 255, 0.08), 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .add-activity-btn:hover {
@@ -229,7 +229,8 @@
   background: linear-gradient(135deg, #ffffff 0%, #e3f2fd 50%, #c0e4f9 100%);
   border-radius: 16px;
   padding: 1.5rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 2px solid rgba(0, 212, 255, 0.25);
+  box-shadow: 0 0 0 1px rgba(0, 212, 255, 0.08), 0 0 24px rgba(0, 212, 255, 0.08), 0 4px 12px rgba(0, 0, 0, 0.08);
   transition: all 0.3s ease;
 }
 

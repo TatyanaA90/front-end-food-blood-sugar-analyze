@@ -41,14 +41,14 @@
     padding: 14px 28px;
     background: linear-gradient(135deg, #ffffff 0%, #e3f2fd 50%, #c0e4f9 100%);
     color: #2c3e50;
-    border: none;
+    border: 2px solid rgba(0, 212, 255, 0.25);
     border-radius: 12px;
     font-weight: 600;
     font-size: 1rem;
     cursor: pointer;
     transition: all 0.3s ease;
     white-space: nowrap;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 0 1px rgba(0, 212, 255, 0.08), 0 0 24px rgba(0, 212, 255, 0.08), 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .glucose-readings-add-btn:hover:not(:disabled) {
@@ -75,8 +75,8 @@
     border-radius: 16px;
     padding: 28px;
     margin-bottom: 28px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    border: 1px solid rgba(144, 202, 249, 0.2);
+    box-shadow: 0 0 0 1px rgba(0, 212, 255, 0.08), 0 0 24px rgba(0, 212, 255, 0.08), 0 4px 12px rgba(0, 0, 0, 0.08);
+    border: 2px solid rgba(0, 212, 255, 0.25);
     transition: all 0.3s ease;
 }
 
@@ -228,7 +228,7 @@
     padding: 12px 24px;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
-    border: none;
+    border: 2px solid rgba(0, 212, 255, 0.25);
     border-radius: 8px;
     font-weight: 500;
     cursor: pointer;
@@ -251,8 +251,8 @@
     background: white;
     border-radius: 12px;
     padding: 20px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    border: 1px solid #e5e7eb;
+    box-shadow: 0 0 0 1px rgba(0, 212, 255, 0.08), 0 0 24px rgba(0, 212, 255, 0.08), 0 1px 3px rgba(0, 0, 0, 0.1);
+    border: 2px solid rgba(0, 212, 255, 0.25);
     transition: all 0.2s;
 }
 

@@ -100,11 +100,11 @@
   content: '';
   position: absolute;
   bottom: 0;
-  left: -100%;
+  left: 0;
   width: 100%;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, #00d4ff, transparent);
-  animation: neonSweep 3s ease-in-out infinite;
+  height: 1px;
+  background: rgba(0, 212, 255, 0.18);
+  animation: none;
 }
 
 .dashboard-section-title::after {
@@ -113,14 +113,9 @@
   bottom: 0;
   left: 0;
   right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, 
-    transparent 0%, 
-    rgba(0, 212, 255, 0.8) 20%, 
-    rgba(0, 212, 255, 1) 50%, 
-    rgba(0, 212, 255, 0.8) 80%, 
-    transparent 100%);
-  box-shadow: 0 0 20px rgba(0, 212, 255, 0.6);
+  height: 1px;
+  background: rgba(0, 212, 255, 0.18);
+  box-shadow: none;
 }
 
 /* Light theme: titles */
