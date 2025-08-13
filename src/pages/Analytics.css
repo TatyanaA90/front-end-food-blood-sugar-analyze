@@ -7,6 +7,11 @@
   overflow-x: hidden;
 }
 
+/* Light theme: page background */
+:root[data-theme='light'] .analytics-page {
+  background: linear-gradient(135deg, #d0ebf9 0%, #b2e0f5 50%, #90caf9 100%);
+}
+
 .analytics-page::before {
   content: '';
   position: fixed;
@@ -41,6 +46,13 @@
   overflow: hidden;
   backdrop-filter: blur(10px);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Light theme: cards */
+:root[data-theme='light'] .dashboard-card {
+  background: linear-gradient(135deg, #ffffff 0%, #e3f2fd 50%, #c0e4f9 100%);
+  border: 1px solid rgba(144, 202, 249, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .dashboard-card::before {
@@ -111,6 +123,22 @@
   box-shadow: 0 0 20px rgba(0, 212, 255, 0.6);
 }
 
+/* Light theme: titles */
+:root[data-theme='light'] .dashboard-section-title {
+  color: #2c3e50;
+  border-bottom: 2px solid rgba(144, 202, 249, 0.3);
+  text-shadow: none;
+}
+
+:root[data-theme='light'] .dashboard-section-title::before {
+  background: linear-gradient(90deg, transparent, rgba(144, 202, 249, 0.4), transparent);
+}
+
+:root[data-theme='light'] .dashboard-section-title::after {
+  background: rgba(144, 202, 249, 0.4);
+  box-shadow: none;
+}
+
 /* Dashboard Card Header */
 .dashboard-card-header {
   margin-bottom: 20px;
@@ -149,6 +177,18 @@
 .time-range-btn.active {
   background: rgba(0, 212, 255, 0.2);
   border-color: rgba(0, 212, 255, 0.8);
+}
+
+/* Light theme: time range buttons */
+:root[data-theme='light'] .time-range-btn {
+  background: #ffffff;
+  color: #2c3e50;
+  border: 1px solid rgba(144, 202, 249, 0.4);
+}
+
+:root[data-theme='light'] .time-range-btn.active {
+  background: #e6f3ff;
+  border-color: rgba(59, 130, 246, 0.6);
 }
 
 .time-range-custom {
@@ -209,6 +249,14 @@
   backdrop-filter: blur(5px);
   text-transform: uppercase;
   letter-spacing: 0.5px;
+}
+
+/* Light theme: badges */
+:root[data-theme='light'] .event-count-badge {
+  background: linear-gradient(135deg, #ffffff 0%, #e3f2fd 100%);
+  color: #1f2937;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  box-shadow: none;
 }
 
 .event-count-badge.meals {
@@ -346,6 +394,19 @@
   height: 220px;
 }
 
+/* Light/Dark chart color variables */
+:root[data-theme='light'] {
+  --chart-grid: rgba(148, 163, 184, 0.3);
+  --chart-tick: #374151;
+  --chart-line: #2563eb;
+}
+
+:root[data-theme='dark'] {
+  --chart-grid: rgba(0, 212, 255, 0.2);
+  --chart-tick: #00d4ff;
+  --chart-line: #00d4ff;
+}
+
 @media (max-width: 480px) {
   .analytics-page {
     padding: 12px;
@@ -402,9 +463,4 @@
   }
 }
 
-/* Dark mode optimizations */
-@media (prefers-color-scheme: dark) {
-  .analytics-page {
-    background: linear-gradient(135deg, #000000 0%, #0a0a0f 50%, #1a1a2e 100%);
-  }
-}
+/* Theme is controlled by html[data-theme]; do not override with OS preference */

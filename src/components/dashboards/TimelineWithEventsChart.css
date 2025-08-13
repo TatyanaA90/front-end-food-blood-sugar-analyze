@@ -11,6 +11,12 @@
   overflow: hidden;
 }
 
+/* Light theme: unify visualization gradient */
+:root[data-theme='light'] .timeline-with-events-chart {
+  background: linear-gradient(135deg, #ffffff 0%, #e3f2fd 50%, #c0e4f9 100%);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
 .timeline-with-events-chart::before {
   content: '';
   position: absolute;
@@ -38,12 +44,23 @@
   stroke-width: 1;
 }
 
+:root[data-theme='light'] .timeline-with-events-chart .recharts-cartesian-grid-horizontal line,
+:root[data-theme='light'] .timeline-with-events-chart .recharts-cartesian-grid-vertical line {
+  stroke: rgba(148, 163, 184, 0.3);
+}
+
 .timeline-with-events-chart .recharts-xAxis .recharts-cartesian-axis-tick-value,
 .timeline-with-events-chart .recharts-yAxis .recharts-cartesian-axis-tick-value {
   fill: #00d4ff;
   font-size: 10px;
   font-weight: 500;
   text-shadow: 0 0 8px rgba(0, 212, 255, 0.6);
+}
+
+:root[data-theme='light'] .timeline-with-events-chart .recharts-xAxis .recharts-cartesian-axis-tick-value,
+:root[data-theme='light'] .timeline-with-events-chart .recharts-yAxis .recharts-cartesian-axis-tick-value {
+  fill: #374151;
+  text-shadow: none;
 }
 
 .timeline-with-events-chart .recharts-cartesian-axis-label {
@@ -61,6 +78,12 @@
   box-shadow: 
     0 0 20px rgba(0, 212, 255, 0.3),
     0 0 40px rgba(0, 0, 0, 0.8);
+}
+
+:root[data-theme='light'] .timeline-with-events-chart .recharts-tooltip-wrapper {
+  background: rgba(255,255,255,0.98);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
 }
 
 .timeline-with-events-chart .recharts-tooltip-content {
@@ -111,6 +134,12 @@
   color: #ffffff;
   transition: all 0.3s ease;
   backdrop-filter: blur(5px);
+}
+
+:root[data-theme='light'] .timeline-legend-item {
+  background: linear-gradient(135deg, #ffffff 0%, #e3f2fd 100%);
+  border: 1px solid rgba(226,232,240,0.8);
+  color: #1f2937;
 }
 
 .timeline-legend-item:hover {

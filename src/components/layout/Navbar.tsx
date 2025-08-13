@@ -7,6 +7,12 @@ import './Navbar.css';
 const Navbar: React.FC = () => {
     const { user, logout } = useAuth();
     const navigate = useNavigate();
+    const [mode, setMode] = React.useState<'dark' | 'light'>(() => (localStorage.getItem('theme-mode') as 'dark' | 'light') || 'light');
+
+    React.useEffect(() => {
+        document.documentElement.setAttribute('data-theme', mode);
+        localStorage.setItem('theme-mode', mode);
+    }, [mode]);
 
     const handleLogout = () => {
         logout();
@@ -40,6 +46,19 @@ const Navbar: React.FC = () => {
                         )}
                     </div>
                     <div className="navbar-actions">
+                        <div className="navbar-mode-switch">
+                            <label htmlFor="theme-mode" className="sr-only">Theme mode</label>
+                            <select
+                                id="theme-mode"
+                                className="navbar-mode-select"
+                                value={mode}
+                                onChange={(e) => setMode(e.target.value as 'dark' | 'light')}
+                                aria-label="Theme mode selector"
+                            >
+                                <option value="light">Light</option>
+                                <option value="dark">Dark</option>
+                            </select>
+                        </div>
                         <button
                             onClick={() => navigate('/glucose-readings')}
                             className="navbar-button"
