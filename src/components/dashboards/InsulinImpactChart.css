@@ -1,0 +1,581 @@
+/* Futuristic Neon Style Insulin Impact Chart */
+.insulin-impact-chart {
+  padding: 24px;
+  background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #16213e 100%);
+  border-radius: 16px;
+  box-shadow: 
+    0 0 40px rgba(0, 255, 255, 0.1),
+    0 0 80px rgba(138, 43, 226, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(0, 255, 255, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.insulin-impact-chart::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(0, 255, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(138, 43, 226, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* Summary Cards - Neon Glow Style */
+.summary-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  margin-bottom: 32px;
+  position: relative;
+  z-index: 1;
+}
+
+.summary-card {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(26, 26, 46, 0.9));
+  color: white;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid transparent;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  transform: perspective(1000px) rotateX(0deg);
+}
+
+.summary-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, var(--card-glow-start), var(--card-glow-end));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: 12px;
+}
+
+.summary-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.05) 50%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: 12px;
+}
+
+.summary-card:hover::before {
+  opacity: 0.15;
+}
+
+.summary-card:hover::after {
+  opacity: 1;
+}
+
+.summary-card:hover {
+  transform: perspective(1000px) rotateX(5deg) translateY(-4px) scale(1.02);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    0 0 0 1px var(--card-border-color),
+    0 0 20px var(--card-glow-color),
+    0 0 40px var(--card-glow-color),
+    0 0 60px var(--card-glow-color);
+}
+
+.summary-card.total-doses {
+  --card-glow-start: #ff6b35;
+  --card-glow-end: #f7931e;
+  --card-border-color: rgba(255, 107, 53, 0.6);
+  --card-glow-color: rgba(255, 107, 53, 0.4);
+}
+
+.summary-card.sensitivity {
+  --card-glow-start: #00d4ff;
+  --card-glow-end: #0099cc;
+  --card-border-color: rgba(0, 212, 255, 0.6);
+  --card-glow-color: rgba(0, 212, 255, 0.4);
+}
+
+.summary-card.effectiveness {
+  --card-glow-start: #00ff88;
+  --card-glow-end: #00cc6a;
+  --card-border-color: rgba(0, 255, 136, 0.6);
+  --card-glow-color: rgba(0, 255, 136, 0.4);
+}
+
+.card-icon {
+  width: 28px;
+  height: 28px;
+  margin-right: 16px;
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 8px currentColor);
+  color: var(--card-glow-start);
+}
+
+.card-content h4 {
+  margin: 0 0 6px 0;
+  font-size: 14px;
+  font-weight: 500;
+  opacity: 0.8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.card-value {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1;
+  background: linear-gradient(135deg, var(--card-glow-start), var(--card-glow-end));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 20px var(--card-glow-color);
+}
+
+/* Chart Controls - Neon Button Style */
+.chart-controls {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 28px;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+
+.chart-btn {
+  padding: 12px 24px;
+  border: 2px solid rgba(0, 212, 255, 0.3);
+  border-radius: 25px;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(26, 26, 46, 0.9));
+  color: #00d4ff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.chart-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.chart-btn:hover::before {
+  left: 100%;
+}
+
+.chart-btn:hover {
+  border-color: #00d4ff;
+  color: #ffffff;
+  box-shadow: 
+    0 0 20px rgba(0, 212, 255, 0.4),
+    0 0 40px rgba(0, 212, 255, 0.2),
+    0 0 60px rgba(0, 212, 255, 0.1);
+  transform: translateY(-2px) scale(1.05);
+}
+
+.chart-btn.active {
+  background: linear-gradient(135deg, #00d4ff, #0099cc);
+  border-color: #00d4ff;
+  color: #000;
+  box-shadow: 
+    0 0 20px rgba(0, 212, 255, 0.6),
+    0 0 40px rgba(0, 212, 255, 0.3),
+    0 0 60px rgba(0, 212, 255, 0.2);
+  animation: neonPulse 2s ease-in-out infinite;
+}
+
+/* Chart Container - Neon Border Style */
+.chart-container {
+  margin-bottom: 32px;
+  border: 1px solid rgba(0, 212, 255, 0.3);
+  border-radius: 16px;
+  padding: 20px;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.6), rgba(26, 26, 46, 0.8));
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+}
+
+.chart-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    linear-gradient(45deg, transparent 30%, rgba(0, 212, 255, 0.05) 50%, transparent 70%);
+  pointer-events: none;
+}
+
+/* Custom Chart Styling for Neon Theme */
+.chart-container .recharts-cartesian-grid-horizontal line,
+.chart-container .recharts-cartesian-grid-vertical line {
+  stroke: rgba(0, 212, 255, 0.2);
+  stroke-width: 1;
+}
+
+.chart-container .recharts-xAxis .recharts-cartesian-axis-tick-value,
+.chart-container .recharts-yAxis .recharts-cartesian-axis-tick-value {
+  fill: #00d4ff;
+  font-size: 12px;
+  font-weight: 500;
+  text-shadow: 0 0 8px rgba(0, 212, 255, 0.6);
+}
+
+.chart-container .recharts-cartesian-axis-label {
+  fill: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.chart-container .recharts-legend-item-text {
+  fill: #ffffff;
+  font-size: 12px;
+  font-weight: 500;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+.chart-container .recharts-tooltip-wrapper {
+  background: rgba(0, 0, 0, 0.95);
+  border: 1px solid rgba(0, 212, 255, 0.6);
+  border-radius: 12px;
+  backdrop-filter: blur(15px);
+  box-shadow: 
+    0 0 20px rgba(0, 212, 255, 0.3),
+    0 0 40px rgba(0, 0, 0, 0.8);
+}
+
+.chart-container .recharts-tooltip-content {
+  background: transparent !important;
+  border: none !important;
+}
+
+.chart-container .recharts-tooltip-label {
+  color: #00d4ff !important;
+  font-weight: 600;
+  text-shadow: 0 0 8px rgba(0, 212, 255, 0.6);
+}
+
+.chart-container .recharts-tooltip-item {
+  color: #ffffff !important;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+}
+
+/* Enhanced chart element styling */
+.chart-container .recharts-bar-rectangle {
+  filter: drop-shadow(0 0 8px rgba(255, 107, 53, 0.4));
+}
+
+.chart-container .recharts-line-curve {
+  filter: drop-shadow(0 0 6px rgba(0, 212, 255, 0.4));
+}
+
+.chart-container .recharts-scatter-symbol {
+  filter: drop-shadow(0 0 8px rgba(255, 107, 53, 0.5));
+}
+
+/* Neon pulse animation for active elements */
+@keyframes neonGlow {
+  0%, 100% {
+    filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.4));
+  }
+  50% {
+    filter: drop-shadow(0 0 15px rgba(0, 212, 255, 0.7));
+  }
+}
+
+.chart-container .recharts-line-curve:hover {
+  animation: neonGlow 1.5s ease-in-out infinite;
+}
+
+.chart-container .recharts-bar-rectangle:hover {
+  filter: drop-shadow(0 0 12px rgba(255, 107, 53, 0.8));
+}
+
+/* Recommendations - Neon Accent Style */
+.recommendations {
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(26, 26, 46, 0.9));
+  border-radius: 12px;
+  padding: 20px;
+  border-left: 4px solid #00d4ff;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+}
+
+.recommendations::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, rgba(0, 212, 255, 0.05), transparent);
+  pointer-events: none;
+}
+
+.recommendations h4 {
+  margin: 0 0 16px 0;
+  color: #00d4ff;
+  font-size: 18px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+}
+
+.recommendation-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Enhanced recommendations styling */
+.recommendation-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.6), rgba(26, 26, 46, 0.8));
+  border-radius: 8px;
+  border: 1px solid rgba(0, 212, 255, 0.2);
+  font-size: 14px;
+  color: #ffffff;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(5px);
+  position: relative;
+  overflow: hidden;
+}
+
+.recommendation-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.recommendation-item:hover::before {
+  left: 100%;
+}
+
+.recommendation-item:hover {
+  border-color: rgba(0, 212, 255, 0.6);
+  box-shadow: 
+    0 0 15px rgba(0, 212, 255, 0.3),
+    0 0 30px rgba(0, 212, 255, 0.1);
+  transform: translateX(4px) scale(1.02);
+}
+
+.warning-icon {
+  width: 18px;
+  height: 18px;
+  color: #ff6b35;
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 8px rgba(255, 107, 53, 0.6));
+}
+
+.success-icon {
+  width: 18px;
+  height: 18px;
+  color: #00ff88;
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 8px rgba(0, 255, 136, 0.6));
+}
+
+/* Empty State - Neon Style */
+.insulin-impact-empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: #00d4ff;
+  position: relative;
+}
+
+.insulin-impact-empty::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(0, 212, 255, 0.1) 0%, transparent 70%);
+  border-radius: 50%;
+  z-index: -1;
+}
+
+.empty-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 20px;
+  color: #00d4ff;
+  filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.6));
+}
+
+.insulin-impact-empty p {
+  margin: 0 0 12px 0;
+  font-size: 18px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+}
+
+.insulin-impact-empty small {
+  font-size: 14px;
+  opacity: 0.8;
+  color: #ffffff;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .insulin-impact-chart {
+    padding: 20px;
+  }
+  
+  .summary-cards {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .chart-controls {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  
+  .chart-btn {
+    padding: 10px 20px;
+    font-size: 13px;
+  }
+  
+  .chart-container {
+    padding: 16px;
+  }
+  
+  .card-value {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .insulin-impact-chart {
+    padding: 16px;
+  }
+  
+  .summary-card {
+    padding: 16px;
+  }
+  
+  .card-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 12px;
+  }
+  
+  .card-content h4 {
+    font-size: 12px;
+  }
+  
+  .card-value {
+    font-size: 20px;
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .summary-card,
+  .chart-btn,
+  .recommendation-item {
+    transition: none;
+  }
+  
+  .summary-card:hover,
+  .chart-btn:hover,
+  .recommendation-item:hover {
+    transform: none;
+  }
+}
+
+/* Focus states for keyboard navigation */
+.chart-btn:focus {
+  outline: 2px solid #00d4ff;
+  outline-offset: 2px;
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.6);
+}
+
+.summary-card:focus-within {
+  outline: 2px solid #00d4ff;
+  outline-offset: 2px;
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.6);
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .insulin-impact-chart {
+    border: 2px solid #00d4ff;
+  }
+  
+  .chart-container {
+    border: 2px solid #00d4ff;
+  }
+  
+  .recommendation-item {
+    border: 2px solid #00d4ff;
+  }
+}
+
+/* Dark mode optimizations */
+@media (prefers-color-scheme: dark) {
+  .insulin-impact-chart {
+    background: linear-gradient(135deg, #000000 0%, #0a0a0f 50%, #1a1a2e 100%);
+  }
+}
+
+/* Neon glow animations */
+@keyframes neonPulse {
+  0%, 100% {
+    box-shadow: 
+      0 0 20px var(--card-glow-color),
+      0 0 40px var(--card-glow-color);
+  }
+  50% {
+    box-shadow: 
+      0 0 30px var(--card-glow-color),
+      0 0 60px var(--card-glow-color);
+  }
+}
+
+.summary-card:hover {
+  animation: neonPulse 2s ease-in-out infinite;
+}
+
+
+
