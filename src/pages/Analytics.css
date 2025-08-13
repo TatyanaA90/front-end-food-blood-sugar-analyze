@@ -1,0 +1,333 @@
+/* Futuristic Neon Style Analytics Page */
+.analytics-page {
+  background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #16213e 100%);
+  min-height: 100vh;
+  padding: 24px;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.analytics-page::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(0, 255, 255, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(138, 43, 226, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Dashboard Section Styling */
+.dashboard-section {
+  margin-bottom: 32px;
+  position: relative;
+  z-index: 1;
+}
+
+.dashboard-card {
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(26, 26, 46, 0.9));
+  border-radius: 20px;
+  padding: 28px;
+  box-shadow: 
+    0 0 40px rgba(0, 255, 255, 0.1),
+    0 0 80px rgba(138, 43, 226, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(0, 212, 255, 0.2);
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dashboard-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    linear-gradient(45deg, transparent 30%, rgba(0, 212, 255, 0.05) 50%, transparent 70%);
+  pointer-events: none;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(0, 212, 255, 0.4),
+    0 0 20px rgba(0, 212, 255, 0.3),
+    0 0 40px rgba(0, 212, 255, 0.2);
+}
+
+/* Dashboard Section Title - Futuristic Neon Style */
+.dashboard-section-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #00d4ff;
+  margin: 0 0 24px 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding-bottom: 16px;
+  border-bottom: 2px solid rgba(0, 212, 255, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-shadow: 
+    0 0 10px rgba(0, 212, 255, 0.6),
+    0 0 20px rgba(0, 212, 255, 0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+.dashboard-section-title::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: -100%;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #00d4ff, transparent);
+  animation: neonSweep 3s ease-in-out infinite;
+}
+
+.dashboard-section-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(0, 212, 255, 0.8) 20%, 
+    rgba(0, 212, 255, 1) 50%, 
+    rgba(0, 212, 255, 0.8) 80%, 
+    transparent 100%);
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.6);
+}
+
+/* Dashboard Card Header */
+.dashboard-card-header {
+  margin-bottom: 20px;
+  position: relative;
+}
+
+/* Event Count Badges - Neon Style */
+.event-count-badges {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 1;
+}
+
+.event-count-badge {
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(26, 26, 46, 0.9));
+  color: #ffffff;
+  border-radius: 8px;
+  padding: 4px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  border: 1px solid transparent;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.event-count-badge.meals {
+  border-color: rgba(0, 255, 136, 0.4);
+  box-shadow: 0 0 10px rgba(0, 255, 136, 0.2);
+}
+
+.event-count-badge.meals:hover {
+  border-color: rgba(0, 255, 136, 0.8);
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
+}
+
+.event-count-badge.insulin {
+  border-color: rgba(255, 107, 53, 0.4);
+  box-shadow: 0 0 10px rgba(255, 107, 53, 0.2);
+}
+
+.event-count-badge.insulin:hover {
+  border-color: rgba(255, 107, 53, 0.8);
+  box-shadow: 0 0 20px rgba(255, 107, 53, 0.4);
+}
+
+.event-count-badge.activities {
+  border-color: rgba(138, 43, 226, 0.4);
+  box-shadow: 0 0 10px rgba(138, 43, 226, 0.2);
+}
+
+.event-count-badge.activities:hover {
+  border-color: rgba(138, 43, 226, 0.8);
+  box-shadow: 0 0 20px rgba(138, 43, 226, 0.4);
+}
+
+/* Main Content Areas */
+.dashboard-main {
+  margin-top: 32px;
+}
+
+/* Loading and Empty States */
+.dashboard-loading,
+.dashboard-empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: #00d4ff;
+  position: relative;
+}
+
+.dashboard-loading::before,
+.dashboard-empty-state::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(0, 212, 255, 0.1) 0%, transparent 70%);
+  border-radius: 50%;
+  z-index: -1;
+}
+
+.dashboard-loading p,
+.dashboard-empty-state p {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+}
+
+.dashboard-empty-icon {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 16px;
+  color: #00d4ff;
+  filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.6));
+}
+
+/* Animations */
+@keyframes neonSweep {
+  0%, 100% {
+    left: -100%;
+  }
+  50% {
+    left: 100%;
+  }
+}
+
+@keyframes neonPulse {
+  0%, 100% {
+    box-shadow: 
+      0 0 20px rgba(0, 212, 255, 0.3),
+      0 0 40px rgba(0, 212, 255, 0.1);
+  }
+  50% {
+    box-shadow: 
+      0 0 30px rgba(0, 212, 255, 0.5),
+      0 0 60px rgba(0, 212, 255, 0.2);
+  }
+}
+
+.dashboard-card:hover .dashboard-section-title::after {
+  animation: neonPulse 2s ease-in-out infinite;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .analytics-page {
+    padding: 16px;
+  }
+  
+  .dashboard-card {
+    padding: 20px;
+  }
+  
+  .dashboard-section-title {
+    font-size: 1.5rem;
+    padding-bottom: 12px;
+  }
+  
+  .event-count-badges {
+    gap: 6px;
+  }
+  
+  .event-count-badge {
+    padding: 3px 6px;
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .analytics-page {
+    padding: 12px;
+  }
+  
+  .dashboard-card {
+    padding: 16px;
+  }
+  
+  .dashboard-section-title {
+    font-size: 1.25rem;
+    padding-bottom: 8px;
+  }
+  
+  .event-count-badges {
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+  
+  .event-count-badge {
+    padding: 2px 4px;
+    font-size: 9px;
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .dashboard-section-title::before,
+  .dashboard-card:hover .dashboard-section-title::after {
+    animation: none;
+  }
+  
+  .dashboard-card:hover {
+    transform: none;
+  }
+}
+
+/* Focus states for keyboard navigation */
+.dashboard-card:focus-within {
+  outline: 2px solid #00d4ff;
+  outline-offset: 2px;
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.6);
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .dashboard-card {
+    border: 2px solid #00d4ff;
+  }
+  
+  .dashboard-section-title {
+    border-bottom: 3px solid #00d4ff;
+  }
+}
+
+/* Dark mode optimizations */
+@media (prefers-color-scheme: dark) {
+  .analytics-page {
+    background: linear-gradient(135deg, #000000 0%, #0a0a0f 50%, #1a1a2e 100%);
+  }
+}

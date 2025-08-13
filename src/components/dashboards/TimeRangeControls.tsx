@@ -22,7 +22,7 @@ const TimeRangeControls: React.FC<Props> = ({ rangeMode, startDate, endDate, onC
           <div style={{ display: 'flex', gap: 6 }}>
             <button type="button" onClick={() => onChangeMode('hour')} className={`btn ${rangeMode === 'hour' ? 'active' : ''}`} style={{ padding: '4px 8px', borderRadius: 8 }}>Last Hour</button>
             <button type="button" onClick={() => onChangeMode('day')} className={`btn ${rangeMode === 'day' ? 'active' : ''}`} style={{ padding: '4px 8px', borderRadius: 8 }}>Today</button>
-            <button type="button" onClick={() => onChangeMode('week')} className={`btn ${rangeMode === 'week' ? 'active' : ''}`} style={{ padding: '4px 8px', borderRadius: 8 }}>Last 7 Days</button>
+            <button type="button" onClick={() => onChangeMode('week')} className={`btn ${rangeMode === 'week' ? 'active' : ''}`} style={{ padding: '4px 8px', borderRadius: 8 }}>7 Days</button>
             <button type="button" onClick={() => onChangeMode('custom')} className={`btn ${rangeMode === 'custom' ? 'active' : ''}`} style={{ padding: '4px 8px', borderRadius: 8 }}>Custom</button>
           </div>
           {rangeMode === 'custom' && (

@@ -32,7 +32,7 @@ const PredefinedMealsAdmin: React.FC = () => {
       setLoading(true);
       const data = await mealService.getPredefinedMeals();
       setMeals(data);
-    } catch (e) {
+    } catch {
       setError('Failed to load predefined meals');
     } finally {
       setLoading(false);
@@ -85,7 +85,7 @@ const PredefinedMealsAdmin: React.FC = () => {
     setForm(prev => ({ ...prev, ingredients: prev.ingredients.filter((_, i) => i !== index) }));
   };
 
-  const updateIngredient = (index: number, field: keyof PredefinedMealIngredientCreate, value: any) => {
+  const updateIngredient = (index: number, field: keyof PredefinedMealIngredientCreate, value: string | number | boolean) => {
     setForm(prev => ({
       ...prev,
       ingredients: prev.ingredients.map((ing, i) => (i === index ? { ...ing, [field]: value } : ing))
@@ -101,7 +101,7 @@ const PredefinedMealsAdmin: React.FC = () => {
       }
       setFormOpen(false);
       await loadMeals();
-    } catch (e) {
+    } catch {
       alert('Failed to save predefined meal');
     }
   };
@@ -111,9 +111,8 @@ const PredefinedMealsAdmin: React.FC = () => {
     try {
       await mealService.deletePredefinedMeal(mealId);
       await loadMeals();
-    } catch (e: unknown) {
-      const errorMessage = e instanceof Error ? e.message : 'Failed to delete predefined meal';
-      alert(errorMessage);
+    } catch {
+      alert('Failed to delete predefined meal');
     }
   };
 

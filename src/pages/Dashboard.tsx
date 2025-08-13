@@ -5,7 +5,6 @@ import { useGlucoseUnitUtils } from '../hooks/useGlucoseUnit';
 import { Activity, BarChart3, Plus, Droplets, Clock, TrendingUp, TrendingDown, Minus } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import NavigationHeader from '../components/layout/NavigationHeader';
-import RecentGlucoseChart from '../components/dashboards/RecentGlucoseChart';
 import './Dashboard.css';
 
 const Dashboard: React.FC = () => {

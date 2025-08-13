@@ -239,11 +239,11 @@ const PredefinedMealSelector: React.FC<PredefinedMealSelectorProps> = ({
                                                 <span
                                                     className="meal-category"
                                                     style={{
-                                                        background: (meal as any).created_by_admin ? '#2563eb' : '#059669',
+                                                        background: meal.created_by_admin ? '#2563eb' : '#059669',
                                                         color: '#fff'
                                                     }}
                                                 >
-                                                    {(meal as any).created_by_admin ? 'System' : 'My Template'}
+                                                    {meal.created_by_admin ? 'System' : 'My Template'}
                                                 </span>
                                             )}
                                         </div>

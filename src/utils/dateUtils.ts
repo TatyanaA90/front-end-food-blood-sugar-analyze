@@ -34,7 +34,7 @@ export const toLocalDateTimeString = (date: Date): string => {
 // Ensure a timestamp string is in UTC ISO format
 export const ensureUtcIso = (timestamp: string): string => {
   if (!timestamp) return timestamp;
-  if (/Z$|[\+\-]\d{2}:?\d{2}$/.test(timestamp)) {
+  if (/Z$|[+-]\d{2}:?\d{2}$/.test(timestamp)) {
     return timestamp;
   }
   return `${timestamp}Z`;
@@ -78,31 +78,35 @@ export const getDefaultTimeRange = (mode: 'hour' | 'day' | 'week' | 'custom'): {
   const now = new Date();
 
   switch (mode) {
-    case 'hour':
+    case 'hour': {
       const oneHourAgo = new Date(now.getTime() - 60 * 60 * 1000);
       return {
         startDate: toLocalDateTimeString(oneHourAgo),
         endDate: toLocalDateTimeString(now)
       };
-    case 'day':
+    }
+    case 'day': {
       const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
       return {
         startDate: toLocalDateTimeString(today),
         endDate: toLocalDateTimeString(today)
       };
-    case 'week':
+    }
+    case 'week': {
       const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
       return {
         startDate: toLocalDateTimeString(weekAgo),
         endDate: toLocalDateTimeString(now)
       };
+    }
     case 'custom':
-    default:
+    default: {
       const todayDefault = new Date(now.getFullYear(), now.getMonth(), now.getDate());
       return {
         startDate: toLocalDateTimeString(todayDefault),
         endDate: toLocalDateTimeString(todayDefault)
       };
+    }
   }
 };
 

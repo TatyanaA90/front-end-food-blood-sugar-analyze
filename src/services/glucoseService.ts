@@ -24,6 +24,7 @@ interface BackendCreateRequest {
     value: number;
     unit: string;
     timestamp?: string;
+    meal_context?: string;
     note?: string;
 }
 
@@ -31,6 +32,7 @@ interface BackendUpdateRequest {
     value?: number;
     unit?: string;
     timestamp?: string;
+    meal_context?: string;
     note?: string;
 }
 
@@ -100,6 +102,7 @@ export const glucoseService = {
             value: data.reading,
             unit: data.unit === 'mmol/L' ? 'mmol/l' : 'mg/dl',
             timestamp: data.reading_time ? new Date(data.reading_time).toISOString() : undefined,
+            meal_context: data.meal_context,
             note: data.notes
         };
         const response = await api.post<BackendGlucoseReading>('/glucose-readings', backendData);
@@ -124,6 +127,7 @@ export const glucoseService = {
         if (data.reading !== undefined) backendData.value = data.reading;
         if (data.unit !== undefined) backendData.unit = data.unit === 'mmol/L' ? 'mmol/l' : 'mg/dl';
         if (data.reading_time !== undefined) backendData.timestamp = data.reading_time ? new Date(data.reading_time).toISOString() : undefined;
+        if (data.meal_context !== undefined) backendData.meal_context = data.meal_context;
         if (data.notes !== undefined) backendData.note = data.notes;
 
         const response = await api.put<BackendGlucoseReading>(`/glucose-readings/${id}`, backendData);
@@ -164,7 +168,12 @@ export const glucoseService = {
         const response = await api.get(`/analytics/glucose-summary?${params.toString()}`);
         // Backend returns either whole-range summary or grouped summary
         if ('summary' in response.data) {
-            const items = response.data.summary as Array<any>;
+            const items = response.data.summary as Array<{
+                num_readings: number;
+                average: number;
+                min: number;
+                max: number;
+            }>;
             const totals = items.reduce((acc, it) => {
                 acc.num += it.num_readings || 0;
                 acc.sum += (it.average || 0) * (it.num_readings || 0);

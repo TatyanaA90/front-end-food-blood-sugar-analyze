@@ -1,0 +1,284 @@
+/* Futuristic Neon Style Timeline With Events Chart */
+.timeline-with-events-chart {
+  width: 100%;
+  height: 260px;
+  position: relative;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.6), rgba(26, 26, 46, 0.8));
+  border-radius: 16px;
+  padding: 20px;
+  border: 1px solid rgba(0, 212, 255, 0.3);
+  backdrop-filter: blur(10px);
+  overflow: hidden;
+}
+
+.timeline-with-events-chart::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    linear-gradient(45deg, transparent 30%, rgba(0, 212, 255, 0.05) 50%, transparent 70%);
+  pointer-events: none;
+}
+
+/* Chart Container Styling */
+.timeline-chart-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+/* Custom Chart Styling for Neon Theme */
+.timeline-with-events-chart .recharts-cartesian-grid-horizontal line,
+.timeline-with-events-chart .recharts-cartesian-grid-vertical line {
+  stroke: rgba(0, 212, 255, 0.2);
+  stroke-width: 1;
+}
+
+.timeline-with-events-chart .recharts-xAxis .recharts-cartesian-axis-tick-value,
+.timeline-with-events-chart .recharts-yAxis .recharts-cartesian-axis-tick-value {
+  fill: #00d4ff;
+  font-size: 10px;
+  font-weight: 500;
+  text-shadow: 0 0 8px rgba(0, 212, 255, 0.6);
+}
+
+.timeline-with-events-chart .recharts-cartesian-axis-label {
+  fill: #ffffff;
+  font-size: 12px;
+  font-weight: 600;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.timeline-with-events-chart .recharts-tooltip-wrapper {
+  background: rgba(0, 0, 0, 0.95);
+  border: 1px solid rgba(0, 212, 255, 0.6);
+  border-radius: 12px;
+  backdrop-filter: blur(15px);
+  box-shadow: 
+    0 0 20px rgba(0, 212, 255, 0.3),
+    0 0 40px rgba(0, 0, 0, 0.8);
+}
+
+.timeline-with-events-chart .recharts-tooltip-content {
+  background: transparent !important;
+  border: none !important;
+}
+
+.timeline-with-events-chart .recharts-tooltip-label {
+  color: #00d4ff !important;
+  font-weight: 600;
+  text-shadow: 0 0 8px rgba(0, 212, 255, 0.6);
+}
+
+.timeline-with-events-chart .recharts-tooltip-item {
+  color: #ffffff !important;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+}
+
+/* Enhanced chart element styling */
+.timeline-with-events-chart .recharts-line-curve {
+  filter: drop-shadow(0 0 6px rgba(0, 212, 255, 0.4));
+}
+
+.timeline-with-events-chart .recharts-scatter-symbol {
+  filter: drop-shadow(0 0 8px rgba(255, 107, 53, 0.5));
+}
+
+/* Event Summary Styling */
+.timeline-event-summary {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+  justify-content: center;
+  font-size: 11px;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 1;
+}
+
+.timeline-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(26, 26, 46, 0.9));
+  border-radius: 8px;
+  border: 1px solid rgba(0, 212, 255, 0.2);
+  color: #ffffff;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+}
+
+.timeline-legend-item:hover {
+  border-color: rgba(0, 212, 255, 0.4);
+  box-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+/* Legend Item Specific Styles */
+.timeline-legend-item.glucose {
+  border-color: rgba(0, 212, 255, 0.3);
+}
+
+.timeline-legend-item.glucose:hover {
+  box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+}
+
+.timeline-legend-item.target {
+  border-color: rgba(0, 255, 136, 0.3);
+}
+
+.timeline-legend-item.target:hover {
+  box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+}
+
+.timeline-legend-item.meal {
+  border-color: rgba(0, 255, 136, 0.3);
+}
+
+.timeline-legend-item.meal:hover {
+  box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+}
+
+.timeline-legend-item.insulin {
+  border-color: rgba(255, 107, 53, 0.3);
+}
+
+.timeline-legend-item.insulin:hover {
+  box-shadow: 0 0 15px rgba(255, 107, 53, 0.3);
+}
+
+.timeline-legend-item.activity {
+  border-color: rgba(138, 43, 226, 0.3);
+}
+
+.timeline-legend-item.activity:hover {
+  box-shadow: 0 0 15px rgba(138, 43, 226, 0.3);
+}
+
+/* Legend Visual Indicators */
+.timeline-legend-line {
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.timeline-legend-line.glucose {
+  background: #00d4ff;
+  box-shadow: 0 0 8px rgba(0, 212, 255, 0.6);
+}
+
+.timeline-legend-line.target {
+  background: #00ff88;
+  border-top: 1px dashed #00ff88;
+  box-shadow: 0 0 8px rgba(0, 255, 136, 0.6);
+}
+
+.timeline-legend-shape {
+  transition: all 0.3s ease;
+}
+
+.timeline-legend-shape.meal {
+  background: #00ff88;
+  transform: rotate(45deg);
+  box-shadow: 0 0 8px rgba(0, 255, 136, 0.6);
+}
+
+.timeline-legend-shape.insulin {
+  background: #ff6b35;
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  box-shadow: 0 0 8px rgba(255, 107, 53, 0.6);
+}
+
+.timeline-legend-shape.activity {
+  background: #8a2be2;
+  box-shadow: 0 0 8px rgba(138, 43, 226, 0.6);
+}
+
+/* Empty State Styling */
+.timeline-empty-state {
+  width: 100%;
+  height: 260px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.6), rgba(26, 26, 46, 0.8));
+  border-radius: 16px;
+  border: 1px solid rgba(0, 212, 255, 0.3);
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+}
+
+.timeline-empty-state::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(0, 212, 255, 0.1) 0%, transparent 70%);
+  border-radius: 50%;
+  z-index: -1;
+}
+
+.timeline-empty-state p {
+  color: #00d4ff;
+  font-size: 14px;
+  font-weight: 500;
+  text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .timeline-with-events-chart {
+    padding: 16px;
+  }
+  
+  .timeline-event-summary {
+    gap: 8px;
+    margin-top: 12px;
+  }
+  
+  .timeline-legend-item {
+    padding: 3px 6px;
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .timeline-with-events-chart {
+    padding: 12px;
+  }
+  
+  .timeline-event-summary {
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  
+  .timeline-legend-item {
+    padding: 2px 4px;
+    font-size: 9px;
+  }
+}
+
+/* Neon glow animations */
+@keyframes timelineNeonPulse {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(0, 212, 255, 0.6);
+  }
+}
+
+.timeline-with-events-chart:hover {
+  animation: timelineNeonPulse 2s ease-in-out infinite;
+}

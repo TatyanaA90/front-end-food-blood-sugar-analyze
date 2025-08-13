@@ -25,7 +25,7 @@ const RecentGlucoseChart: React.FC<Props> = ({ data, rangeStartMs, rangeEndMs })
           <YAxis tick={{ fontSize: 12 }} domain={[40, 350]} />
           <Tooltip
             labelFormatter={(ts) => new Date(Number(ts)).toLocaleString()}
-            formatter={(val: any, name: any) => [Number(val).toFixed(0), name]}
+            formatter={(val: number, name: string) => [Number(val).toFixed(0), name]}
           />
           <Legend />
           <ReferenceLine x={rangeEndMs} stroke="#94a3b8" strokeDasharray="3 3" label={{ value: 'Now', position: 'top', fontSize: 10 }} />

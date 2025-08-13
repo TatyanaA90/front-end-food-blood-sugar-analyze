@@ -50,7 +50,7 @@ export interface PredefinedMealCreate {
   ingredients: PredefinedMealIngredientCreate[];
 }
 
-export interface PredefinedMealUpdate extends Partial<PredefinedMealCreate> {}
+export type PredefinedMealUpdate = Partial<PredefinedMealCreate>;
 
 export interface MealFromPredefinedCreate {
   predefined_meal_id: number;

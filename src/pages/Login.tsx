@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
-import { Eye, EyeOff, LogIn, ChevronDown } from 'lucide-react';
+import { Eye, EyeOff, ChevronDown } from 'lucide-react';
 import './Login.css';
 
 interface LoginFormData {
@@ -42,9 +42,6 @@ const Login: React.FC = () => {
       // Prevent navigation on error - stay on the same page
     }
   };
-
-  // Get today's date in ISO format
-  const today = new Date().toISOString().slice(0, 10);
 
   return (
     <div className="landing-page">
