@@ -69,6 +69,40 @@
   animation: slideInFromTop 0.8s ease-out;
 }
 
+/* Back button at the top of the register page */
+.register-back-button {
+  margin-top: 1.25rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.65rem 1rem;
+  border-radius: 12px;
+  border: 2px solid #ffffff;
+  background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(243, 246, 255, 0.95) 60%, rgba(224, 236, 255, 0.95) 100%);
+  color: #1f2a44;
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.register-back-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.18);
+}
+
+.register-back-icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+@media (max-width: 640px) {
+  .register-back-button {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
 @media (min-width: 640px) {
   .register-header-section {
     max-width: 28rem;

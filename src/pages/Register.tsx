@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
-import { Eye, EyeOff, UserPlus } from 'lucide-react';
+import { Eye, EyeOff, UserPlus, ArrowLeft } from 'lucide-react';
 import './Register.css';
 
 interface RegisterFormData {
@@ -20,6 +20,14 @@ const Register: React.FC = () => {
   const [error, setError] = useState<string>('');
   const { register: registerUser, isLoading } = useAuth();
   const navigate = useNavigate();
+  
+  const handleBack = () => {
+    if (window.history.length > 1) {
+      navigate(-1);
+    } else {
+      navigate('/login');
+    }
+  };
 
   const {
     register,
@@ -58,6 +66,10 @@ const Register: React.FC = () => {
             sign in to your existing account
           </Link>
         </p>
+        <button type="button" className="register-back-button" onClick={handleBack}>
+          <ArrowLeft className="register-back-icon" />
+          Back
+        </button>
       </section>
 
       <section className="register-form-section">
