@@ -354,6 +354,9 @@ html[data-theme='dark'] .glucose-reading-action-btn { color: var(--text-secondar
 html[data-theme='dark'] .glucose-readings-title-section h1,
 html[data-theme='dark'] .glucose-readings-title-section h2 { color: #ffffff !important; }
 html[data-theme='dark'] .glucose-readings-header .glucose-readings-subtitle { color: var(--text-secondary) !important; }
+/* Improve Notes label and notes text visibility */
+html[data-theme='dark'] .glucose-form-label { color: #ffffff !important; }
+html[data-theme='dark'] .glucose-reading-notes { color: #ffffff !important; }
 
 /* ===== Meals (lists, ingredients) ===== */
 html[data-theme='dark'] .meal-list-header,
