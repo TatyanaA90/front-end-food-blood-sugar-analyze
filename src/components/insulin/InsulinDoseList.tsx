@@ -260,6 +260,21 @@ const InsulinDoseList: React.FC<InsulinDoseListProps> = ({
                   </div>
                 </div>
 
+                {/* Admin-only: show creator user_id when present or inferred via URL */}
+                {(() => {
+                  const { user } = useAuth();
+                  if (!user?.is_admin) return null;
+                  const userId = (dose as any).user_id as number | undefined;
+                  const search = typeof window !== 'undefined' ? window.location.search : '';
+                  const urlId = new URLSearchParams(search).get('user') || undefined;
+                  const displayId = userId ?? (urlId ? Number(urlId) : undefined);
+                  return displayId ? (
+                    <div className="dose-notes" style={{ marginTop: 8 }}>
+                      <strong>User ID:</strong> {displayId}
+                    </div>
+                  ) : null;
+                })()}
+
                 {dose.note && (
                   <div className="dose-notes">
                     <p>{dose.note}</p>

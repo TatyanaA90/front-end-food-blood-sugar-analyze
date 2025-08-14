@@ -262,6 +262,22 @@ const ActivityList: React.FC<ActivityListProps> = ({
                   </div>
                 </div>
 
+                {/* Admin-only: show creator user_id when present or inferred via URL */}
+                {(() => {
+                  const { user } = useAuth();
+                  if (!user?.is_admin) return null;
+                  const userId = (activity as any).user_id as number | undefined;
+                  // Try to read ?user from URL as fallback
+                  const search = typeof window !== 'undefined' ? window.location.search : '';
+                  const urlId = new URLSearchParams(search).get('user') || undefined;
+                  const displayId = userId ?? (urlId ? Number(urlId) : undefined);
+                  return displayId ? (
+                    <div className="activity-notes" style={{ marginTop: 8 }}>
+                      <strong>User ID:</strong> {displayId}
+                    </div>
+                  ) : null;
+                })()}
+
                 {activity.note && (
                   <div className="activity-notes">
                                           <p>{activity.note}</p>

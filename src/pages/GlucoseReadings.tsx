@@ -413,7 +413,7 @@ const GlucoseReadings: React.FC = () => {
                                             {/* Show creator user_id for admins only */}
                                             {user?.is_admin && (
                                                 <div className="glucose-reading-detail" title="Creator user_id">
-                                                    <span>User ID: {reading.user_id}</span>
+                                                    <span>User ID: {reading.user_id ?? urlUserParam}</span>
                                                 </div>
                                             )}
 
