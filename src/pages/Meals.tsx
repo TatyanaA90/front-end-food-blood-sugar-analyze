@@ -7,6 +7,8 @@ import MealForm from '../components/meals/MealForm';
 import { useMeals, useCreateMeal, useUpdateMeal, useDeleteMeal } from '../hooks/useMealManagement';
 import type { MealBasic, MealCreate, MealUpdate } from '../services/mealService';
 import { mealService } from '../services/mealService';
+import { useUserData } from '../hooks/useUserManagement';
+import { useAuth } from '../hooks/useAuth';
 import './Meals.css';
 
 const Meals: React.FC = () => {
@@ -26,9 +28,12 @@ const Meals: React.FC = () => {
     const v = params.get('user');
     return v ? Number(v) : undefined;
   }, [location.search]);
+  const { user } = useAuth();
+  const isAdmin = !!user?.is_admin;
   const createMealMutation = useCreateMeal();
   const updateMealMutation = useUpdateMeal();
   const deleteMealMutation = useDeleteMeal();
+  const { data: selectedUserData } = useUserData(isAdmin ? (urlUserParam || 0) : 0);
 
   // Show notification
   const showNotification = (type: 'success' | 'error', message: string) => {
@@ -148,7 +153,25 @@ const Meals: React.FC = () => {
           />
         ) : (
           <MealList
-            meals={urlUserParam ? meals.filter(m => (m as any).user_id === urlUserParam) : meals}
+            meals={isAdmin && urlUserParam
+              ? (() => {
+                  const withUserId = meals.filter(m => Object.prototype.hasOwnProperty.call(m, 'user_id')) as Array<MealBasic & { user_id?: number }>;
+                  if (withUserId.length > 0) {
+                    return withUserId.filter(m => m.user_id === urlUserParam);
+                  }
+                  // Fallback to admin user data if list items lack user_id
+                  if (selectedUserData?.meals && selectedUserData.meals.length > 0) {
+                    return selectedUserData.meals.map(m => ({
+                      id: m.id,
+                      description: m.name,
+                      meal_type: m.meal_type,
+                      timestamp: m.timestamp,
+                      user_id: urlUserParam,
+                    } as MealBasic));
+                  }
+                  return [] as MealBasic[];
+                })()
+              : meals}
             onAddMeal={handleAddMeal}
             onEditMeal={handleEditMeal}
             onDeleteMeal={handleDeleteMeal}

@@ -16,14 +16,8 @@ const Login: React.FC = () => {
   const [showLoginForm, setShowLoginForm] = useState(false);
   const { login, isLoading } = useAuth();
   const navigate = useNavigate();
-  const [theme, setTheme] = useState<'dark' | 'light'>(() =>
-    ((document.documentElement.getAttribute('data-theme') as 'dark' | 'light') || (localStorage.getItem('theme-mode') as 'dark' | 'light') || 'light')
-  );
-
-  useEffect(() => {
-    const current = (document.documentElement.getAttribute('data-theme') as 'dark' | 'light') || (localStorage.getItem('theme-mode') as 'dark' | 'light') || 'light';
-    setTheme(current);
-  }, []);
+  // Login page uses a single logo asset regardless of theme
+  const loginLogoSrc = '/assets/images/Logo_orange.png';
 
   const {
     register,
@@ -56,12 +50,12 @@ const Login: React.FC = () => {
       <nav className="landing-top-bar">
         <div className="landing-logo">
           <img
-            src={theme === 'dark' ? '/assets/images/logo_light.png' : '/assets/images/Logo.png'}
+            src={loginLogoSrc}
             alt="App logo"
             width={32}
             height={32}
           />
-          <span>🩸 Food & Blood Sugar Analyzer</span>
+          <span> Food & Blood Sugar Analyzer</span>
         </div>
         
         <div className="landing-top-buttons">

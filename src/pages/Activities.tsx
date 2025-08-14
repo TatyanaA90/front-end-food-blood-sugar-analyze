@@ -6,6 +6,8 @@ import ActivityList from '../components/activities/ActivityList';
 import ActivityForm from '../components/activities/ActivityForm';
 import { useActivities, useCreateActivity, useUpdateActivity, useDeleteActivity } from '../hooks/useActivityManagement';
 import type { ActivityBasic, ActivityCreate, ActivityUpdate } from '../services/activityService';
+import { useUserData } from '../hooks/useUserManagement';
+import { useAuth } from '../hooks/useAuth';
 import './Activities.css';
 
 const Activities: React.FC = () => {
@@ -24,6 +26,9 @@ const Activities: React.FC = () => {
     const v = params.get('user');
     return v ? Number(v) : undefined;
   }, [location.search]);
+  const { user } = useAuth();
+  const isAdmin = !!user?.is_admin;
+  const { data: selectedUserData } = useUserData(isAdmin ? (urlUserParam || 0) : 0);
   const createActivityMutation = useCreateActivity();
   const updateActivityMutation = useUpdateActivity();
   const deleteActivityMutation = useDeleteActivity();
@@ -130,7 +135,27 @@ const Activities: React.FC = () => {
           />
         ) : (
           <ActivityList
-            activities={urlUserParam ? activities.filter(a => (a as any).user_id === urlUserParam) : activities}
+            activities={isAdmin && urlUserParam
+              ? (() => {
+                  const withUserId = activities.filter(a => Object.prototype.hasOwnProperty.call(a, 'user_id')) as Array<ActivityBasic & { user_id?: number }>;
+                  if (withUserId.length > 0) {
+                    return withUserId.filter(a => a.user_id === urlUserParam);
+                  }
+                  // Fallback to admin user data if list items lack user_id
+                  if (selectedUserData?.activities && selectedUserData.activities.length > 0) {
+                    return selectedUserData.activities.map(a => ({
+                      id: a.id,
+                      // type: (a as any).activity_type || 'activity',
+                      // duration_min: (a as any).duration_minutes ?? 0,
+                      type: (a as { activity_type?: string }).activity_type || 'activity',
+                      duration_min: (a as { duration_minutes?: number }).duration_minutes ?? 0,
+                      timestamp: a.timestamp,
+                      user_id: urlUserParam,
+                    } as ActivityBasic));
+                  }
+                  return [] as ActivityBasic[];
+                })()
+              : activities}
             onAddActivity={handleAddActivity}
             onEditActivity={handleEditActivity}
             onDeleteActivity={handleDeleteActivity}

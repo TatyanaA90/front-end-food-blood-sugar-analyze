@@ -63,6 +63,7 @@ const GlucoseReadings: React.FC = () => {
     }, [location.search]);
 
     const { user } = useAuth();
+    const isAdmin = !!user?.is_admin;
 
     // React Query hooks
     const { data: readings = [], isLoading, error } = useGlucoseReadings({
@@ -72,7 +73,7 @@ const GlucoseReadings: React.FC = () => {
 
     // If an admin navigates with ?user=<id> and backend items lack user_id,
     // fall back to admin user-data endpoint to populate that user's readings.
-    const { data: selectedUserData } = useUserData(urlUserParam || 0);
+    const { data: selectedUserData } = useUserData(isAdmin ? (urlUserParam || 0) : 0);
     const createMutation = useCreateGlucoseReading();
     const updateMutation = useUpdateGlucoseReading();
     const deleteMutation = useDeleteGlucoseReading();
@@ -95,7 +96,7 @@ const GlucoseReadings: React.FC = () => {
 
     // If admin navigated with ?user=<id>, filter list client-side
     const filteredReadings = React.useMemo(() => {
-        if (!urlUserParam) return sortedReadings;
+        if (!(isAdmin && urlUserParam)) return sortedReadings;
         const withUserId = sortedReadings.filter(r => Object.prototype.hasOwnProperty.call(r, 'user_id')) as Array<GlucoseReading & { user_id?: number }>;
         if (withUserId.length > 0) {
             return withUserId.filter(r => r.user_id === urlUserParam);

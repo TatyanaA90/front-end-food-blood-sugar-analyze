@@ -6,6 +6,8 @@ import InsulinDoseList from '../components/insulin/InsulinDoseList';
 import InsulinDoseForm from '../components/insulin/InsulinDoseForm';
 import { useInsulinDoses, useCreateInsulinDose, useUpdateInsulinDose, useDeleteInsulinDose } from '../hooks/useInsulinDoseManagement';
 import type { InsulinDoseBasic, InsulinDoseCreate, InsulinDoseUpdate } from '../services/insulinDoseService';
+import { useUserData } from '../hooks/useUserManagement';
+import { useAuth } from '../hooks/useAuth';
 import './InsulinDoses.css';
 
 const InsulinDoses: React.FC = () => {
@@ -24,9 +26,12 @@ const InsulinDoses: React.FC = () => {
     const v = params.get('user');
     return v ? Number(v) : undefined;
   }, [location.search]);
+  const { user } = useAuth();
+  const isAdmin = !!user?.is_admin;
   const createDoseMutation = useCreateInsulinDose();
   const updateDoseMutation = useUpdateInsulinDose();
   const deleteDoseMutation = useDeleteInsulinDose();
+  const { data: selectedUserData } = useUserData(isAdmin ? (urlUserParam || 0) : 0);
 
   const showNotification = (type: 'success' | 'error', message: string) => {
     setNotification({ type, message });
@@ -130,7 +135,24 @@ const InsulinDoses: React.FC = () => {
           />
         ) : (
           <InsulinDoseList
-            doses={urlUserParam ? doses.filter(d => (d as any).user_id === urlUserParam) : doses}
+            doses={isAdmin && urlUserParam
+              ? (() => {
+                  const withUserId = doses.filter(d => Object.prototype.hasOwnProperty.call(d, 'user_id')) as Array<InsulinDoseBasic & { user_id?: number }>;
+                  if (withUserId.length > 0) {
+                    return withUserId.filter(d => d.user_id === urlUserParam);
+                  }
+                  // Fallback to admin user data if list items lack user_id
+                  if (selectedUserData?.insulin_doses && selectedUserData.insulin_doses.length > 0) {
+                    return selectedUserData.insulin_doses.map(d => ({
+                      id: d.id,
+                      units: d.units,
+                      timestamp: d.timestamp,
+                      user_id: urlUserParam,
+                    } as InsulinDoseBasic));
+                  }
+                  return [] as InsulinDoseBasic[];
+                })()
+              : doses}
             onAddDose={handleAddDose}
             onEditDose={handleEditDose}
             onDeleteDose={handleDeleteDose}

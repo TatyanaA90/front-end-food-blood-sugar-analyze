@@ -1,7 +1,7 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
-import { LogOut, User, Settings, Shield, Droplets, Utensils, Activity, Syringe, ChevronDown, Home } from 'lucide-react';
+import { LogOut, User, Settings, Shield, Droplets, Utensils, Activity, Syringe, ChevronDown, Home, List } from 'lucide-react';
 import './Navbar.css';
 
 const Navbar: React.FC = () => {
@@ -45,7 +45,19 @@ const Navbar: React.FC = () => {
                     <div className="navbar-user-info">
                         <User className="navbar-user-icon" />
                         <span className="navbar-username">{user?.username}</span>
-                        <Home className="navbar-home-icon" />
+                        <Home
+                            className="navbar-home-icon"
+                            role="button"
+                            aria-label="Go to Dashboard"
+                            tabIndex={0}
+                            onClick={() => navigate('/dashboard')}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter' || e.key === ' ') {
+                                    e.preventDefault();
+                                    navigate('/dashboard');
+                                }
+                            }}
+                        />
                         {user?.is_admin && (
                             <div className="navbar-admin-badge">
                                 <Shield className="admin-icon" />
@@ -102,6 +114,7 @@ const Navbar: React.FC = () => {
                                     aria-expanded={isPagesOpen}
                                     onClick={() => setIsPagesOpen((prev) => !prev)}
                                 >
+                                    <List className="button-icon" />
                                     <ChevronDown className={`button-icon navbar-dropdown-icon${isPagesOpen ? ' open' : ''}`} />
                                     <span>Pages</span>
                                 </button>
@@ -153,6 +166,7 @@ const Navbar: React.FC = () => {
                                     aria-expanded={isLogsOpen}
                                     onClick={() => setIsLogsOpen((prev) => !prev)}
                                 >
+                                    <List className="button-icon" />
                                     <ChevronDown className={`button-icon navbar-dropdown-icon${isLogsOpen ? ' open' : ''}`} />
                                     <span>Logs</span>
                                 </button>
