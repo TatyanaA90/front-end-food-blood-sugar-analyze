@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { AlertTriangle, CheckCircle, XCircle } from 'lucide-react';
 import NavigationHeader from '../components/layout/NavigationHeader';
 import ActivityList from '../components/activities/ActivityList';
@@ -17,6 +18,12 @@ const Activities: React.FC = () => {
   } | null>(null);
 
   const { data: activities = [], isLoading, error } = useActivities();
+  const location = useLocation();
+  const urlUserParam = useMemo(() => {
+    const params = new URLSearchParams(location.search);
+    const v = params.get('user');
+    return v ? Number(v) : undefined;
+  }, [location.search]);
   const createActivityMutation = useCreateActivity();
   const updateActivityMutation = useUpdateActivity();
   const deleteActivityMutation = useDeleteActivity();
@@ -123,7 +130,7 @@ const Activities: React.FC = () => {
           />
         ) : (
           <ActivityList
-            activities={activities}
+            activities={urlUserParam ? activities.filter(a => (a as any).user_id === urlUserParam) : activities}
             onAddActivity={handleAddActivity}
             onEditActivity={handleEditActivity}
             onDeleteActivity={handleDeleteActivity}

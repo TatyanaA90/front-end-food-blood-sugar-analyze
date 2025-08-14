@@ -191,34 +191,34 @@ const UserDetailModal: React.FC<UserDetailModalProps> = ({
               <section className="user-detail-section">
                 <h3 className="section-title">Data Summary</h3>
                 <div className="data-summary-cards">
-                  <div className="data-summary-card">
+                  <button className="data-summary-card" onClick={() => window.location.assign(`/glucose-readings?user=${user.id}`)}>
                     <Droplets className="data-card-icon" />
                     <div className="data-card-content">
                       <span className="data-card-count">{user.glucose_readings_count}</span>
                       <span className="data-card-label">Glucose Readings</span>
                     </div>
-                  </div>
-                  <div className="data-summary-card">
+                  </button>
+                  <button className="data-summary-card" onClick={() => window.location.assign(`/meals?user=${user.id}`)}>
                     <Utensils className="data-card-icon" />
                     <div className="data-card-content">
                       <span className="data-card-count">{user.meals_count}</span>
                       <span className="data-card-label">Meals</span>
                     </div>
-                  </div>
-                  <div className="data-summary-card">
+                  </button>
+                  <button className="data-summary-card" onClick={() => window.location.assign(`/activities?user=${user.id}`)}>
                     <Activity className="data-card-icon" />
                     <div className="data-card-content">
                       <span className="data-card-count">{user.activities_count}</span>
                       <span className="data-card-label">Activities</span>
                     </div>
-                  </div>
-                  <div className="data-summary-card">
+                  </button>
+                  <button className="data-summary-card" onClick={() => window.location.assign(`/logs?user=${user.id}`)}>
                     <FileText className="data-card-icon" />
                     <div className="data-card-content">
                       <span className="data-card-count">{user.condition_logs_count}</span>
                       <span className="data-card-label">Condition Logs</span>
                     </div>
-                  </div>
+                  </button>
                 </div>
               </section>
 

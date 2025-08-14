@@ -20,7 +20,7 @@
 }
 
 .layout-footer-content {
-    position: relative;
+    position: static;
     max-width: 1280px;
     margin: 0 auto;
     width: 100%;
@@ -29,8 +29,8 @@
 
 .layout-footer-copy {
     position: absolute;
-    right: 1rem;
-    bottom: 0.75rem;
+    right: 0.75rem;
+    bottom: 0.5rem;
     font-size: 0.825rem;
     color: #6b7280; /* subtle, low-contrast */
     letter-spacing: 0.15px;
@@ -40,5 +40,5 @@
     .layout-main {
         padding: 1rem;
     }
-    .layout-footer-copy { right: 0.75rem; bottom: 0.75rem; }
+    .layout-footer-copy { right: 0.5rem; bottom: 0.5rem; }
 }

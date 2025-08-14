@@ -70,6 +70,9 @@ const UserCard: React.FC<UserCardProps> = ({
       <div className="user-card-content">
         <div className="user-meta">
           <div className="user-meta-item">
+            <span>User ID: {userData.id}</span>
+          </div>
+          <div className="user-meta-item">
             <Mail className="meta-icon" />
             <span>{userData.email}</span>
           </div>

@@ -214,7 +214,7 @@ html[data-theme='dark'] .navbar-dropdown-item { color: var(--text-main) !importa
 html[data-theme='dark'] .navbar-dropdown-item:hover { background: #606060 !important; }
 
 /* Footer copyright in dark mode */
-html[data-theme='dark'] .layout-footer { background: rgba(0,0,0,0.25) !important; border-top: 1px solid var(--dm-border) !important; }
+html[data-theme='dark'] .layout-footer { background: rgba(0,0,0,0.25) !important; border-top: 1px solid var(--dm-border) !important; position: relative; }
 html[data-theme='dark'] .layout-footer-copy { color: var(--text-secondary) !important; }
 
 /* Meals and Insulin Doses pages (page wrappers that use light gradients) */

@@ -200,16 +200,6 @@ const AdminDashboard: React.FC = () => {
       />
 
       <div className="admin-content">
-        {/* Debug information */}
-        <div style={{ background: '#f0f0f0', padding: '10px', margin: '10px 0', borderRadius: '5px' }}>
-          <h4>Debug Info:</h4>
-          <p>Users count: {users.length}</p>
-          <p>Users detailed count: {usersDetailed.length}</p>
-          <p>User stats: {userStats ? JSON.stringify(userStats) : 'null'}</p>
-          <p>Current user ID: {user?.id}</p>
-          <p>Token: {authService.getToken() ? 'Present' : 'Missing'}</p>
-        </div>
-
         <div style={{ display: 'grid', gap: 24 }}>
           <UserManagementSection
             users={usersDetailed}

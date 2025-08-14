@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import { useLocation } from "react-router-dom";
 import {
     Plus,
     Search,
@@ -52,6 +53,13 @@ const GlucoseReadings: React.FC = () => {
     // Glucose unit utilities
     const { convertReading, getReadingStatus } = useGlucoseUnitUtils();
 
+    const location = useLocation();
+    const urlUserParam = React.useMemo(() => {
+        const params = new URLSearchParams(location.search);
+        const val = params.get('user');
+        return val ? Number(val) : undefined;
+    }, [location.search]);
+
     // React Query hooks
     const { data: readings = [], isLoading, error } = useGlucoseReadings({
         ...filters,
@@ -77,8 +85,11 @@ const GlucoseReadings: React.FC = () => {
         });
     }, [readings, sortOrder]);
 
-    // Use sorted readings for display
-    const filteredReadings = sortedReadings;
+    // If admin navigated with ?user=<id>, filter list client-side
+    const filteredReadings = React.useMemo(() => {
+        if (!urlUserParam) return sortedReadings;
+        return sortedReadings.filter(r => r.user_id === urlUserParam);
+    }, [sortedReadings, urlUserParam]);
 
     const handleSortToggle = () => {
         setSortOrder(prev => prev === 'newest' ? 'oldest' : 'newest');
@@ -371,6 +382,11 @@ const GlucoseReadings: React.FC = () => {
                                                     {getMealContextLabel(reading.meal_context || "other")}
                                                 </span>
                     </div>
+
+                                            {/* Show creator user_id for admins */}
+                                            <div className="glucose-reading-detail" title="Creator user_id">
+                                                <span>User ID: {reading.user_id}</span>
+                                            </div>
 
                                             {reading.notes && (
                                                 <div className="glucose-reading-detail">

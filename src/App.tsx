@@ -31,12 +31,84 @@ function App() {
           <Router>
         <main className="App">
           <Routes>
-            {/* Public routes */}
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/reset-password" element={<ResetPassword />} />
-            <Route path="/admin/login" element={<AdminLoginRoute><AdminLogin /></AdminLoginRoute>} />
+            {/* Public routes (wrapped to include footer on all pages) */}
+            <Route
+              path="/login"
+              element={
+                <div className="layout">
+                  <main className="layout-main">
+                    <Login />
+                  </main>
+                  <footer className="layout-footer" aria-label="Site footer">
+                    <div className="layout-footer-content">
+                      <span className="layout-footer-copy">© 2025 Tatyana Ageyeva</span>
+                    </div>
+                  </footer>
+                </div>
+              }
+            />
+            <Route
+              path="/register"
+              element={
+                <div className="layout">
+                  <main className="layout-main">
+                    <Register />
+                  </main>
+                  <footer className="layout-footer" aria-label="Site footer">
+                    <div className="layout-footer-content">
+                      <span className="layout-footer-copy">© 2025 Tatyana Ageyeva</span>
+                    </div>
+                  </footer>
+                </div>
+              }
+            />
+            <Route
+              path="/forgot-password"
+              element={
+                <div className="layout">
+                  <main className="layout-main">
+                    <ForgotPassword />
+                  </main>
+                  <footer className="layout-footer" aria-label="Site footer">
+                    <div className="layout-footer-content">
+                      <span className="layout-footer-copy">© 2025 Tatyana Ageyeva</span>
+                    </div>
+                  </footer>
+                </div>
+              }
+            />
+            <Route
+              path="/reset-password"
+              element={
+                <div className="layout">
+                  <main className="layout-main">
+                    <ResetPassword />
+                  </main>
+                  <footer className="layout-footer" aria-label="Site footer">
+                    <div className="layout-footer-content">
+                      <span className="layout-footer-copy">© 2025 Tatyana Ageyeva</span>
+                    </div>
+                  </footer>
+                </div>
+              }
+            />
+            <Route
+              path="/admin/login"
+              element={
+                <AdminLoginRoute>
+                  <div className="layout">
+                    <main className="layout-main">
+                      <AdminLogin />
+                    </main>
+                    <footer className="layout-footer" aria-label="Site footer">
+                      <div className="layout-footer-content">
+                        <span className="layout-footer-copy">© 2025 Tatyana Ageyeva</span>
+                      </div>
+                    </footer>
+                  </div>
+                </AdminLoginRoute>
+              }
+            />
             <Route path="/login/admin" element={<Navigate to="/admin/login" replace />} />
 
             {/* Protected routes */}

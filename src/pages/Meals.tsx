@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { AlertTriangle, CheckCircle, XCircle } from 'lucide-react';
 import NavigationHeader from '../components/layout/NavigationHeader';
 import MealList from '../components/meals/MealList';
@@ -19,6 +20,12 @@ const Meals: React.FC = () => {
 
   // React Query hooks
   const { data: meals = [], isLoading, error } = useMeals();
+  const location = useLocation();
+  const urlUserParam = useMemo(() => {
+    const params = new URLSearchParams(location.search);
+    const v = params.get('user');
+    return v ? Number(v) : undefined;
+  }, [location.search]);
   const createMealMutation = useCreateMeal();
   const updateMealMutation = useUpdateMeal();
   const deleteMealMutation = useDeleteMeal();
@@ -141,7 +148,7 @@ const Meals: React.FC = () => {
           />
         ) : (
           <MealList
-            meals={meals}
+            meals={urlUserParam ? meals.filter(m => (m as any).user_id === urlUserParam) : meals}
             onAddMeal={handleAddMeal}
             onEditMeal={handleEditMeal}
             onDeleteMeal={handleDeleteMeal}

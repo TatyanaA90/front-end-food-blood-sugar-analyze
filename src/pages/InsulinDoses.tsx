@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { AlertTriangle, CheckCircle, XCircle } from 'lucide-react';
 import NavigationHeader from '../components/layout/NavigationHeader';
 import InsulinDoseList from '../components/insulin/InsulinDoseList';
@@ -17,6 +18,12 @@ const InsulinDoses: React.FC = () => {
   } | null>(null);
 
   const { data: doses = [], isLoading, error } = useInsulinDoses();
+  const location = useLocation();
+  const urlUserParam = useMemo(() => {
+    const params = new URLSearchParams(location.search);
+    const v = params.get('user');
+    return v ? Number(v) : undefined;
+  }, [location.search]);
   const createDoseMutation = useCreateInsulinDose();
   const updateDoseMutation = useUpdateInsulinDose();
   const deleteDoseMutation = useDeleteInsulinDose();
@@ -123,7 +130,7 @@ const InsulinDoses: React.FC = () => {
           />
         ) : (
           <InsulinDoseList
-            doses={doses}
+            doses={urlUserParam ? doses.filter(d => (d as any).user_id === urlUserParam) : doses}
             onAddDose={handleAddDose}
             onEditDose={handleEditDose}
             onDeleteDose={handleDeleteDose}
