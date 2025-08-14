@@ -16,6 +16,14 @@ const Login: React.FC = () => {
   const [showLoginForm, setShowLoginForm] = useState(false);
   const { login, isLoading } = useAuth();
   const navigate = useNavigate();
+  const [theme, setTheme] = useState<'dark' | 'light'>(() =>
+    ((document.documentElement.getAttribute('data-theme') as 'dark' | 'light') || (localStorage.getItem('theme-mode') as 'dark' | 'light') || 'light')
+  );
+
+  useEffect(() => {
+    const current = (document.documentElement.getAttribute('data-theme') as 'dark' | 'light') || (localStorage.getItem('theme-mode') as 'dark' | 'light') || 'light';
+    setTheme(current);
+  }, []);
 
   const {
     register,
@@ -48,9 +56,8 @@ const Login: React.FC = () => {
       <nav className="landing-top-bar">
         <div className="landing-logo">
           <img
-            src="/assets/images/Logo.png"
+            src={theme === 'dark' ? '/assets/images/logo_light.png' : '/assets/images/Logo.png'}
             alt="App logo"
-            className="landing-logo-img"
             width={32}
             height={32}
           />

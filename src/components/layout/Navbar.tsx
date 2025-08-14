@@ -11,6 +11,7 @@ const Navbar: React.FC = () => {
     const [mode, setMode] = React.useState<'dark' | 'light'>(() => (localStorage.getItem('theme-mode') as 'dark' | 'light') || 'light');
     const [isPagesOpen, setIsPagesOpen] = React.useState(false);
     const [isLogsOpen, setIsLogsOpen] = React.useState(false);
+    const [isModeOpen, setIsModeOpen] = React.useState(false);
 
     React.useEffect(() => {
         document.documentElement.setAttribute('data-theme', mode);
@@ -34,7 +35,7 @@ const Navbar: React.FC = () => {
                         aria-label="Go to Dashboard"
                     >
                         <img
-                            src="/assets/images/Logo.png"
+                            src={mode === 'dark' ? '/assets/images/logo_light.png' : '/assets/images/Logo.png'}
                             alt="App logo"
                             className="navbar-logo-img"
                             width={28}
@@ -55,18 +56,40 @@ const Navbar: React.FC = () => {
                 </div>
                 <nav className="navbar-nav">
                     <div className="navbar-actions">
-                        <div className="navbar-mode-switch">
-                            <label htmlFor="theme-mode" className="sr-only">Theme mode</label>
-                            <select
-                                id="theme-mode"
-                                className="navbar-mode-select"
-                                value={mode}
-                                onChange={(e) => setMode(e.target.value as 'dark' | 'light')}
+                        <div
+                            className="navbar-dropdown"
+                            onMouseLeave={() => setIsModeOpen(false)}
+                        >
+                            <button
+                                className="navbar-button navbar-dropdown-toggle"
+                                aria-haspopup="menu"
+                                aria-expanded={isModeOpen}
+                                onClick={() => setIsModeOpen((prev) => !prev)}
                                 aria-label="Theme mode selector"
                             >
-                                <option value="light">Light</option>
-                                <option value="dark">Dark</option>
-                            </select>
+                                <ChevronDown className={`button-icon navbar-dropdown-icon${isModeOpen ? ' open' : ''}`} />
+                                <span>Mode</span>
+                            </button>
+                            {isModeOpen && (
+                                <div className="navbar-dropdown-menu" role="menu">
+                                    <button
+                                        className="navbar-dropdown-item"
+                                        role="menuitemradio"
+                                        aria-checked={mode === 'light'}
+                                        onClick={() => { setMode('light'); setIsModeOpen(false); }}
+                                    >
+                                        <span>Light</span>
+                                    </button>
+                                    <button
+                                        className="navbar-dropdown-item"
+                                        role="menuitemradio"
+                                        aria-checked={mode === 'dark'}
+                                        onClick={() => { setMode('dark'); setIsModeOpen(false); }}
+                                    >
+                                        <span>Dark</span>
+                                    </button>
+                                </div>
+                            )}
                         </div>
                         {isAdminDashboard ? (
                             <div
