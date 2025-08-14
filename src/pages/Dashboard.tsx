@@ -6,6 +6,7 @@ import { Activity, BarChart3, Plus, Droplets, Clock, TrendingUp, TrendingDown, M
 import { useNavigate } from 'react-router-dom';
 import NavigationHeader from '../components/layout/NavigationHeader';
 import TimeInRangePie from '../components/dashboards/TimeInRangePie';
+import { ensureUtcIso } from '../utils/dateUtils';
 import api from '../services/api';
 import './Dashboard.css';
 
@@ -28,13 +29,13 @@ const Dashboard: React.FC = () => {
 
     // Get recent readings (last 5), ordered by displayed time (newest first)
     const recentReadings = [...readings]
-        .sort((a, b) => new Date(b.reading_time).getTime() - new Date(a.reading_time).getTime())
+        .sort((a, b) => new Date(ensureUtcIso(b.reading_time)).getTime() - new Date(ensureUtcIso(a.reading_time)).getTime())
         .slice(0, 5);
 
     // Calculate summary stats
     const totalReadings = readings.length;
     const todayReadings = readings.filter(reading => {
-        const readingDate = new Date(reading.reading_time).toDateString();
+        const readingDate = new Date(ensureUtcIso(reading.reading_time)).toDateString();
         const today = new Date().toDateString();
         return readingDate === today;
     }).length;
@@ -213,7 +214,7 @@ const Dashboard: React.FC = () => {
                                     if (readings.length < 2) return '';
 
                                     const sortedReadings = [...readings]
-                                        .sort((a, b) => new Date(a.reading_time).getTime() - new Date(b.reading_time).getTime());
+                                        .sort((a, b) => new Date(ensureUtcIso(a.reading_time)).getTime() - new Date(ensureUtcIso(b.reading_time)).getTime());
 
                                     const firstReading = convertReading(sortedReadings[0]);
                                     const lastReading = convertReading(sortedReadings[sortedReadings.length - 1]);
@@ -226,7 +227,7 @@ const Dashboard: React.FC = () => {
                                         if (readings.length < 2) return '--';
 
                                         const sortedReadings = [...readings]
-                                            .sort((a, b) => new Date(a.reading_time).getTime() - new Date(b.reading_time).getTime());
+                                            .sort((a, b) => new Date(ensureUtcIso(a.reading_time)).getTime() - new Date(ensureUtcIso(b.reading_time)).getTime());
 
                                         const firstReading = convertReading(sortedReadings[0]);
                                         const lastReading = convertReading(sortedReadings[sortedReadings.length - 1]);
@@ -242,7 +243,7 @@ const Dashboard: React.FC = () => {
                                         if (readings.length < 2) return '';
 
                                         const sortedReadings = [...readings]
-                                            .sort((a, b) => new Date(a.reading_time).getTime() - new Date(b.reading_time).getTime());
+                                            .sort((a, b) => new Date(ensureUtcIso(a.reading_time)).getTime() - new Date(ensureUtcIso(b.reading_time)).getTime());
 
                                         const firstReading = convertReading(sortedReadings[0]);
                                         const lastReading = convertReading(sortedReadings[sortedReadings.length - 1]);
@@ -312,7 +313,7 @@ const Dashboard: React.FC = () => {
                                             </div>
                                             <div className="dashboard-reading-details">
                                                 <div className="dashboard-reading-time">
-                                                    {new Date(reading.reading_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                    {new Date(ensureUtcIso(reading.reading_time)).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                                 </div>
                                                 <div className="dashboard-reading-status" style={{ backgroundColor: status.color }}>
                                                     {getTrendIcon(status.status)}

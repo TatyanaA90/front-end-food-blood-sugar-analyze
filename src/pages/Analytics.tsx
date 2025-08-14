@@ -149,7 +149,7 @@ const Analytics: React.FC = () => {
       })).filter((r) => r.value > 0);
 
       const events = (r.data.events || r.data?.events || []).map((ev: { timestamp: string | number; type: string; description?: string; activity_type?: string; units?: number }) => {
-        const time = (typeof ev.timestamp === 'string' ? new Date(ev.timestamp).getTime() : Number(ev.timestamp));
+              const time = (typeof ev.timestamp === 'string' ? new Date(ev.timestamp.endsWith('Z') || /[+-]\d{2}:?\d{2}$/.test(ev.timestamp) ? ev.timestamp : `${ev.timestamp}Z`).getTime() : Number(ev.timestamp));
         let label = ev.description || ev.type;
         if (ev.type === 'activity') {
           label = ev.activity_type || ev.type;

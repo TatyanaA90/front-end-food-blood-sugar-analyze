@@ -36,6 +36,7 @@ import GlucoseReadingForm from "../components/glucose/GlucoseReadingForm";
 import NavigationHeader from "../components/layout/NavigationHeader";
 import { uploadCsv } from "../services/api";
 import "./GlucoseReadings.css";
+import { ensureUtcIso } from "../utils/dateUtils";
 
 const GlucoseReadings: React.FC = () => {
     const [filters, setFilters] = useState<GlucoseReadingFilters>({});
@@ -83,8 +84,8 @@ const GlucoseReadings: React.FC = () => {
         if (!readings.length) return [];
         
         return [...readings].sort((a, b) => {
-            const dateA = new Date(a.reading_time).getTime();
-            const dateB = new Date(b.reading_time).getTime();
+            const dateA = new Date(ensureUtcIso(a.reading_time)).getTime();
+            const dateB = new Date(ensureUtcIso(b.reading_time)).getTime();
             
             if (sortOrder === 'newest') {
                 return dateB - dateA; // Newest first
@@ -108,11 +109,11 @@ const GlucoseReadings: React.FC = () => {
                 user_id: urlUserParam!,
                 reading: gr.value,
                 unit: (gr.unit?.toLowerCase() === 'mmol/l' ? 'mmol/L' : 'mg/dL') as 'mg/dL' | 'mmol/L',
-                reading_time: gr.timestamp,
+                reading_time: ensureUtcIso(gr.timestamp),
                 meal_context: undefined,
                 notes: (gr as any).notes || undefined,
-                created_at: gr.timestamp,
-                updated_at: gr.timestamp,
+                created_at: ensureUtcIso(gr.timestamp),
+                updated_at: ensureUtcIso(gr.timestamp),
             }));
         }
         return [];
@@ -161,7 +162,7 @@ const GlucoseReadings: React.FC = () => {
     };
 
     const formatReadingTime = (timeString: string) => {
-        return new Date(timeString).toLocaleString();
+        return new Date(ensureUtcIso(timeString)).toLocaleString();
     };
 
     const getMealContextLabel = (context: string) => {
