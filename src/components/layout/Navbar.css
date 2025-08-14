@@ -39,11 +39,9 @@
     transform: translateY(-1px);
 }
 
-.navbar-home-icon {
-    width: 1.75rem;
-    height: 1.75rem;
-    color: #1976d2;
-}
+.navbar-home-icon { width: 1.75rem; height: 1.75rem; color: #1976d2; }
+
+.navbar-logo-img { width: 28px; height: 28px; display: inline-block; object-fit: contain; }
 
 .navbar-title {
     font-size: 1.625rem;

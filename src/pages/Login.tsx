@@ -47,10 +47,14 @@ const Login: React.FC = () => {
     <div className="landing-page">
       <nav className="landing-top-bar">
         <div className="landing-logo">
-          <div className="landing-logo-icon">
-            <span style={{ color: 'white', fontSize: '12px' }}>🩸</span>
-          </div>
-          <span>Food & Blood Sugar Analyzer</span>
+          <img
+            src="/assets/images/Logo.png"
+            alt="App logo"
+            className="landing-logo-img"
+            width={32}
+            height={32}
+          />
+          <span>🩸 Food & Blood Sugar Analyzer</span>
         </div>
         
         <div className="landing-top-buttons">

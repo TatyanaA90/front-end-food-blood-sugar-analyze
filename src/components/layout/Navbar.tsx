@@ -1,7 +1,7 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
-import { LogOut, User, Settings, Shield, Droplets, Utensils, Activity, Syringe, ChevronDown } from 'lucide-react';
+import { LogOut, User, Settings, Shield, Droplets, Utensils, Activity, Syringe, ChevronDown, Home } from 'lucide-react';
 import './Navbar.css';
 
 const Navbar: React.FC = () => {
@@ -33,14 +33,18 @@ const Navbar: React.FC = () => {
                         onClick={() => navigate('/dashboard')}
                         aria-label="Go to Dashboard"
                     >
-                        <span className="navbar-home-icon">🩸</span>
-                        <h1 className="navbar-title">Food & Blood Sugar Analyzer</h1>
+                        <img
+                            src="/assets/images/Logo.png"
+                            alt="App logo"
+                            className="navbar-logo-img"
+                            width={28}
+                            height={28}
+                        />
                     </button>
-                </div>
-                <nav className="navbar-nav">
                     <div className="navbar-user-info">
                         <User className="navbar-user-icon" />
                         <span className="navbar-username">{user?.username}</span>
+                        <Home className="navbar-home-icon" />
                         {user?.is_admin && (
                             <div className="navbar-admin-badge">
                                 <Shield className="admin-icon" />
@@ -48,6 +52,8 @@ const Navbar: React.FC = () => {
                             </div>
                         )}
                     </div>
+                </div>
+                <nav className="navbar-nav">
                     <div className="navbar-actions">
                         <div className="navbar-mode-switch">
                             <label htmlFor="theme-mode" className="sr-only">Theme mode</label>
@@ -165,20 +171,12 @@ const Navbar: React.FC = () => {
                                 )}
                             </div>
                         )}
-                        <button
-                            onClick={() => navigate('/profile')}
-                            className="navbar-button"
-                            aria-label="User Profile"
-                        >
+                        <button onClick={() => navigate('/profile')} className="navbar-button" aria-label="User Profile">
                             <Settings className="button-icon" />
                             <span>Profile</span>
                         </button>
                         {user?.is_admin && (
-                            <button
-                                onClick={() => navigate('/admin')}
-                                className="navbar-button navbar-admin-button"
-                                aria-label="Admin Dashboard"
-                            >
+                            <button onClick={() => navigate('/admin')} className="navbar-button navbar-admin-button" aria-label="Admin Dashboard">
                                 <Shield className="button-icon" />
                                 <span>Admin</span>
                             </button>

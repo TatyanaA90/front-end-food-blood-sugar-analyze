@@ -195,7 +195,26 @@ html[data-theme='dark'] .navbar {
   color: var(--text-main) !important;
 }
 
-/* (Removed admin-only and dropdown-specific overrides to restore original look) */
+/* Navbar dropdowns (Logs / Pages) */
+html[data-theme='dark'] .navbar-dropdown-menu {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--dm-border) !important;
+  box-shadow: 0 10px 28px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.06) !important;
+  color: var(--text-main) !important;
+}
+html[data-theme='dark'] .navbar-dropdown-item {
+  background: #3b3b3b !important;
+  color: var(--text-main) !important;
+  border: 1px solid rgba(255,255,255,0.06) !important;
+}
+html[data-theme='dark'] .navbar-dropdown-item:hover {
+  background: #505050 !important;
+}
+html[data-theme='dark'] .navbar-dropdown-item .button-icon,
+html[data-theme='dark'] .navbar-dropdown-toggle .button-icon,
+html[data-theme='dark'] .navbar-dropdown-icon {
+  color: var(--text-main) !important;
+}
 
 /* Meals and Insulin Doses pages (page wrappers that use light gradients) */
 html[data-theme='dark'] .meals-page,
