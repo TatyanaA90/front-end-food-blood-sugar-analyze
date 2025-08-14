@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { Search, Filter, SortAsc, SortDesc, Plus, Edit, Trash2, Utensils, Calendar, Calculator, ArrowUpDown } from 'lucide-react';
 import type { MealBasic } from '../../services/mealService';
 import { mealUtils, mealService } from '../../services/mealService';
+import { useAuth } from '../../hooks/useAuth';
 import './MealList.css';
 
 interface MealListProps {
@@ -102,6 +103,8 @@ const MealList: React.FC<MealListProps> = ({
 
   return (
     <div className="meal-list-container">
+      {/* Admin-only placeholder (no UI change for users) */}
+      {(() => { const { user } = useAuth(); return user?.is_admin ? null : null; })()}
       {/* Header */}
       <div className="meal-list-header">
         <div className="header-content">

@@ -34,7 +34,7 @@ const Navbar: React.FC = () => {
                     >
                         <Home className="navbar-home-icon" />
                         <h1 className="navbar-title">
-                            Food Blood Sugar Analyzer
+                        🩸 Food & Blood Sugar Analyzer
                         </h1>
                     </button>
                 </div>

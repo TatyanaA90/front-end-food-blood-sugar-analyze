@@ -96,6 +96,10 @@ const UserDetailModal: React.FC<UserDetailModalProps> = ({
                     <span className="detail-value">{user.username}</span>
                   </div>
                   <div className="detail-item">
+                    <label className="detail-label">User ID</label>
+                    <span className="detail-value">{user.id}</span>
+                  </div>
+                  <div className="detail-item">
                     <label className="detail-label">Name</label>
                     {isEditing ? (
                                               <input

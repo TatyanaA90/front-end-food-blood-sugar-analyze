@@ -56,7 +56,10 @@ const UserCard: React.FC<UserCardProps> = ({
           <UserIcon className="user-avatar" />
           <div className="user-details">
             <h3 className="user-name">{userData.name}</h3>
-            <p className="user-username">@{userData.username}</p>
+            <p className="user-username">
+              @{userData.username}
+              <span className="user-id-badge" aria-label="User ID">ID: {userData.id}</span>
+            </p>
           </div>
         </div>
         {userData.is_admin && (

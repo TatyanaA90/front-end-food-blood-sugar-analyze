@@ -30,6 +30,7 @@ import {
     MEAL_CONTEXT_OPTIONS,
 } from "../types/glucose";
 import { useGlucoseUnitUtils } from "../hooks/useGlucoseUnit";
+import { useAuth } from "../hooks/useAuth";
 import GlucoseReadingForm from "../components/glucose/GlucoseReadingForm";
 import NavigationHeader from "../components/layout/NavigationHeader";
 import { uploadCsv } from "../services/api";
@@ -59,6 +60,8 @@ const GlucoseReadings: React.FC = () => {
         const val = params.get('user');
         return val ? Number(val) : undefined;
     }, [location.search]);
+
+    const { user } = useAuth();
 
     // React Query hooks
     const { data: readings = [], isLoading, error } = useGlucoseReadings({
@@ -383,10 +386,12 @@ const GlucoseReadings: React.FC = () => {
                                                 </span>
                     </div>
 
-                                            {/* Show creator user_id for admins */}
-                                            <div className="glucose-reading-detail" title="Creator user_id">
-                                                <span>User ID: {reading.user_id}</span>
-                                            </div>
+                                            {/* Show creator user_id for admins only */}
+                                            {user?.is_admin && (
+                                                <div className="glucose-reading-detail" title="Creator user_id">
+                                                    <span>User ID: {reading.user_id}</span>
+                                                </div>
+                                            )}
 
                                             {reading.notes && (
                                                 <div className="glucose-reading-detail">

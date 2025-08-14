@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { Search, Filter, SortAsc, SortDesc, Plus, Edit, Trash2, Syringe, Calendar, Zap, Utensils, ArrowUpDown } from 'lucide-react';
 import type { InsulinDoseBasic } from '../../services/insulinDoseService';
 import { insulinDoseUtils } from '../../services/insulinDoseService';
+import { useAuth } from '../../hooks/useAuth';
 import './InsulinDoseList.css';
 
 interface InsulinDoseListProps {
@@ -96,6 +97,8 @@ const InsulinDoseList: React.FC<InsulinDoseListProps> = ({
 
   return (
     <div className="insulin-dose-list-container">
+      {/* Admin-only placeholder to scope future admin-only fields without affecting users */}
+      {(() => { const { user } = useAuth(); return user?.is_admin ? null : null; })()}
       <div className="insulin-dose-list-header">
         <div className="header-content">
           <div className="header-title">

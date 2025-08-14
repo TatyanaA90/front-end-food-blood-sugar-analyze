@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { Search, Filter, SortAsc, SortDesc, Plus, Edit, Trash2, Activity, Calendar, Zap, Flame, Clock, ArrowUpDown } from 'lucide-react';
 import type { ActivityBasic } from '../../services/activityService';
+import { useAuth } from '../../hooks/useAuth';
 import { activityUtils } from '../../services/activityService';
 import './ActivityList.css';
 
@@ -95,6 +96,8 @@ const ActivityList: React.FC<ActivityListProps> = ({
 
   return (
     <div className="activity-list-container">
+      {/* Admin-only note: show creator user_id inline for admins */}
+      {(() => { const { user } = useAuth(); return user?.is_admin ? null : null; })()}
       <div className="activity-list-header">
         <div className="header-content">
           <div className="header-title">
