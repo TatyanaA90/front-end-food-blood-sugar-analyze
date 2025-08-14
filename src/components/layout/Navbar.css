@@ -52,6 +52,8 @@
     margin: 0;
 }
 
+/* removed temporary landing-logo styles to avoid extra classes */
+
 .navbar-nav {
     display: flex;
     align-items: center;

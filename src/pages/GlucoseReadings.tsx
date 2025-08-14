@@ -30,6 +30,7 @@ import {
     MEAL_CONTEXT_OPTIONS,
 } from "../types/glucose";
 import { useGlucoseUnitUtils } from "../hooks/useGlucoseUnit";
+import { useUserData } from "../hooks/useUserManagement";
 import { useAuth } from "../hooks/useAuth";
 import GlucoseReadingForm from "../components/glucose/GlucoseReadingForm";
 import NavigationHeader from "../components/layout/NavigationHeader";
@@ -68,6 +69,10 @@ const GlucoseReadings: React.FC = () => {
         ...filters,
         search: searchTerm || undefined
     });
+
+    // If an admin navigates with ?user=<id> and backend items lack user_id,
+    // fall back to admin user-data endpoint to populate that user's readings.
+    const { data: selectedUserData } = useUserData(urlUserParam || 0);
     const createMutation = useCreateGlucoseReading();
     const updateMutation = useUpdateGlucoseReading();
     const deleteMutation = useDeleteGlucoseReading();
@@ -91,8 +96,26 @@ const GlucoseReadings: React.FC = () => {
     // If admin navigated with ?user=<id>, filter list client-side
     const filteredReadings = React.useMemo(() => {
         if (!urlUserParam) return sortedReadings;
-        return sortedReadings.filter(r => r.user_id === urlUserParam);
-    }, [sortedReadings, urlUserParam]);
+        const withUserId = sortedReadings.filter(r => Object.prototype.hasOwnProperty.call(r, 'user_id')) as Array<GlucoseReading & { user_id?: number }>;
+        if (withUserId.length > 0) {
+            return withUserId.filter(r => r.user_id === urlUserParam);
+        }
+        // Fallback: build from admin user data if available
+        if (selectedUserData?.glucose_readings && selectedUserData.glucose_readings.length > 0) {
+            return selectedUserData.glucose_readings.map(gr => ({
+                id: gr.id,
+                user_id: urlUserParam!,
+                reading: gr.value,
+                unit: (gr.unit?.toLowerCase() === 'mmol/l' ? 'mmol/L' : 'mg/dL') as 'mg/dL' | 'mmol/L',
+                reading_time: gr.timestamp,
+                meal_context: undefined,
+                notes: (gr as any).notes || undefined,
+                created_at: gr.timestamp,
+                updated_at: gr.timestamp,
+            }));
+        }
+        return [];
+    }, [sortedReadings, urlUserParam, selectedUserData]);
 
     const handleSortToggle = () => {
         setSortOrder(prev => prev === 'newest' ? 'oldest' : 'newest');

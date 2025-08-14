@@ -307,6 +307,66 @@ html[data-theme='dark'] .tooltip-glucose-value { color: var(--text-main); }
 /* Recommendations card title */
 html[data-theme='dark'] .recommendations h4 { color: var(--dm-accent); text-shadow: none; }
 
+/* ===== Admin (scoped) – cohesive dark theme for admin UI ===== */
+html[data-theme='dark'] .admin-container { background: var(--bg-main) !important; }
+html[data-theme='dark'] .admin-title { color: var(--text-main) !important; }
+html[data-theme='dark'] .admin-header-icon { color: var(--dm-accent) !important; }
+
+/* Cards/sections */
+html[data-theme='dark'] .admin-stat-card,
+html[data-theme='dark'] .admin-section,
+html[data-theme='dark'] .admin-user-card {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--dm-border) !important;
+  box-shadow: var(--dm-shadow) !important;
+  color: var(--text-main) !important;
+}
+html[data-theme='dark'] .admin-section-title,
+html[data-theme='dark'] .user-name { color: var(--text-main) !important; }
+html[data-theme='dark'] .stat-number { color: var(--text-main) !important; }
+html[data-theme='dark'] .stat-label,
+html[data-theme='dark'] .user-username,
+html[data-theme='dark'] .user-meta-item,
+html[data-theme='dark'] .admin-empty-state { color: var(--text-secondary) !important; }
+
+/* Data summary tiles */
+html[data-theme='dark'] .user-data-summary { border-top: 1px solid var(--dm-border) !important; }
+html[data-theme='dark'] .data-summary-item {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--dm-border) !important;
+  color: var(--text-main) !important;
+}
+html[data-theme='dark'] .data-icon { color: var(--text-secondary) !important; }
+html[data-theme='dark'] .data-label { color: var(--text-secondary) !important; }
+html[data-theme='dark'] .data-count { background: var(--accent-primary) !important; color: #001216 !important; }
+
+/* Buttons in admin cards/headers */
+html[data-theme='dark'] .admin-refresh-btn {
+  background: #0ea5e9 !important;
+  color: #001216 !important;
+  border: 1px solid rgba(0,229,255,0.25) !important;
+}
+html[data-theme='dark'] .admin-refresh-btn:hover { background: #0284c7 !important; }
+html[data-theme='dark'] .admin-danger-btn { background: #dc2626 !important; color: #fff !important; }
+html[data-theme='dark'] .user-action-btn { background: #555555 !important; color: var(--text-main) !important; border: 1px solid var(--dm-border) !important; }
+html[data-theme='dark'] .user-view-btn { background: #1d4ed8 !important; color: #fff !important; }
+html[data-theme='dark'] .user-reset-btn { background: #d97706 !important; color: #fff !important; }
+html[data-theme='dark'] .user-delete-btn { background: #b91c1c !important; color: #fff !important; }
+
+/* Modals */
+html[data-theme='dark'] .admin-modal-overlay { background: rgba(0,0,0,0.6) !important; }
+html[data-theme='dark'] .admin-modal {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--dm-border) !important;
+  box-shadow: var(--dm-shadow) !important;
+  color: var(--text-main) !important;
+}
+html[data-theme='dark'] .admin-modal-title { color: var(--text-main) !important; }
+html[data-theme='dark'] .admin-modal-text { color: var(--text-secondary) !important; }
+html[data-theme='dark'] .admin-modal-warning { background: rgba(220,38,38,0.1) !important; border-color: rgba(220,38,38,0.35) !important; color: #fecaca !important; }
+html[data-theme='dark'] .admin-modal-cancel { background: #555555 !important; color: var(--text-main) !important; border: 1px solid var(--dm-border) !important; }
+html[data-theme='dark'] .admin-modal-cancel:hover { background: #606060 !important; }
+html[data-theme='dark'] .admin-modal-confirm { background: #dc2626 !important; color: #fff !important; }
 /* Glucose Readings – search panel and filters */
 html[data-theme='dark'] .glucose-readings-filters {
   background: var(--bg-card) !important;

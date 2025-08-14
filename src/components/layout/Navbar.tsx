@@ -1,7 +1,7 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
-import { LogOut, User, Settings, Shield, Droplets, Home, Utensils, Activity, Syringe, ChevronDown } from 'lucide-react';
+import { LogOut, User, Settings, Shield, Droplets, Utensils, Activity, Syringe, ChevronDown } from 'lucide-react';
 import './Navbar.css';
 
 const Navbar: React.FC = () => {
@@ -10,6 +10,7 @@ const Navbar: React.FC = () => {
     const location = useLocation();
     const [mode, setMode] = React.useState<'dark' | 'light'>(() => (localStorage.getItem('theme-mode') as 'dark' | 'light') || 'light');
     const [isPagesOpen, setIsPagesOpen] = React.useState(false);
+    const [isLogsOpen, setIsLogsOpen] = React.useState(false);
 
     React.useEffect(() => {
         document.documentElement.setAttribute('data-theme', mode);
@@ -32,10 +33,8 @@ const Navbar: React.FC = () => {
                         onClick={() => navigate('/dashboard')}
                         aria-label="Go to Dashboard"
                     >
-                        <Home className="navbar-home-icon" />
-                        <h1 className="navbar-title">
-                        🩸 Food & Blood Sugar Analyzer
-                        </h1>
+                        <span className="navbar-home-icon">🩸</span>
+                        <h1 className="navbar-title">Food & Blood Sugar Analyzer</h1>
                     </button>
                 </div>
                 <nav className="navbar-nav">
@@ -115,41 +114,56 @@ const Navbar: React.FC = () => {
                                 )}
                             </div>
                         ) : (
-                            <>
-                                {/* Keep individual buttons for non-admin or non-admin route */}
+                            <div
+                                className="navbar-dropdown"
+                                onMouseLeave={() => setIsLogsOpen(false)}
+                            >
                                 <button
-                                    onClick={() => navigate('/glucose-readings')}
-                                    className="navbar-button"
-                                    aria-label="Glucose Readings"
+                                    className="navbar-button navbar-dropdown-toggle"
+                                    aria-haspopup="menu"
+                                    aria-expanded={isLogsOpen}
+                                    onClick={() => setIsLogsOpen((prev) => !prev)}
                                 >
-                                    <Droplets className="button-icon" />
-                                    <span>Readings</span>
+                                    <ChevronDown className={`button-icon navbar-dropdown-icon${isLogsOpen ? ' open' : ''}`} />
+                                    <span>Logs</span>
                                 </button>
-                                <button
-                                    onClick={() => navigate('/meals')}
-                                    className="navbar-button"
-                                    aria-label="Meals"
-                                >
-                                    <Utensils className="button-icon" />
-                                    <span>Meals</span>
-                                </button>
-                                <button
-                                    onClick={() => navigate('/activities')}
-                                    className="navbar-button"
-                                    aria-label="Activities"
-                                >
-                                    <Activity className="button-icon" />
-                                    <span>Activities</span>
-                                </button>
-                                <button
-                                    onClick={() => navigate('/insulin-doses')}
-                                    className="navbar-button"
-                                    aria-label="Insulin Doses"
-                                >
-                                    <Syringe className="button-icon" />
-                                    <span>Insulin</span>
-                                </button>
-                            </>
+                                {isLogsOpen && (
+                                    <div className="navbar-dropdown-menu" role="menu">
+                                        <button
+                                            className="navbar-dropdown-item"
+                                            role="menuitem"
+                                            onClick={() => { setIsLogsOpen(false); navigate('/glucose-readings'); }}
+                                        >
+                                            <Droplets className="button-icon" />
+                                            <span>Readings</span>
+                                        </button>
+                                        <button
+                                            className="navbar-dropdown-item"
+                                            role="menuitem"
+                                            onClick={() => { setIsLogsOpen(false); navigate('/meals'); }}
+                                        >
+                                            <Utensils className="button-icon" />
+                                            <span>Meals</span>
+                                        </button>
+                                        <button
+                                            className="navbar-dropdown-item"
+                                            role="menuitem"
+                                            onClick={() => { setIsLogsOpen(false); navigate('/activities'); }}
+                                        >
+                                            <Activity className="button-icon" />
+                                            <span>Activities</span>
+                                        </button>
+                                        <button
+                                            className="navbar-dropdown-item"
+                                            role="menuitem"
+                                            onClick={() => { setIsLogsOpen(false); navigate('/insulin-doses'); }}
+                                        >
+                                            <Syringe className="button-icon" />
+                                            <span>Insulin</span>
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
                         )}
                         <button
                             onClick={() => navigate('/profile')}

@@ -111,6 +111,7 @@ export interface MealBasic {
   note?: string;
   photo_url?: string;
   timestamp?: string;
+  user_id?: number;
 }
 
 // Meal service functions

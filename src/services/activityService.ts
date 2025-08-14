@@ -37,6 +37,7 @@ export interface ActivityBasic {
   intensity?: 'low' | 'medium' | 'high';
   note?: string;
   timestamp?: string;
+  user_id?: number;
 }
 
 export const activityService = {

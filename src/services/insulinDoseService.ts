@@ -31,6 +31,7 @@ export interface InsulinDoseBasic {
   timestamp?: string;
   meal_context?: 'Breakfast' | 'Lunch' | 'Dinner' | 'Snack' | 'Dessert' | 'Beverage' | 'Other';
   note?: string;
+  user_id?: number;
 }
 
 export const insulinDoseService = {

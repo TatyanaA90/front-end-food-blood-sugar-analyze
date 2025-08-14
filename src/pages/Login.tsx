@@ -45,7 +45,6 @@ const Login: React.FC = () => {
 
   return (
     <div className="landing-page">
-      {/* ===== TOP BAR - MATCHES SCREENSHOT STYLE ===== */}
       <nav className="landing-top-bar">
         <div className="landing-logo">
           <div className="landing-logo-icon">
@@ -334,6 +333,13 @@ const Login: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Footer copyright (bottom-right), same subtle style used elsewhere */}
+      <footer className="layout-footer" aria-label="Site footer">
+        <div className="layout-footer-content">
+          <span className="layout-footer-copy">© 2025 Tatyana Ageyeva</span>
+        </div>
+      </footer>
     </div>
   );
 };
