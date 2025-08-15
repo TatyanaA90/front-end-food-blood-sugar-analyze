@@ -28,6 +28,8 @@ const MealList: React.FC<MealListProps> = ({
   const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
   const [showFilters, setShowFilters] = useState(false);
 
+  const { user } = useAuth();
+
   // Filter and sort meals
   const filteredAndSortedMeals = useMemo(() => {
     const filtered = meals.filter(meal => {
@@ -104,7 +106,7 @@ const MealList: React.FC<MealListProps> = ({
   return (
     <div className="meal-list-container">
       {/* Admin-only placeholder (no UI change for users) */}
-      {(() => { const { user } = useAuth(); return user?.is_admin ? null : null; })()}
+      {user?.is_admin ? null : null}
       {/* Header */}
       <div className="meal-list-header">
         <div className="header-content">
@@ -282,10 +284,12 @@ const MealList: React.FC<MealListProps> = ({
                 </div>
 
                 {/* Admin-only: show creator user_id when present or inferred via URL */}
-                {(() => {
-                  const { user } = useAuth();
-                  if (!user?.is_admin) return null;
-                  const userId = (meal as any).user_id as number | undefined;
+                {user?.is_admin && (() => {
+                  interface MealWithUserId extends MealBasic {
+                    user_id?: number;
+                  }
+                  const mealWithUserId = meal as MealWithUserId;
+                  const userId = mealWithUserId.user_id;
                   const search = typeof window !== 'undefined' ? window.location.search : '';
                   const urlId = new URLSearchParams(search).get('user') || undefined;
                   const displayId = userId ?? (urlId ? Number(urlId) : undefined);

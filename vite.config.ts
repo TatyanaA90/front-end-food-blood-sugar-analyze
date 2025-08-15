@@ -10,6 +10,9 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['./src/__tests__/setup.ts'],
     css: true,
+    env: {
+      VITE_API_BASE_URL: 'https://back-end-food-blood-sugar-analyzer.onrender.com'
+    }
   },
   build: {
     outDir: 'dist',

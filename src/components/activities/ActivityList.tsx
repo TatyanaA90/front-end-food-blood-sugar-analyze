@@ -28,11 +28,13 @@ const ActivityList: React.FC<ActivityListProps> = ({
   const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
   const [showFilters, setShowFilters] = useState(false);
 
+  const { user } = useAuth();
+
   const filteredAndSortedActivities = useMemo(() => {
     const filtered = activities.filter(activity => {
       const searchLower = searchTerm.toLowerCase();
       return (
-        activity.type.toLowerCase().includes(searchLower) ||
+        String(activity.type).toLowerCase().includes(searchLower) ||
         activity.note?.toLowerCase().includes(searchLower) ||
         activityUtils.getActivityType(activity).toLowerCase().includes(searchLower)
       );
@@ -49,7 +51,7 @@ const ActivityList: React.FC<ActivityListProps> = ({
 
       if (typeof aValue === 'string') {
         aValue = aValue.toLowerCase();
-        bValue = bValue.toLowerCase();
+        bValue = typeof bValue === 'string' ? bValue.toLowerCase() : bValue;
       }
 
       if (aValue == null) aValue = sortDirection === 'asc' ? Infinity : -Infinity;
@@ -97,7 +99,7 @@ const ActivityList: React.FC<ActivityListProps> = ({
   return (
     <div className="activity-list-container">
       {/* Admin-only note: show creator user_id inline for admins */}
-      {(() => { const { user } = useAuth(); return user?.is_admin ? null : null; })()}
+      {user?.is_admin ? null : null}
       <div className="activity-list-header">
         <div className="header-content">
           <div className="header-title">
@@ -263,10 +265,12 @@ const ActivityList: React.FC<ActivityListProps> = ({
                 </div>
 
                 {/* Admin-only: show creator user_id when present or inferred via URL */}
-                {(() => {
-                  const { user } = useAuth();
-                  if (!user?.is_admin) return null;
-                  const userId = (activity as any).user_id as number | undefined;
+                {user?.is_admin && (() => {
+                  interface ActivityWithUserId extends ActivityBasic {
+                    user_id?: number;
+                  }
+                  const activityWithUserId = activity as ActivityWithUserId;
+                  const userId = activityWithUserId.user_id;
                   // Try to read ?user from URL as fallback
                   const search = typeof window !== 'undefined' ? window.location.search : '';
                   const urlId = new URLSearchParams(search).get('user') || undefined;

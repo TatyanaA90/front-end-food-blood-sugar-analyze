@@ -111,13 +111,13 @@ const GlucoseReadings: React.FC = () => {
                 unit: (gr.unit?.toLowerCase() === 'mmol/l' ? 'mmol/L' : 'mg/dL') as 'mg/dL' | 'mmol/L',
                 reading_time: ensureUtcIso(gr.timestamp),
                 meal_context: undefined,
-                notes: (gr as any).notes || undefined,
+                notes: (gr as { notes?: string }).notes || undefined,
                 created_at: ensureUtcIso(gr.timestamp),
                 updated_at: ensureUtcIso(gr.timestamp),
             }));
         }
         return [];
-    }, [sortedReadings, urlUserParam, selectedUserData]);
+    }, [sortedReadings, urlUserParam, selectedUserData, isAdmin]);
 
     const handleSortToggle = () => {
         setSortOrder(prev => prev === 'newest' ? 'oldest' : 'newest');

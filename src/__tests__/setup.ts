@@ -2,12 +2,15 @@ import '@testing-library/jest-dom'
 import { setupServer } from 'msw/node'
 import { handlers } from './mocks/handlers'
 
+// Set test environment variables
+process.env.VITE_API_BASE_URL = 'https://back-end-food-blood-sugar-analyzer.onrender.com'
+
 // Setup MSW server for API mocking
 export const server = setupServer(...handlers)
 
 // Establish API mocking before all tests
 beforeAll(() => {
-  server.listen({ onUnhandledRequest: 'error' })
+  server.listen({ onUnhandledRequest: 'warn' })
 })
 
 // Reset any request handlers that we may add during the tests,

@@ -28,6 +28,8 @@ const InsulinDoseList: React.FC<InsulinDoseListProps> = ({
   const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
   const [showFilters, setShowFilters] = useState(false);
 
+  const { user } = useAuth();
+
   const filteredAndSortedDoses = useMemo(() => {
     const filtered = doses.filter(dose => {
       const searchLower = searchTerm.toLowerCase();
@@ -50,7 +52,7 @@ const InsulinDoseList: React.FC<InsulinDoseListProps> = ({
 
       if (typeof aValue === 'string') {
         aValue = aValue.toLowerCase();
-        bValue = bValue.toLowerCase();
+        bValue = typeof bValue === 'string' ? bValue.toLowerCase() : bValue;
       }
 
       if (aValue == null) aValue = sortDirection === 'asc' ? Infinity : -Infinity;
@@ -98,7 +100,7 @@ const InsulinDoseList: React.FC<InsulinDoseListProps> = ({
   return (
     <div className="insulin-dose-list-container">
       {/* Admin-only placeholder to scope future admin-only fields without affecting users */}
-      {(() => { const { user } = useAuth(); return user?.is_admin ? null : null; })()}
+      {user?.is_admin ? null : null}
       <div className="insulin-dose-list-header">
         <div className="header-content">
           <div className="header-title">
@@ -261,10 +263,12 @@ const InsulinDoseList: React.FC<InsulinDoseListProps> = ({
                 </div>
 
                 {/* Admin-only: show creator user_id when present or inferred via URL */}
-                {(() => {
-                  const { user } = useAuth();
-                  if (!user?.is_admin) return null;
-                  const userId = (dose as any).user_id as number | undefined;
+                {user?.is_admin && (() => {
+                  interface InsulinDoseWithUserId extends InsulinDoseBasic {
+                    user_id?: number;
+                  }
+                  const doseWithUserId = dose as InsulinDoseWithUserId;
+                  const userId = doseWithUserId.user_id;
                   const search = typeof window !== 'undefined' ? window.location.search : '';
                   const urlId = new URLSearchParams(search).get('user') || undefined;
                   const displayId = userId ?? (urlId ? Number(urlId) : undefined);
