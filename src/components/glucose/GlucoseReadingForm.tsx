@@ -4,7 +4,7 @@ import { Droplets, Clock, Utensils, FileText, X, Save } from 'lucide-react';
 import type { GlucoseReading, CreateGlucoseReadingRequest, UpdateGlucoseReadingRequest } from '../../types/glucose';
 import { MEAL_CONTEXT_OPTIONS } from '../../types/glucose';
 import { useGlucoseUnitUtils } from '../../hooks/useGlucoseUnit';
-import { toLocalDateTimeString } from '../../utils/dateUtils';
+import { toLocalDateTimeString, localDateTimeToUtcIso } from '../../utils/dateUtils';
 import './GlucoseReadingForm.css';
 
 interface GlucoseReadingFormProps {
@@ -48,7 +48,7 @@ const GlucoseReadingForm: React.FC<GlucoseReadingFormProps> = ({
     const payload: CreateGlucoseReadingRequest = {
       ...data,
       // Convert browser-local datetime to UTC ISO before sending
-      reading_time: data.reading_time ? new Date(data.reading_time).toISOString() : data.reading_time,
+      reading_time: data.reading_time ? localDateTimeToUtcIso(data.reading_time) : data.reading_time,
     };
     onSubmit(payload);
   };

@@ -47,7 +47,7 @@
 - [x] Fix weight data persistence from registration to profile
 - [x] Add accessibility improvements (id attributes, aria-labels)
 - [x] Remove unused imports and fix linter errors
-- [x] Create password reset functionality (pages/ForgotPassword.tsx, pages/ResetPassword.tsx; hooks/useUserManagement.ts; services/userService.ts)
+ - [x] Create password reset functionality (pages/ForgotPassword.tsx, pages/ResetPassword.tsx; hooks/useUserManagement.ts; services/userService.ts)
 - [x] Test authentication flow end-to-end
 - [x] Implement comprehensive admin feature system
   - [x] Create admin dashboard with user management
@@ -95,16 +95,16 @@
     - [x] Modal interface for clean template selection
     - [x] Integration with existing MealForm component
 - [x] Create activities page with CRUD operations ✅ **COMPLETED**
-  - [x] List view with activity types and durations (components/activities/ActivityList.tsx)
-  - [x] Add new activity form (components/activities/ActivityForm.tsx)
-  - [x] Edit activity functionality (components/activities/ActivityList.tsx)
-  - [x] Delete activity with confirmation (components/activities/ActivityList.tsx)
-  - [ ] Calorie calculation display (Not implemented)
+   - [x] List view with activity types and durations (components/activities/ActivityList.tsx)
+   - [x] Add new activity form (components/activities/ActivityForm.tsx)
+   - [x] Edit activity functionality (components/activities/ActivityList.tsx)
+   - [x] Delete activity with confirmation (components/activities/ActivityList.tsx)
+   - [ ] Calorie calculation display (Not implemented)
 - [x] Create insulin doses page with CRUD operations ✅ **COMPLETED**
-  - [x] List view with insulin types and units (components/insulin/InsulinDoseList.tsx)
-  - [x] Add new insulin dose form (components/insulin/InsulinDoseForm.tsx)
-  - [x] Edit insulin dose functionality (components/insulin/InsulinDoseList.tsx)
-  - [x] Delete insulin dose with confirmation (components/insulin/InsulinDoseList.tsx)
+   - [x] List view with insulin types and units (components/insulin/InsulinDoseList.tsx)
+   - [x] Add new insulin dose form (components/insulin/InsulinDoseForm.tsx)
+   - [x] Edit insulin dose functionality (components/insulin/InsulinDoseList.tsx)
+   - [x] Delete insulin dose with confirmation (components/insulin/InsulinDoseList.tsx)
 
 ### Phase 4: Dashboard and Analytics
 - [x] Create main dashboard page (pages/Dashboard.tsx)
@@ -132,10 +132,10 @@
   - [ ] Health condition tracking
   - [ ] Symptom logging
   - [ ] Medication tracking
-- [ ] Create CGM upload functionality
-  - [x] CSV file upload interface (pages/GlucoseReadings.tsx; services/api.ts → uploadCsv)
-  - [ ] File validation and parsing
-  - [x] Upload progress indicator (pages/GlucoseReadings.tsx → importing state/UI)
+ - [ ] Create CGM upload functionality
+   - [x] CSV file upload interface (pages/GlucoseReadings.tsx; services/api.ts → uploadCsv)
+   - [ ] File validation and parsing
+   - [x] Upload progress indicator (pages/GlucoseReadings.tsx → importing state/UI)
 - [ ] Create recommendations page
   - [ ] AI-generated insights display
   - [ ] Personalized tips and alerts

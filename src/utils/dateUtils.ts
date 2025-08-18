@@ -31,6 +31,25 @@ export const toLocalDateTimeString = (date: Date): string => {
   return `${year}-${month}-${day}T${hours}:${minutes}`;
 };
 
+// Convert local datetime string to UTC ISO string without timezone shifting
+// This preserves the local time as-is when converting to UTC
+export const localDateTimeToUtcIso = (localDateTimeString: string): string => {
+  if (!localDateTimeString) return '';
+  
+  // Create a Date object from the local datetime string
+  // JavaScript will treat this as local time
+  const localDate = new Date(localDateTimeString);
+  
+  // Get the timezone offset in minutes
+  const timezoneOffset = localDate.getTimezoneOffset();
+  
+  // Adjust the time by the timezone offset to get UTC time
+  // This preserves the local time as the UTC time
+  const utcDate = new Date(localDate.getTime() - (timezoneOffset * 60 * 1000));
+  
+  return utcDate.toISOString();
+};
+
 // Ensure a timestamp string is in UTC ISO format
 export const ensureUtcIso = (timestamp: string): string => {
   if (!timestamp) return timestamp;

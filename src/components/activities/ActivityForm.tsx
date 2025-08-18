@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { Calendar, FileText, Activity, Zap, Clock, Calculator } from 'lucide-react';
+import { Calendar, Clock, FileText, Activity, Calculator, Zap } from 'lucide-react';
 import type { ActivityCreate, ActivityUpdate } from '../../services/activityService';
 import { activityUtils } from '../../services/activityService';
-import { toLocalDateTimeString } from '../../utils/dateUtils';
+import { toLocalDateTimeString, localDateTimeToUtcIso } from '../../utils/dateUtils';
 import './ActivityForm.css';
 
 interface ActivityFormProps {
@@ -67,7 +67,7 @@ const ActivityForm: React.FC<ActivityFormProps> = ({
   const handleFormSubmit = (data: ActivityFormData) => {
     const activityData = {
       ...data,
-      timestamp: data.timestamp ? new Date(data.timestamp).toISOString() : undefined,
+      timestamp: data.timestamp ? localDateTimeToUtcIso(data.timestamp) : undefined,
       calories_burned: calculatedCalories,
     };
 

@@ -4,6 +4,7 @@ import { Plus, Trash2, Calendar, FileText, Utensils, Calculator, BookOpen } from
 import type { MealCreate, MealUpdate, MealIngredient, PredefinedMeal } from '../../services/mealService';
 import { mealUtils, mealService } from '../../services/mealService';
 import PredefinedMealSelector from './PredefinedMealSelector';
+import { localDateTimeToUtcIso } from '../../utils/dateUtils';
 import './MealForm.css';
 
 interface MealFormProps {
@@ -87,7 +88,7 @@ const MealForm: React.FC<MealFormProps> = ({
   const handleFormSubmit = (data: MealFormData) => {
     const mealData = {
       ...data,
-      timestamp: data.timestamp ? new Date(data.timestamp).toISOString() : undefined,
+      timestamp: data.timestamp ? localDateTimeToUtcIso(data.timestamp) : undefined,
       ingredients: data.ingredients.filter(ing => ing.name.trim() !== ''),
     };
 
@@ -113,7 +114,7 @@ const MealForm: React.FC<MealFormProps> = ({
       const mealData = {
         predefined_meal_id: meal.id,
         quantity,
-        timestamp: new Date().toISOString(),
+        timestamp: localDateTimeToUtcIso(new Date().toISOString()),
         ingredient_adjustments: ingredientAdjustments
       };
 

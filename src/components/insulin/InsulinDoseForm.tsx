@@ -4,7 +4,7 @@ import { Syringe, Clock, FileText, Save, X, Utensils } from 'lucide-react';
 import type { InsulinDoseCreate, InsulinDoseUpdate } from '../../services/insulinDoseService';
 import { MEAL_CONTEXT_OPTIONS } from '../../services/insulinDoseService';
 import './InsulinDoseForm.css';
-import { toLocalDateTimeString } from '../../utils/dateUtils';
+import { toLocalDateTimeString, localDateTimeToUtcIso } from '../../utils/dateUtils';
 
 interface InsulinDoseFormProps {
   initialData?: InsulinDoseCreate | InsulinDoseUpdate;
@@ -46,7 +46,7 @@ const InsulinDoseForm: React.FC<InsulinDoseFormProps> = ({
   const handleFormSubmit = (data: InsulinDoseFormData) => {
     const doseData = {
       ...data,
-      timestamp: data.timestamp ? new Date(data.timestamp).toISOString() : undefined,
+      timestamp: data.timestamp ? localDateTimeToUtcIso(data.timestamp) : undefined,
     };
 
     onSubmit(doseData as InsulinDoseCreate | InsulinDoseUpdate);
