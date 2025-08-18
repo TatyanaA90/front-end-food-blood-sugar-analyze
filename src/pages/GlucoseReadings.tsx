@@ -161,8 +161,12 @@ const GlucoseReadings: React.FC = () => {
         setEditingReading(null);
     };
 
-    const formatReadingTime = (timeString: string) => {
-        return new Date(ensureUtcIso(timeString)).toLocaleString();
+    const formatDate = (timestamp: string) => {
+        return new Date(ensureUtcIso(timestamp)).toLocaleDateString();
+    };
+
+    const formatTime = (timestamp: string) => {
+        return new Date(ensureUtcIso(timestamp)).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     };
 
     const getMealContextLabel = (context: string) => {
@@ -401,7 +405,9 @@ const GlucoseReadings: React.FC = () => {
                                         <div className="glucose-reading-details">
                                             <div className="glucose-reading-detail">
                                                 <Clock size={14} />
-                                                <span>{formatReadingTime(reading.reading_time)}</span>
+                                                <span>{formatDate(reading.reading_time)}</span>
+                                                <span className="time-separator">•</span>
+                                                <span>{formatTime(reading.reading_time)}</span>
                                             </div>
 
                                             <div className="glucose-reading-detail">

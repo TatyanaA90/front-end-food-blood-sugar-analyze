@@ -853,6 +853,53 @@ html[data-theme='dark'] .insulin-dose-form .form-section {
   color: var(--text-main) !important;
 }
 
+/* Text colors inside calculation and summary cards */
+html[data-theme='dark'] .calorie-calculation .calculation-label,
+html[data-theme='dark'] .calorie-calculation .calculation-value,
+html[data-theme='dark'] .nutrition-summary .summary-label,
+html[data-theme='dark'] .nutrition-summary .summary-value,
+html[data-theme='dark'] .nutrition-summary h4 {
+  color: var(--text-main) !important;
+}
+
+/* Special styling for calorie values */
+html[data-theme='dark'] .calorie-calculation .calculation-value.calories {
+  color: var(--success) !important;
+}
+
+/* Special styling for summary values with background */
+html[data-theme='dark'] .nutrition-summary .summary-value {
+  background: var(--pill-bg) !important;
+  border: 1px solid var(--border-default) !important;
+}
+
+/* Predefined meal selector nutrition summary */
+html[data-theme='dark'] .predefined-meal-selector .nutrition-summary {
+  background: var(--bg-card) !important;
+  border: 2px solid var(--dm-border) !important;
+}
+
+html[data-theme='dark'] .predefined-meal-selector .nutrition-summary h4 {
+  color: var(--text-main) !important;
+}
+
+html[data-theme='dark'] .predefined-meal-selector .nutrition-summary .summary-icon {
+  color: var(--text-primary) !important;
+}
+
+html[data-theme='dark'] .predefined-meal-selector .nutrition-summary .summary-item {
+  background: var(--bg-card-alt) !important;
+  border: 1px solid var(--border-default) !important;
+}
+
+html[data-theme='dark'] .predefined-meal-selector .nutrition-summary .summary-item .label {
+  color: var(--text-secondary) !important;
+}
+
+html[data-theme='dark'] .predefined-meal-selector .nutrition-summary .summary-item .value {
+  color: var(--text-primary) !important;
+}
+
 /* Meal preset/custom description containers */
 html[data-theme='dark'] .preset-description-container,
 html[data-theme='dark'] .custom-description-container,
