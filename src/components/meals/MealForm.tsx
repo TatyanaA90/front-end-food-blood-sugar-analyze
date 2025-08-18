@@ -114,7 +114,7 @@ const MealForm: React.FC<MealFormProps> = ({
       const mealData = {
         predefined_meal_id: meal.id,
         quantity,
-        timestamp: localDateTimeToUtcIso(new Date().toISOString()),
+        timestamp: new Date().toISOString(),
         ingredient_adjustments: ingredientAdjustments
       };
 
