@@ -4,7 +4,7 @@ import { Plus, Trash2, Calendar, FileText, Utensils, Calculator, BookOpen } from
 import type { MealCreate, MealUpdate, MealIngredient, PredefinedMeal } from '../../services/mealService';
 import { mealUtils, mealService } from '../../services/mealService';
 import PredefinedMealSelector from './PredefinedMealSelector';
-import { localDateTimeToUtcIso } from '../../utils/dateUtils';
+import { localDateTimeToUtcIso, utcTimestampToLocalDateTimeString } from '../../utils/dateUtils';
 import './MealForm.css';
 
 interface MealFormProps {
@@ -63,7 +63,7 @@ const MealForm: React.FC<MealFormProps> = ({
       description: initialData?.description || '',
       meal_type: initialData?.meal_type ?? '',
       timestamp: initialData?.timestamp
-        ? toLocalInputValue(new Date(initialData.timestamp))
+        ? utcTimestampToLocalDateTimeString(initialData.timestamp)
         : toLocalInputValue(new Date()),
       note: initialData?.note || '',
       photo_url: initialData?.photo_url || '',

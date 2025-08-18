@@ -4,7 +4,7 @@ import { Syringe, Clock, FileText, Save, X, Utensils } from 'lucide-react';
 import type { InsulinDoseCreate, InsulinDoseUpdate } from '../../services/insulinDoseService';
 import { MEAL_CONTEXT_OPTIONS } from '../../services/insulinDoseService';
 import './InsulinDoseForm.css';
-import { toLocalDateTimeString, localDateTimeToUtcIso } from '../../utils/dateUtils';
+import { toLocalDateTimeString, localDateTimeToUtcIso, utcTimestampToLocalDateTimeString } from '../../utils/dateUtils';
 
 interface InsulinDoseFormProps {
   initialData?: InsulinDoseCreate | InsulinDoseUpdate;
@@ -38,7 +38,7 @@ const InsulinDoseForm: React.FC<InsulinDoseFormProps> = ({
       meal_context: (initialData as (InsulinDoseCreate | InsulinDoseUpdate) | undefined)?.meal_context ?? '',
       note: (initialData as (InsulinDoseCreate | InsulinDoseUpdate) | undefined)?.note ?? '',
       timestamp: (initialData as (InsulinDoseCreate | InsulinDoseUpdate) | undefined)?.timestamp
-        ? toLocalDateTimeString(new Date((initialData as (InsulinDoseCreate | InsulinDoseUpdate)).timestamp as string))
+        ? utcTimestampToLocalDateTimeString((initialData as (InsulinDoseCreate | InsulinDoseUpdate)).timestamp as string)
         : toLocalDateTimeString(new Date()),
     },
   });

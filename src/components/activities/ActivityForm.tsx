@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { Calendar, Clock, FileText, Activity, Calculator, Zap } from 'lucide-react';
 import type { ActivityCreate, ActivityUpdate } from '../../services/activityService';
 import { activityUtils } from '../../services/activityService';
-import { toLocalDateTimeString, localDateTimeToUtcIso } from '../../utils/dateUtils';
+import { toLocalDateTimeString, localDateTimeToUtcIso, utcTimestampToLocalDateTimeString } from '../../utils/dateUtils';
 import './ActivityForm.css';
 
 interface ActivityFormProps {
@@ -44,7 +44,7 @@ const ActivityForm: React.FC<ActivityFormProps> = ({
       intensity: initialData?.intensity || 'medium',
       note: initialData?.note || '',
       timestamp: initialData?.timestamp
-        ? toLocalDateTimeString(new Date(initialData.timestamp))
+        ? utcTimestampToLocalDateTimeString(initialData.timestamp)
         : toLocalDateTimeString(new Date()),
     },
   });
