@@ -54,12 +54,18 @@ export const localDateTimeToUtcIso = (localDateTimeString: string): string => {
   // JavaScript will treat this as local time
   const localDate = new Date(localDateTimeString);
   
-  // Get the timezone offset in minutes
-  const timezoneOffset = localDate.getTimezoneOffset();
+  // The Date object now represents the local time in the user's timezone
+  // To preserve this exact time as UTC, we need to create a new UTC date
+  // with the same year, month, day, hour, minute values
+  const year = localDate.getFullYear();
+  const month = localDate.getMonth();
+  const day = localDate.getDate();
+  const hours = localDate.getHours();
+  const minutes = localDate.getMinutes();
   
-  // Adjust the time by the timezone offset to get UTC time
+  // Create a new Date object in UTC with the same components
   // This preserves the local time as the UTC time
-  const utcDate = new Date(localDate.getTime() - (timezoneOffset * 60 * 1000));
+  const utcDate = new Date(Date.UTC(year, month, day, hours, minutes));
   
   return utcDate.toISOString();
 };

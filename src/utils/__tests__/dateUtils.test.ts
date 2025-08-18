@@ -25,6 +25,14 @@ describe('dateUtils', () => {
       expect(result).toMatch(/^2024-08-15T14:30:00\.\d{3}Z$/);
     });
 
+    it('should preserve 8:36 PM as 8:36 PM UTC', () => {
+      const localTime = '2025-08-17T20:36';
+      const result = localDateTimeToUtcIso(localTime);
+      
+      // 8:36 PM local time should become 8:36 PM UTC (not 6:36 AM)
+      expect(result).toMatch(/^2025-08-17T20:36:00\.\d{3}Z$/);
+    });
+
     it('should handle empty string', () => {
       const result = localDateTimeToUtcIso('');
       expect(result).toBe('');
