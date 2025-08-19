@@ -109,11 +109,11 @@ const GlucoseReadings: React.FC = () => {
                 user_id: urlUserParam!,
                 reading: gr.value,
                 unit: (gr.unit?.toLowerCase() === 'mmol/l' ? 'mmol/L' : 'mg/dL') as 'mg/dL' | 'mmol/L',
-                reading_time: ensureUtcIso(gr.timestamp),
+                reading_time: gr.timestamp, // Don't modify the timestamp - use it as-is
                 meal_context: undefined,
                 notes: (gr as { notes?: string }).notes || undefined,
-                created_at: ensureUtcIso(gr.timestamp),
-                updated_at: ensureUtcIso(gr.timestamp),
+                created_at: gr.timestamp, // Don't modify the timestamp - use it as-is
+                updated_at: gr.timestamp, // Don't modify the timestamp - use it as-is
             }));
         }
         return [];
@@ -162,11 +162,21 @@ const GlucoseReadings: React.FC = () => {
     };
 
     const formatDate = (timestamp: string) => {
-        return new Date(ensureUtcIso(timestamp)).toLocaleDateString();
+        // If timestamp already has Z or timezone offset, use it as-is
+        // If not, assume it's UTC and add Z to prevent local time interpretation
+        const utcTimestamp = timestamp.includes('Z') || timestamp.includes('+') || timestamp.includes('-') 
+            ? timestamp 
+            : timestamp + 'Z';
+        return new Date(utcTimestamp).toLocaleDateString();
     };
 
     const formatTime = (timestamp: string) => {
-        return new Date(ensureUtcIso(timestamp)).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        // If timestamp already has Z or timezone offset, use it as-is
+        // If not, assume it's UTC and add Z to prevent local time interpretation
+        const utcTimestamp = timestamp.includes('Z') || timestamp.includes('+') || timestamp.includes('-') 
+            ? timestamp 
+            : timestamp + 'Z';
+        return new Date(utcTimestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     };
 
     const getMealContextLabel = (context: string) => {

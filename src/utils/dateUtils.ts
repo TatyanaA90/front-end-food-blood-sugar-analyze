@@ -39,10 +39,9 @@ export const utcTimestampToLocalDateTimeString = (utcTimestamp: string): string 
   // Create a Date object from the UTC timestamp
   const utcDate = new Date(utcTimestamp);
   
-  // Convert to local time for the form input
-  const localDate = new Date(utcDate.getTime() + (utcDate.getTimezoneOffset() * 60 * 1000));
-  
-  return toLocalDateTimeString(localDate);
+  // The Date object automatically converts UTC to local time
+  // No need to manually add timezone offset - that would be incorrect
+  return toLocalDateTimeString(utcDate);
 };
 
 // Convert local datetime string to UTC ISO string without timezone shifting
