@@ -104,16 +104,20 @@ const GlucoseReadings: React.FC = () => {
         }
         // Fallback: build from admin user data if available
         if (selectedUserData?.glucose_readings && selectedUserData.glucose_readings.length > 0) {
+            const toUtc = (ts?: string) => {
+                if (!ts) return '';
+                return /Z$|[+-]\d{2}:?\d{2}$/.test(ts) ? ts : `${ts}Z`;
+            };
             return selectedUserData.glucose_readings.map(gr => ({
                 id: gr.id,
                 user_id: urlUserParam!,
                 reading: gr.value,
                 unit: (gr.unit?.toLowerCase() === 'mmol/l' ? 'mmol/L' : 'mg/dL') as 'mg/dL' | 'mmol/L',
-                reading_time: gr.timestamp.includes('Z') ? gr.timestamp : gr.timestamp + 'Z', // Ensure UTC format for form
+                reading_time: toUtc(gr.timestamp), // Ensure UTC format for form/display
                 meal_context: undefined,
                 notes: (gr as { notes?: string }).notes || undefined,
-                created_at: gr.timestamp.includes('Z') ? gr.timestamp : gr.timestamp + 'Z', // Ensure UTC format
-                updated_at: gr.timestamp.includes('Z') ? gr.timestamp : gr.timestamp + 'Z', // Ensure UTC format
+                created_at: toUtc(gr.timestamp),
+                updated_at: toUtc(gr.timestamp),
             }));
         }
         return [];

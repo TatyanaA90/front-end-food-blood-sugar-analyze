@@ -8,17 +8,24 @@ import type {
 import { localDateTimeToUtcIso } from '../utils/dateUtils';
 // Note: timestamps returned by backend should already be ISO with timezone
 
+// Small helper to safely ensure a timestamp string is UTC ISO (adds 'Z' if missing)
+// Returns empty string when input is null/undefined
+const ensureUtc = (ts?: string): string => {
+    if (!ts) return '';
+    return /Z$|[+-]\d{2}:?\d{2}$/.test(ts) ? ts : `${ts}Z`;
+};
+
 // Backend response interface
 interface BackendGlucoseReading {
     id: number;
     user_id: number;
     value: number;
     unit: string;
-    timestamp: string;
+    timestamp?: string;
     meal_context?: string;
     note?: string;
-    created_at: string;
-    updated_at: string;
+    created_at?: string;
+    updated_at?: string;
 }
 
 interface BackendCreateRequest {
@@ -58,11 +65,11 @@ export const glucoseService = {
             user_id: item.user_id,
             reading: item.value,
             unit: (item.unit?.toLowerCase() === 'mmol/l' ? 'mmol/L' : 'mg/dL') as 'mg/dL' | 'mmol/L',
-            reading_time: item.timestamp.includes('Z') ? item.timestamp : item.timestamp + 'Z', // Ensure UTC format
+            reading_time: ensureUtc(item.timestamp),
             meal_context: item.meal_context as GlucoseReading['meal_context'],
             notes: item.note,
-            created_at: item.created_at.includes('Z') ? item.created_at : item.created_at + 'Z', // Ensure UTC format
-            updated_at: item.updated_at.includes('Z') ? item.updated_at : item.updated_at + 'Z' // Ensure UTC format
+            created_at: ensureUtc(item.created_at),
+            updated_at: ensureUtc(item.updated_at)
         }));
 
         // Apply frontend search filter if no backend search was provided
@@ -88,11 +95,11 @@ export const glucoseService = {
             user_id: response.data.user_id,
             reading: response.data.value,
             unit: (response.data.unit?.toLowerCase() === 'mmol/l' ? 'mmol/L' : 'mg/dL') as 'mg/dL' | 'mmol/L',
-            reading_time: response.data.timestamp.includes('Z') ? response.data.timestamp : response.data.timestamp + 'Z', // Ensure UTC format
+            reading_time: ensureUtc(response.data.timestamp),
             meal_context: response.data.meal_context as GlucoseReading['meal_context'],
             notes: response.data.note,
-            created_at: response.data.created_at.includes('Z') ? response.data.created_at : response.data.created_at + 'Z', // Ensure UTC format
-            updated_at: response.data.updated_at.includes('Z') ? response.data.updated_at : response.data.updated_at + 'Z' // Ensure UTC format
+            created_at: ensureUtc(response.data.created_at),
+            updated_at: ensureUtc(response.data.updated_at)
         };
     },
 
@@ -113,11 +120,11 @@ export const glucoseService = {
             user_id: response.data.user_id,
             reading: response.data.value,
             unit: (response.data.unit?.toLowerCase() === 'mmol/l' ? 'mmol/L' : 'mg/dL') as 'mg/dL' | 'mmol/L',
-            reading_time: response.data.timestamp.includes('Z') ? response.data.timestamp : response.data.timestamp + 'Z', // Ensure UTC format
+            reading_time: ensureUtc(response.data.timestamp),
             meal_context: response.data.meal_context as GlucoseReading['meal_context'],
             notes: response.data.note,
-            created_at: response.data.created_at.includes('Z') ? response.data.created_at : response.data.created_at + 'Z', // Ensure UTC format
-            updated_at: response.data.updated_at.includes('Z') ? response.data.updated_at : response.data.updated_at + 'Z' // Ensure UTC format
+            created_at: ensureUtc(response.data.created_at),
+            updated_at: ensureUtc(response.data.updated_at)
         };
     },
 
@@ -138,11 +145,11 @@ export const glucoseService = {
             user_id: response.data.user_id,
             reading: response.data.value,
             unit: (response.data.unit?.toLowerCase() === 'mmol/l' ? 'mmol/L' : 'mg/dL') as 'mg/dL' | 'mmol/L',
-            reading_time: response.data.timestamp.includes('Z') ? response.data.timestamp : response.data.timestamp + 'Z', // Ensure UTC format
+            reading_time: ensureUtc(response.data.timestamp),
             meal_context: response.data.meal_context as GlucoseReading['meal_context'],
             notes: response.data.note,
-            created_at: response.data.created_at.includes('Z') ? response.data.created_at : response.data.created_at + 'Z', // Ensure UTC format
-            updated_at: response.data.updated_at.includes('Z') ? response.data.updated_at : response.data.updated_at + 'Z' // Ensure UTC format
+            created_at: ensureUtc(response.data.created_at),
+            updated_at: ensureUtc(response.data.updated_at)
         };
     },
 
