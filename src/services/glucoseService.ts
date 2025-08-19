@@ -5,7 +5,6 @@ import type {
     UpdateGlucoseReadingRequest,
     GlucoseReadingFilters
 } from '../types/glucose';
-import { localDateTimeToUtcIso } from '../utils/dateUtils';
 // Note: timestamps returned by backend should already be ISO with timezone
 
 // Backend response interface (different field names than frontend)
@@ -103,7 +102,7 @@ export const glucoseService = {
         const backendData: BackendCreateRequest = {
             value: data.reading,
             unit: data.unit === 'mmol/L' ? 'mmol/l' : 'mg/dl',
-            timestamp: data.reading_time ? localDateTimeToUtcIso(data.reading_time) : undefined,
+            timestamp: data.reading_time, // Send local datetime string directly
             meal_context: data.meal_context,
             note: data.notes
         };
@@ -128,7 +127,7 @@ export const glucoseService = {
         const backendData: BackendUpdateRequest = {};
         if (data.reading !== undefined) backendData.value = data.reading;
         if (data.unit !== undefined) backendData.unit = data.unit === 'mmol/L' ? 'mmol/l' : 'mg/dl';
-        if (data.reading_time !== undefined) backendData.timestamp = data.reading_time ? localDateTimeToUtcIso(data.reading_time) : undefined;
+        if (data.reading_time !== undefined) backendData.timestamp = data.reading_time; // Send local datetime string directly
         if (data.meal_context !== undefined) backendData.meal_context = data.meal_context;
         if (data.notes !== undefined) backendData.note = data.notes;
 
