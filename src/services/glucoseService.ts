@@ -8,26 +8,6 @@ import type {
 import { localDateTimeToUtcIso } from '../utils/dateUtils';
 // Note: timestamps returned by backend should already be ISO with timezone
 
-// Small helper to safely ensure a timestamp string is UTC ISO (adds 'Z' if missing)
-// Returns empty string when input is null/undefined
-const ensureUtc = (ts?: string): string => {
-    if (!ts) return '';
-    return /Z$|[+-]\d{2}:?\d{2}$/.test(ts) ? ts : `${ts}Z`;
-};
-
-// Backend response interface
-interface BackendGlucoseReading {
-    id: number;
-    user_id: number;
-    value: number;
-    unit: string;
-    timestamp?: string;
-    meal_context?: string;
-    note?: string;
-    created_at?: string;
-    updated_at?: string;
-}
-
 interface BackendCreateRequest {
     value: number;
     unit: string;
@@ -58,24 +38,12 @@ export const glucoseService = {
         if (filters?.unit) params.append('unit', filters.unit);
         if (filters?.search) params.append('search', filters.search);
 
-        const response = await api.get<BackendGlucoseReading[]>(`/glucose-readings?${params.toString()}`);
-        // Map backend fields to frontend fields
-        const mappedReadings = response.data.map(item => ({
-            id: item.id,
-            user_id: item.user_id,
-            reading: item.value,
-            unit: (item.unit?.toLowerCase() === 'mmol/l' ? 'mmol/L' : 'mg/dL') as 'mg/dL' | 'mmol/L',
-            reading_time: ensureUtc(item.timestamp),
-            meal_context: item.meal_context as GlucoseReading['meal_context'],
-            notes: item.note,
-            created_at: ensureUtc(item.created_at),
-            updated_at: ensureUtc(item.updated_at)
-        }));
-
+        const response = await api.get<GlucoseReading[]>(`/glucose-readings?${params.toString()}`);
+        
         // Apply frontend search filter if no backend search was provided
         if (filters?.search && !params.has('search')) {
             const searchLower = filters.search.toLowerCase();
-            return mappedReadings.filter(reading =>
+            return response.data.filter(reading =>
                 reading.reading.toString().includes(searchLower) ||
                 reading.unit.toLowerCase().includes(searchLower) ||
                 reading.meal_context?.toLowerCase().includes(searchLower) ||
@@ -83,24 +51,13 @@ export const glucoseService = {
             );
         }
 
-        return mappedReadings;
+        return response.data;
     },
 
     // Get a single glucose reading by ID
     getGlucoseReading: async (id: number): Promise<GlucoseReading> => {
-        const response = await api.get<BackendGlucoseReading>(`/glucose-readings/${id}`);
-        // Map backend fields to frontend fields
-        return {
-            id: response.data.id,
-            user_id: response.data.user_id,
-            reading: response.data.value,
-            unit: (response.data.unit?.toLowerCase() === 'mmol/l' ? 'mmol/L' : 'mg/dL') as 'mg/dL' | 'mmol/L',
-            reading_time: ensureUtc(response.data.timestamp),
-            meal_context: response.data.meal_context as GlucoseReading['meal_context'],
-            notes: response.data.note,
-            created_at: ensureUtc(response.data.created_at),
-            updated_at: ensureUtc(response.data.updated_at)
-        };
+        const response = await api.get<GlucoseReading>(`/glucose-readings/${id}`);
+        return response.data;
     },
 
     // Create a new glucose reading
@@ -113,19 +70,8 @@ export const glucoseService = {
             meal_context: data.meal_context,
             note: data.notes
         };
-        const response = await api.post<BackendGlucoseReading>('/glucose-readings', backendData);
-        // Map backend fields to frontend fields
-        return {
-            id: response.data.id,
-            user_id: response.data.user_id,
-            reading: response.data.value,
-            unit: (response.data.unit?.toLowerCase() === 'mmol/l' ? 'mmol/L' : 'mg/dL') as 'mg/dL' | 'mmol/L',
-            reading_time: ensureUtc(response.data.timestamp),
-            meal_context: response.data.meal_context as GlucoseReading['meal_context'],
-            notes: response.data.note,
-            created_at: ensureUtc(response.data.created_at),
-            updated_at: ensureUtc(response.data.updated_at)
-        };
+        const response = await api.post<GlucoseReading>('/glucose-readings', backendData);
+        return response.data;
     },
 
     // Update an existing glucose reading
@@ -138,19 +84,8 @@ export const glucoseService = {
         if (data.meal_context !== undefined) backendData.meal_context = data.meal_context;
         if (data.notes !== undefined) backendData.note = data.notes;
 
-        const response = await api.put<BackendGlucoseReading>(`/glucose-readings/${id}`, backendData);
-        // Map backend fields to frontend fields
-        return {
-            id: response.data.id,
-            user_id: response.data.user_id,
-            reading: response.data.value,
-            unit: (response.data.unit?.toLowerCase() === 'mmol/l' ? 'mmol/L' : 'mg/dL') as 'mg/dL' | 'mmol/L',
-            reading_time: ensureUtc(response.data.timestamp),
-            meal_context: response.data.meal_context as GlucoseReading['meal_context'],
-            notes: response.data.note,
-            created_at: ensureUtc(response.data.created_at),
-            updated_at: ensureUtc(response.data.updated_at)
-        };
+        const response = await api.put<GlucoseReading>(`/glucose-readings/${id}`, backendData);
+        return response.data;
     },
 
     // Delete a glucose reading

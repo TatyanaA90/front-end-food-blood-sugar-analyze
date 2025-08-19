@@ -36,7 +36,6 @@ import GlucoseReadingForm from "../components/glucose/GlucoseReadingForm";
 import NavigationHeader from "../components/layout/NavigationHeader";
 import { uploadCsv } from "../services/api";
 import "./GlucoseReadings.css";
-import { ensureUtcIso } from "../utils/dateUtils";
 
 const GlucoseReadings: React.FC = () => {
     const [filters, setFilters] = useState<GlucoseReadingFilters>({});
@@ -84,8 +83,8 @@ const GlucoseReadings: React.FC = () => {
         if (!readings.length) return [];
         
         return [...readings].sort((a, b) => {
-            const dateA = new Date(ensureUtcIso(a.reading_time)).getTime();
-            const dateB = new Date(ensureUtcIso(b.reading_time)).getTime();
+            const dateA = new Date(a.reading_time).getTime();
+            const dateB = new Date(b.reading_time).getTime();
             
             if (sortOrder === 'newest') {
                 return dateB - dateA; // Newest first
@@ -104,20 +103,16 @@ const GlucoseReadings: React.FC = () => {
         }
         // Fallback: build from admin user data if available
         if (selectedUserData?.glucose_readings && selectedUserData.glucose_readings.length > 0) {
-            const toUtc = (ts?: string) => {
-                if (!ts) return '';
-                return /Z$|[+-]\d{2}:?\d{2}$/.test(ts) ? ts : `${ts}Z`;
-            };
             return selectedUserData.glucose_readings.map(gr => ({
                 id: gr.id,
                 user_id: urlUserParam!,
                 reading: gr.value,
                 unit: (gr.unit?.toLowerCase() === 'mmol/l' ? 'mmol/L' : 'mg/dL') as 'mg/dL' | 'mmol/L',
-                reading_time: toUtc(gr.timestamp), // Ensure UTC format for form/display
+                reading_time: gr.timestamp, // Use timestamp as-is, just like activities
                 meal_context: undefined,
                 notes: (gr as { notes?: string }).notes || undefined,
-                created_at: toUtc(gr.timestamp),
-                updated_at: toUtc(gr.timestamp),
+                created_at: gr.timestamp, // Use timestamp as-is
+                updated_at: gr.timestamp, // Use timestamp as-is
             }));
         }
         return [];
@@ -166,21 +161,11 @@ const GlucoseReadings: React.FC = () => {
     };
 
     const formatDate = (timestamp: string) => {
-        // If timestamp already has Z or timezone offset, use it as-is
-        // If not, assume it's UTC and add Z to prevent local time interpretation
-        const utcTimestamp = timestamp.includes('Z') || timestamp.includes('+') || timestamp.includes('-') 
-            ? timestamp 
-            : timestamp + 'Z';
-        return new Date(utcTimestamp).toLocaleDateString();
+        return new Date(timestamp).toLocaleDateString();
     };
 
     const formatTime = (timestamp: string) => {
-        // If timestamp already has Z or timezone offset, use it as-is
-        // If not, assume it's UTC and add Z to prevent local time interpretation
-        const utcTimestamp = timestamp.includes('Z') || timestamp.includes('+') || timestamp.includes('-') 
-            ? timestamp 
-            : timestamp + 'Z';
-        return new Date(utcTimestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        return new Date(timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     };
 
     const getMealContextLabel = (context: string) => {
