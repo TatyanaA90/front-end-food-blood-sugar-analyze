@@ -58,11 +58,11 @@ export const glucoseService = {
             user_id: item.user_id,
             reading: item.value,
             unit: (item.unit?.toLowerCase() === 'mmol/l' ? 'mmol/L' : 'mg/dL') as 'mg/dL' | 'mmol/L',
-            reading_time: item.timestamp,
+            reading_time: item.timestamp.includes('Z') ? item.timestamp : item.timestamp + 'Z', // Ensure UTC format
             meal_context: item.meal_context as GlucoseReading['meal_context'],
             notes: item.note,
-            created_at: item.created_at,
-            updated_at: item.updated_at
+            created_at: item.created_at.includes('Z') ? item.created_at : item.created_at + 'Z', // Ensure UTC format
+            updated_at: item.updated_at.includes('Z') ? item.updated_at : item.updated_at + 'Z' // Ensure UTC format
         }));
 
         // Apply frontend search filter if no backend search was provided
@@ -88,11 +88,11 @@ export const glucoseService = {
             user_id: response.data.user_id,
             reading: response.data.value,
             unit: (response.data.unit?.toLowerCase() === 'mmol/l' ? 'mmol/L' : 'mg/dL') as 'mg/dL' | 'mmol/L',
-            reading_time: response.data.timestamp,
+            reading_time: response.data.timestamp.includes('Z') ? response.data.timestamp : response.data.timestamp + 'Z', // Ensure UTC format
             meal_context: response.data.meal_context as GlucoseReading['meal_context'],
             notes: response.data.note,
-            created_at: response.data.created_at,
-            updated_at: response.data.updated_at
+            created_at: response.data.created_at.includes('Z') ? response.data.created_at : response.data.created_at + 'Z', // Ensure UTC format
+            updated_at: response.data.updated_at.includes('Z') ? response.data.updated_at : response.data.updated_at + 'Z' // Ensure UTC format
         };
     },
 
@@ -113,11 +113,11 @@ export const glucoseService = {
             user_id: response.data.user_id,
             reading: response.data.value,
             unit: (response.data.unit?.toLowerCase() === 'mmol/l' ? 'mmol/L' : 'mg/dL') as 'mg/dL' | 'mmol/L',
-            reading_time: response.data.timestamp,
+            reading_time: response.data.timestamp.includes('Z') ? response.data.timestamp : response.data.timestamp + 'Z', // Ensure UTC format
             meal_context: response.data.meal_context as GlucoseReading['meal_context'],
             notes: response.data.note,
-            created_at: response.data.created_at,
-            updated_at: response.data.updated_at
+            created_at: response.data.created_at.includes('Z') ? response.data.created_at : response.data.created_at + 'Z', // Ensure UTC format
+            updated_at: response.data.updated_at.includes('Z') ? response.data.updated_at : response.data.updated_at + 'Z' // Ensure UTC format
         };
     },
 
@@ -138,11 +138,11 @@ export const glucoseService = {
             user_id: response.data.user_id,
             reading: response.data.value,
             unit: (response.data.unit?.toLowerCase() === 'mmol/l' ? 'mmol/L' : 'mg/dL') as 'mg/dL' | 'mmol/L',
-            reading_time: response.data.timestamp,
+            reading_time: response.data.timestamp.includes('Z') ? response.data.timestamp : response.data.timestamp + 'Z', // Ensure UTC format
             meal_context: response.data.meal_context as GlucoseReading['meal_context'],
             notes: response.data.note,
-            created_at: response.data.created_at,
-            updated_at: response.data.updated_at
+            created_at: response.data.created_at.includes('Z') ? response.data.created_at : response.data.created_at + 'Z', // Ensure UTC format
+            updated_at: response.data.updated_at.includes('Z') ? response.data.updated_at : response.data.updated_at + 'Z' // Ensure UTC format
         };
     },
 

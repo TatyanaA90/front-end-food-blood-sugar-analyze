@@ -109,11 +109,11 @@ const GlucoseReadings: React.FC = () => {
                 user_id: urlUserParam!,
                 reading: gr.value,
                 unit: (gr.unit?.toLowerCase() === 'mmol/l' ? 'mmol/L' : 'mg/dL') as 'mg/dL' | 'mmol/L',
-                reading_time: gr.timestamp, // Don't modify the timestamp - use it as-is
+                reading_time: gr.timestamp.includes('Z') ? gr.timestamp : gr.timestamp + 'Z', // Ensure UTC format for form
                 meal_context: undefined,
                 notes: (gr as { notes?: string }).notes || undefined,
-                created_at: gr.timestamp, // Don't modify the timestamp - use it as-is
-                updated_at: gr.timestamp, // Don't modify the timestamp - use it as-is
+                created_at: gr.timestamp.includes('Z') ? gr.timestamp : gr.timestamp + 'Z', // Ensure UTC format
+                updated_at: gr.timestamp.includes('Z') ? gr.timestamp : gr.timestamp + 'Z', // Ensure UTC format
             }));
         }
         return [];
