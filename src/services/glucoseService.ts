@@ -8,6 +8,19 @@ import type {
 import { localDateTimeToUtcIso } from '../utils/dateUtils';
 // Note: timestamps returned by backend should already be ISO with timezone
 
+// Backend response interface (different field names than frontend)
+interface BackendGlucoseReading {
+    id: number;
+    user_id: number;
+    value: number;
+    unit: string;
+    timestamp: string;
+    meal_context?: string;
+    note?: string;
+    created_at: string;
+    updated_at: string;
+}
+
 interface BackendCreateRequest {
     value: number;
     unit: string;
@@ -38,12 +51,25 @@ export const glucoseService = {
         if (filters?.unit) params.append('unit', filters.unit);
         if (filters?.search) params.append('search', filters.search);
 
-        const response = await api.get<GlucoseReading[]>(`/glucose-readings?${params.toString()}`);
+        const response = await api.get<BackendGlucoseReading[]>(`/glucose-readings?${params.toString()}`);
+        
+        // Simple field mapping: backend → frontend (no complex UTC conversion)
+        const mappedReadings = response.data.map(item => ({
+            id: item.id,
+            user_id: item.user_id,
+            reading: item.value,
+            unit: (item.unit?.toLowerCase() === 'mmol/l' ? 'mmol/L' : 'mg/dL') as 'mg/dL' | 'mmol/L',
+            reading_time: item.timestamp,
+            meal_context: item.meal_context as GlucoseReading['meal_context'],
+            notes: item.note,
+            created_at: item.created_at,
+            updated_at: item.updated_at
+        }));
         
         // Apply frontend search filter if no backend search was provided
         if (filters?.search && !params.has('search')) {
             const searchLower = filters.search.toLowerCase();
-            return response.data.filter(reading =>
+            return mappedReadings.filter(reading =>
                 reading.reading.toString().includes(searchLower) ||
                 reading.unit.toLowerCase().includes(searchLower) ||
                 reading.meal_context?.toLowerCase().includes(searchLower) ||
@@ -51,13 +77,24 @@ export const glucoseService = {
             );
         }
 
-        return response.data;
+        return mappedReadings;
     },
 
     // Get a single glucose reading by ID
     getGlucoseReading: async (id: number): Promise<GlucoseReading> => {
-        const response = await api.get<GlucoseReading>(`/glucose-readings/${id}`);
-        return response.data;
+        const response = await api.get<BackendGlucoseReading>(`/glucose-readings/${id}`);
+        // Simple field mapping: backend → frontend
+        return {
+            id: response.data.id,
+            user_id: response.data.user_id,
+            reading: response.data.value,
+            unit: (response.data.unit?.toLowerCase() === 'mmol/l' ? 'mmol/L' : 'mg/dL') as 'mg/dL' | 'mmol/L',
+            reading_time: response.data.timestamp,
+            meal_context: response.data.meal_context as GlucoseReading['meal_context'],
+            notes: response.data.note,
+            created_at: response.data.created_at,
+            updated_at: response.data.updated_at
+        };
     },
 
     // Create a new glucose reading
@@ -70,8 +107,19 @@ export const glucoseService = {
             meal_context: data.meal_context,
             note: data.notes
         };
-        const response = await api.post<GlucoseReading>('/glucose-readings', backendData);
-        return response.data;
+        const response = await api.post<BackendGlucoseReading>('/glucose-readings', backendData);
+        // Simple field mapping: backend → frontend
+        return {
+            id: response.data.id,
+            user_id: response.data.user_id,
+            reading: response.data.value,
+            unit: (response.data.unit?.toLowerCase() === 'mmol/l' ? 'mmol/L' : 'mg/dL') as 'mg/dL' | 'mmol/L',
+            reading_time: response.data.timestamp,
+            meal_context: response.data.meal_context as GlucoseReading['meal_context'],
+            notes: response.data.note,
+            created_at: response.data.created_at,
+            updated_at: response.data.updated_at
+        };
     },
 
     // Update an existing glucose reading
@@ -84,8 +132,19 @@ export const glucoseService = {
         if (data.meal_context !== undefined) backendData.meal_context = data.meal_context;
         if (data.notes !== undefined) backendData.note = data.notes;
 
-        const response = await api.put<GlucoseReading>(`/glucose-readings/${id}`, backendData);
-        return response.data;
+        const response = await api.put<BackendGlucoseReading>(`/glucose-readings/${id}`, backendData);
+        // Simple field mapping: backend → frontend
+        return {
+            id: response.data.id,
+            user_id: response.data.user_id,
+            reading: response.data.value,
+            unit: (response.data.unit?.toLowerCase() === 'mmol/l' ? 'mmol/L' : 'mg/dL') as 'mg/dL' | 'mmol/L',
+            reading_time: response.data.timestamp,
+            meal_context: response.data.meal_context as GlucoseReading['meal_context'],
+            notes: response.data.note,
+            created_at: response.data.created_at,
+            updated_at: response.data.updated_at
+        };
     },
 
     // Delete a glucose reading
